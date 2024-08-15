@@ -71,7 +71,12 @@ jobs:
         run: npm install
       
       - name: Run Jest Tests
-        run: npm test
+        run: npm test -- --coverage .
+      
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
