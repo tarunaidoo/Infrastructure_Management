@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import LoginButton from './LoginButton.js';
-import LogoutButton from './LogoutButton.js';
 import Profile from './Profile.js';
 import { Auth0Provider } from '@auth0/auth0-react';
 
