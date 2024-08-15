@@ -14,12 +14,28 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x']
+
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
       
+      - name: Checkout repository
+        uses: actions/checkout@v2
+  
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+        
+      - name: Install Dependencies
+        run: npm install
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -35,8 +51,14 @@ jobs:
           ###### End of Repository/Build Configurations ######
 
   test:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     name: Run Unit Tests
+    
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x']
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -56,7 +78,23 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x']
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install Dependencies
+        run: npm install
+
       - name: Close Pull Request
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
