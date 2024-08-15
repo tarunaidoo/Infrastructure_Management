@@ -49,12 +49,21 @@ async function del(id) {
   }
 }
 
+async function get(id) {
+  const endpoint = `/data-api/rest/Person/Id`;
+  const response = await fetch(`${endpoint}/${id}`);
+  const result = await response.json();
+  return result;
+}
+
 function App() {
   const [data, setData] = useState(null);
   const [id, setId] = useState('');
   const [name, setName] = useState('');
-  const [newName, setNewName] = useState(''); 
-  const [deleteId, setDeleteId] = useState(''); // State for the ID to delete
+  const [newName, setNewName] = useState('');
+  const [deleteId, setDeleteId] = useState('');
+  const [fetchId, setFetchId] = useState('');
+  const [fetchedData, setFetchedData] = useState(null); // State for fetched data
 
   const handleListButtonClick = async () => {
     const result = await list();
@@ -84,7 +93,16 @@ function App() {
     if (deleteId) {
       await del(deleteId);
       alert(`Deleted person with ID: ${deleteId}`);
-      setDeleteId(''); // Clear the input field after deletion
+      setDeleteId('');
+    } else {
+      alert('Please enter an ID');
+    }
+  };
+
+  const handleFetchButtonClick = async () => {
+    if (fetchId) {
+      const result = await get(fetchId);
+      setFetchedData(result); // Set fetched data in state
     } else {
       alert('Please enter an ID');
     }
@@ -130,6 +148,23 @@ function App() {
         />
         <button onClick={handleDeleteButtonClick}>Delete</button>
       </div>
+
+      <div>
+        <input 
+          type="text" 
+          placeholder="Enter ID to Fetch" 
+          value={fetchId} 
+          onChange={(e) => setFetchId(e.target.value)} 
+        />
+        <button onClick={handleFetchButtonClick}>Fetch by ID</button>
+      </div>
+
+      {fetchedData && (
+        <div>
+          <h3>Fetched Data:</h3>
+          <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+        </div>
+      )}
       
       <p>Does it work ..?</p>
     </>
