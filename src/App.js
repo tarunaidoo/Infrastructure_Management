@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-async function list() {
+
+
+/*async function list() {
   const endpoint = '/data-api/rest/Person';
   const response = await fetch(endpoint);
   const data = await response.json();
@@ -169,6 +171,12 @@ function App() {
       <p>Does it work ..?</p>
     </>
   );
+}*/
+
+import LoginPage from './pages/LoginPage/LoginPage';
+
+function App(){
+  return(<LoginPage/>);
 }
 
 export default App;

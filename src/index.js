@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import LoginButton from './LoginButton.js';
-import Profile from './Profile.js';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 ReactDOM.render(
@@ -15,9 +13,6 @@ ReactDOM.render(
     }}
   >
     <App />
-    <LoginButton />
-    
-    <Profile />
   </Auth0Provider>,
   document.getElementById('root')
 );
