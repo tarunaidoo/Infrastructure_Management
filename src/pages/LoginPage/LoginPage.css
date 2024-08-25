@@ -1,0 +1,69 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.centered-container {
+    display: flex;
+    justify-content: center; /* Centers the container horizontally */
+    align-items: center; /* Centers the container vertically */
+    
+}
+
+.content-section {
+    width: 100vw; /* Takes up 80% of the viewport width */
+    max-width: 500px; /* Optional: Set a max width to prevent the section from being too wide */
+    background-color: #fff; /* Background color for the section */
+    padding: 20px;
+    border-radius: 40px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(#0047AB, 0.575); /* Add a subtle shadow */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20vh;
+}
+
+.logo {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.WellcomeText {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 15px;
+}
+
+.promt{
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+.promt a{
+    color: var(--color-main); /* Link color */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Make text bold */
+    transition: color 0.3s ease; /* Smooth transition on hover */
+    cursor: pointer;
+}
+
+.promt a:hover {
+    color: var(--color-highlight); /* Color on hover */
+}
+
+
