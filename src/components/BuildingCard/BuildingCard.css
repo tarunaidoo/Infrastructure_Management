@@ -1,0 +1,47 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+.building-card-container {
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--color-main);
+
+    width: 80%;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.building-card-container .heading-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 10px;
+    padding: 5px 10px;
+}
+
+.heading-section .building-name-text {
+    flex-grow: 2;
+    color: var(--color-neutral);
+    font-size: medium;
+    font-weight: bold;
+}
+
+.heading-section .office-icon {
+    width: 15%;
+}
+
+.building-card-container .tags-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    gap: 15px;
+    padding: 0px 15px;
+}

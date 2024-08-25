@@ -3,7 +3,7 @@ import React from "react";
 import "./RoomCard.css"
 
 import arrowDoorInIcon from "../../assets/icons/arrow-door-in.svg";
-import circleQuestionIcon from "../../assets/icons/circle-question.svg"
+import circleQuestionIcon from "../../assets/icons/circle-question.svg";
 
 const RoomCard = ({roomName, setTrigger}) => {
     
