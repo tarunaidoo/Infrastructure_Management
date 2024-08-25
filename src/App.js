@@ -175,7 +175,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-import VenueSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
+import BuildingSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
 import RoomSelectionPage from './pages/RoomSelectionPage/RoomSelectionPage';
 import CampusSelectionPage from './pages/CampusSelectionPage/CampusSelectionPage';
 
@@ -183,7 +183,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<VenueSelectionPage />} />
+        <Route path="/" element={<CampusSelectionPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>

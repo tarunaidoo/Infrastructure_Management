@@ -11,9 +11,12 @@ import circleQuestionIcon from "../../assets/icons/circle-question.svg";
 const RoomSelectionPage = () => {
     // Variables
     const rooms = [
-        {"ROOM_ID": 0, "ROOM_NAME": "WSS001"},
-        {"ROOM_ID": 1, "ROOM_NAME": "WSS002"},
-        {"ROOM_ID": 2, "ROOM_NAME": "WSS003"}
+        {"ROOM_ID": 0, "ROOM_NAME": "MSL001"},
+        {"ROOM_ID": 1, "ROOM_NAME": "MSL002"},
+        {"ROOM_ID": 2, "ROOM_NAME": "MSL003"},
+        {"ROOM_ID": 3, "ROOM_NAME": "MSL004"},
+        {"ROOM_ID": 4, "ROOM_NAME": "MSL005"},
+        {"ROOM_ID": 5, "ROOM_NAME": "MSL006"},
     ]
 
     // Function & Logic
@@ -23,7 +26,7 @@ const RoomSelectionPage = () => {
         <>
             <Header title={"Choose a Room"}/>
             <main className="centered-container">
-                <section className="content-section">
+                <section className="room-selection-content-section">
                     {rooms ? 
                     rooms.map((room) => (
                         <RoomCard key={room.ROOM_ID} roomName={room.ROOM_NAME}> 

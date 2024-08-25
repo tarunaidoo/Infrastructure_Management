@@ -18,7 +18,7 @@
 
     border-radius: 15px; /* Rounds the corners */
     gap: 10px; /* Adds a gab between items */
-    padding: 5px 15px; /* Adds padding */
+    padding: 0px 15px; /* Adds padding */
 }
 
 .room-card-container .room-name-text {

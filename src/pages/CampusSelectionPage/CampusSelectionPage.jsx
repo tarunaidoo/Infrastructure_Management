@@ -16,7 +16,7 @@ const CampusSelectionPage = () => {
         <>
             <Header title={"Choose a Campus"}/>
             <main className="centered-container">
-                <section className="content-section">
+                <section className="campus-selection-content-section">
                     <CampusCard campusName={"East Campus"}/>
 
                     <CampusCard campusName={"West Campus"}/>
