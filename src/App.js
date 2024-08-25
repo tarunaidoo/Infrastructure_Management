@@ -174,9 +174,10 @@ function App() {
 }*/
 
 import LoginPage from './pages/LoginPage/LoginPage';
+import VenueSelectionPage from './pages/Booking/VenueSelectionPage';
 
 function App(){
-  return(<LoginPage/>);
+  return(<VenueSelectionPage/>);
 }
 
 export default App;
