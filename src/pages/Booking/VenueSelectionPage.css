@@ -5,3 +5,7 @@
     --color-accent: #D4A843;       /* Soft Gold */
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
+
+.circle-question-icon {
+    width: 8%;
+}
