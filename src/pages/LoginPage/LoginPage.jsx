@@ -1,10 +1,35 @@
-import React from 'react';
-import './LoginPage.css';
+import React, { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
 
+import './LoginPage.css';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import Logo from '../../assets/icons/WitsVenueTitle.svg';
+import {list,createUser} from '../../services/LoginPage.service'
+
 
 function LoginPage() {
+    const {user, isAuthenticated } = useAuth0();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchDataAndNavigate = async () => {
+            if (isAuthenticated) {//if authenticated then check if user is in db, if not, add them
+                try {
+                    const data=await list(user.email);
+                    if(data.length===0){//user isnt in db, add them
+                        createUser(user.email,user.given_name,user.family_name);
+                    }
+                    navigate('/profile'); // Navigate to the ProfilePage
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+        };
+
+        fetchDataAndNavigate();
+    }, [isAuthenticated, user?.email, user?.given_name, user?.family_name, navigate]);
+
     return (
         <main className="centered-container">
             <section className="content-section">
@@ -12,9 +37,8 @@ function LoginPage() {
                     <img src={Logo} alt="WitsVenue Logo" className="logo" />
                 </div>
                 <p className="WellcomeText">Welcome!</p>
-            <LoginButton />
-            <p className='promt'>Can't sign in? <a href='https://www.wits.ac.za/about-wits/contact-us/'>Contact IT</a></p>
-
+                {!isAuthenticated && <LoginButton />}
+                <p className='promt'>Can't sign in? <a href='https://www.wits.ac.za/about-wits/contact-us/'>Contact IT</a></p>
             </section>
         </main>
     );
