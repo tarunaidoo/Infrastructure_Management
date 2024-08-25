@@ -28,6 +28,7 @@ async function createUser(email,firstName,lastName) {
       body: JSON.stringify(data)
     });
     const result = await response.json();
+    return result;
   }
 
 function LoginPage() {
@@ -39,8 +40,8 @@ function LoginPage() {
             if (isAuthenticated) {//if authenticated then check if user is in db, if not, add them
                 try {
                     const data=await list(user.email);
-                    if(data.length==0){//user isnt in db, add them
-                        const add=await createUser(user.email,user.given_name,user.family_name);
+                    if(data.length===0){//user isnt in db, add them
+                        createUser(user.email,user.given_name,user.family_name);
                     }
                     navigate('/profile'); // Navigate to the ProfilePage
                 } catch (error) {
@@ -50,7 +51,7 @@ function LoginPage() {
         };
 
         fetchDataAndNavigate();
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, user?.email, user?.given_name, user?.family_name, navigate]);
 
     return (
         <main className="centered-container">
