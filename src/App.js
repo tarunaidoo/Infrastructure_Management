@@ -1,5 +1,3 @@
-import React from 'react';
-
 
 
 /*async function list() {
@@ -173,10 +171,21 @@ function App() {
   );
 }*/
 
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
-function App(){
-  return(<LoginPage/>);
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
+

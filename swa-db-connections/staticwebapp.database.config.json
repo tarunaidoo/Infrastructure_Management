@@ -37,6 +37,15 @@
           "role": "anonymous"
         }
       ]
+    },
+    "USERS": {
+      "source": "dbo.USERS",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
     }
   }
 }
