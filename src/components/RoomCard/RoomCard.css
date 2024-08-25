@@ -12,7 +12,7 @@
     justify-content: space-around; /* Evenly spaces out container items */
     align-items: center; /* Centers the container vertically */
 
-    width: 80%;
+    width: 90%;
 
     background-color: var(--color-main); /* Background colour */
 

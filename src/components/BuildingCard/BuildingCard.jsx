@@ -18,7 +18,7 @@ const BuildingCard = ({buildingName, buildingTags}) => {
             <div className="tags-section">
                 { buildingTags ?
                 buildingTags.map((buildingTag) =>(
-                    <BuildingTag key={buildingTag.NAME} tagName={buildingTag.NAME}/>
+                    <BuildingTag key={buildingTag} tagName={buildingTag}/>
                 )) : ""}
             </div>
         </section>
