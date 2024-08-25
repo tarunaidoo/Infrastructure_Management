@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
-import "VenueSelection.css";
+import RoomCard from "../../components/RoomCard/RoomCard";
+
+import "./VenueSelectionPage.css";
 
 
 const VenueSelectionPage = () => {
@@ -10,8 +12,11 @@ const VenueSelectionPage = () => {
     
     // HTML code
     return (
-      <>
-      </>  
+      <main className="centered-container">
+        <section className="content-section">
+            
+        </section>
+      </main>  
     );
 }
 

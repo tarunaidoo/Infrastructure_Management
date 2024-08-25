@@ -1,0 +1,37 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+.room-card-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; /* Evenly spaces out container items */
+    align-items: center; /* Centers the container vertically */
+
+    width: 80%;
+
+    background-color: var(--color-main); /* Background colour */
+
+    border-radius: 15px; /* Rounds the corners */
+    gap: 10px; /* Adds a gab between items */
+    padding: 5px 10px; /* Adds padding */
+}
+
+.room-card-container .room-name-text {
+    color: var(--color-neutral); /* Text colour */
+    flex-grow: 2; /* Item takes up twice as much space as other items */
+    font-size: 1.2em; /* Font Size */
+    font-weight: bold; /* Font Weight*/
+}
+
+.room-card-container .door-in-icon {
+    width: 8%;
+}
+
+.room-card-container .circle-question-icon {
+    width: 8%;
+}
