@@ -1,35 +1,12 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
+
 import './LoginPage.css';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import Logo from '../../assets/icons/WitsVenueTitle.svg';
+import {list,createUser} from '../../services/LoginPage.service'
 
-//function to get users
-async function list(id) {
-    const endpoint = '/data-api/rest/USERS/USER_ID';
-    const response = await fetch(`${endpoint}/${id}`);
-    const data = await response.json();
-    return data.value;
-}
-
-async function createUser(email,firstName,lastName) {
-    const data = {
-      USER_ID: email,
-      FIRST_NAME: firstName,
-      LAST_NAME:lastName,
-      USER_ROLE: "Student"
-    };
-  
-    const endpoint = `/data-api/rest/USERS/`;
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    const result = await response.json();
-    return result;
-  }
 
 function LoginPage() {
     const {user, isAuthenticated } = useAuth0();
