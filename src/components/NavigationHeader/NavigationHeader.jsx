@@ -4,7 +4,7 @@ import chevronIcon from '../../assets/icons/chevron-left.svg'
 
 const Header = ({ title }) => {
   return (
-    <div className="header">
+    <div className="header" data-testid="NavigationHeader-1">
       <img src={chevronIcon} alt="Back" className="chevron-icon" />
       <h1 className="header-title">{title}</h1>
     </div>
