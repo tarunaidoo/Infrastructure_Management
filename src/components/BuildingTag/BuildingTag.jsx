@@ -5,8 +5,8 @@ import "./BuildingTag.css"
 
 const BuildingTag = ({tagName}) => {
     return (
-        <div className="building-tag-container">
-            <p className="tag-name-text"> {tagName} </p>
+        <div data-testid="building-tag" className="building-tag-container">
+            <p data-testid="building-tag-text" className="tag-name-text">{tagName}</p>
         </div>
     );
 }
