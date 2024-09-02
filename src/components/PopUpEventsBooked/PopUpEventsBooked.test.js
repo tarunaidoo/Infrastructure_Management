@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PopupEventsBooked from './PopupEventsBooked'; // Adjust import path as needed
+import PopupEventsBooked from './PopUpEventsBooked'; // Adjust import path as needed
 
 // Example props for the PopupEventsBooked component
 const props = {
