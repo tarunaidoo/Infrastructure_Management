@@ -1,10 +1,7 @@
 import React from 'react';
-//import Header from './StudentHomeHeader.jsx'
-//import Card from './StudentHomeCard.jsx'
-//import Footer from './StudentHomeFooter.jsx';
-import Footer from '../../components//NavigationBar/AdminHomeFooter.jsx';
-import Card from '../../components/HomePageCard/StudentHomeCard.jsx';
-import Header from '../../components/NavigationHeader/NavigationHeader.jsx';
+import Header from './StudentHomeHeader.jsx'
+import Card from './StudentHomeCard.jsx'
+import Footer from './StudentHomeFooter.jsx';
 import './StudentHomePage.css'
 function App() {
   return(
