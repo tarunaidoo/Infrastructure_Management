@@ -1,12 +1,10 @@
 import '@testing-library/jest-dom';
-import { cleanup, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 
 import CampusCard from "./CampusCard";
 
-
-afterEach(() => {
-    cleanup();
-});
+//Mock Data
+const campuses = ["West Campus", "East Campus"];
 
 
 describe(CampusCard, () => {
@@ -19,8 +17,6 @@ describe(CampusCard, () => {
     });
 
     it("should display the correct text through prop", () => {
-        const campuses = ["West Campus", "East Campus"];
-        
         const { getAllByTestId } = render(
             <>
                 {campuses.map((campus) => (
