@@ -3,7 +3,7 @@ import './PopUpIssuesReported.css';
 
 function ReportedIssuePopup({ title, user, date, time, venue, room, description, onClose }) {
     return (
-        <div className="popup-overlay">
+        <div className="popup-overlay" data-testid="popIssues-1">
             <div className="popup-content">
                 <h2>{title}</h2>
                 <p><strong>User:</strong> {user}</p>

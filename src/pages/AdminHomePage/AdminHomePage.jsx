@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
 import AdminIcon from '../../assets/icons/admin-home-icon.svg'
 import AdminIssuesCard from '../../components/AdminIssuesCard/AdminIssuesCard'
-import AdminEventsCard from '../../components/AdminEventsCard/AdminEventsCard'
+import AdminEventsCard from '../../components/AdminEventsCard/AdminEventsCard';
+import Footer from '../../components/NavigationBar/AdminHomeFooter';
 import './AdminHomePage.css';
 
 function AdminHomePage(){
@@ -12,20 +13,21 @@ function AdminHomePage(){
     const navigate = useNavigate();
 
     const eventsCardClick = () =>{
-        navigate('/events-booked'); //move from this page to Events list page
+        navigate('/admin-events-booked'); //move from this page to Events page
     };
 
     const issuesCardClick = () =>{
-        navigate('/issues-reported');
+        navigate('/admin-issues-reported'); //move from this page to Issues page
     };
 
     return(
         <>
             
-            <NavigationHeader title = "Home"/>
-            <img src={AdminIcon} alt='admin icon' className='adminIcon'/>
-            <AdminIssuesCard onClick={issuesCardClick}/>
-            <AdminEventsCard onClick={eventsCardClick}/>
+            <NavigationHeader title = "Home" className="heading"/>
+            {/* <img src={AdminIcon} alt='admin icon' className='adminIcon'/> not appearing over header element */}
+            <AdminIssuesCard onClick={issuesCardClick} className="cards"/>
+            <AdminEventsCard onClick={eventsCardClick} className="cards"/>
+            <Footer/>
         </>
         
         

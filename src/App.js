@@ -174,14 +174,22 @@ function App() {
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
+import Profile from './pages/ProfilePage/ProfilePage';
+import BookingPage from './pages/BookingPage/BookingPage';
+import AdminHomePage from './pages/AdminHomePage/AdminHomePage';
+import EventsBookedPage from './pages/EventsBookedPage/EventsBookedPage';
+import IssuesReportedPage from './pages/IssuesReportedPage/IssuesReportedPage';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/booking" element={<BookingPage />} />
+        <Route path="/admin-home" element={<AdminHomePage/>} />
+        <Route path="/admin-events-booked" element={<EventsBookedPage/>} />
+        <Route path="/admin-issues-reported" element={<IssuesReportedPage/>} />
       </Routes>
     </Router>
   );
