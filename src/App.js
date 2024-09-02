@@ -176,6 +176,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Profile from './pages/ProfilePage/ProfilePage';
 import BookingPage from './pages/BookingPage/BookingPage';
+import ReportIssue from './pages/ReportIssuePage/ReportIssue';
 
 function App() {
   return (
@@ -184,6 +185,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path="/report-issue" element = {<ReportIssue/>}/>
       </Routes>
     </Router>
   );
