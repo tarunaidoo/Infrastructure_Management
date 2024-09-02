@@ -4,8 +4,12 @@ import { render } from "@testing-library/react";
 
 import BuildingTag from "./BuildingTag";
 
+// Mock Data
+const tags = ["Computer Labs", "Tutorial Rooms", "Lecture Halls"];
+
+
 describe(BuildingTag, () => {
-    it("Should render BuildingTag", () => {
+    it("should render BuildingTag", () => {
         const { getByTestId } = render(<BuildingTag tagName={"Placeholder"}/>);
 
         const buildingTagElement = getByTestId("building-tag");
@@ -14,8 +18,6 @@ describe(BuildingTag, () => {
     });
 
     it("should display the correct text through prop", () => {
-        const tags = ["Computer Labs", "Tutorial Rooms", "Lecture Halls"];
-        
         const { getAllByTestId } = render(
             <>
                 {tags.map((tag) => (
