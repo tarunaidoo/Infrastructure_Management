@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
-import AdminIcon from '../../assets/icons/admin-home-icon.svg'
+// import AdminIcon from '../../assets/icons/admin-home-icon.svg'
 import AdminIssuesCard from '../../components/AdminIssuesCard/AdminIssuesCard'
 import AdminEventsCard from '../../components/AdminEventsCard/AdminEventsCard';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
