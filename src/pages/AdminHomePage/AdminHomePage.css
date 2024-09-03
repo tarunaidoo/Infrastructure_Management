@@ -1,0 +1,23 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.cards{
+    content: wrap;
+    align-items: center;
+}
+.adminIcon{
+    padding: none;
+    margin-top: 0;
+    filter: invert(1) brightness(7) sepia(1) saturate(6);
+    width: 3.25em; /* Uses em units for scalable image size */
+    height: 3.25em;
+}
