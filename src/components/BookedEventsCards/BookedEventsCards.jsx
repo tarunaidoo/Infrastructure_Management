@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './BookedEventsCard.css';
-import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';
+// import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';
 import InfoIcon from '../../assets/icons/circle-info.svg';
 
 const BookedEventsCard = ({ eventName, eventDetails }) => {
