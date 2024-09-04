@@ -179,7 +179,9 @@ import BookingPage from './pages/BookingPage/BookingPage';
 import AdminHomePage from './pages/AdminHomePage/AdminHomePage';
 import EventsBookedPage from './pages/EventsBookedPage/EventsBookedPage';
 import IssuesReportedPage from './pages/IssuesReportedPage/IssuesReportedPage';
-
+import AddAddVenuePage from './pages/AdminAddVenuePage/AdminAddVenuePage';
+import StudentsBookingPage from './pages/UserBookingsPage/StudentBookingPage';
+import LecturerBookingPage from './pages/UserBookingsPage/LecturerBookingsPage';
 function App() {
   return (
     <Router>
@@ -190,6 +192,9 @@ function App() {
         <Route path="/admin-home" element={<AdminHomePage/>} />
         <Route path="/admin-events-booked" element={<EventsBookedPage/>} />
         <Route path="/admin-issues-reported" element={<IssuesReportedPage/>} />
+        <Route path="/admin-add-venue" element={<AddAddVenuePage/>} />
+        <Route path="/admin-view-stud-booking" element={<StudentsBookingPage/>} />
+        <Route path="/admin-view-lec-booking" element={<LecturerBookingPage/>} />
       </Routes>
     </Router>
   );

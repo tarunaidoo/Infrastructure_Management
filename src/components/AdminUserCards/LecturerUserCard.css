@@ -1,0 +1,41 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    /* display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh; */
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100px; /* Ensures content-wrapper takes full height of the viewport */
+    margin-top: 14pv;
+}
+.lecturer-card{
+    border: 1px solid var(--color-main);
+    background-color: var(--color-main);
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px var(--color-neutral);
+    padding: 25px;
+    margin: 10px;
+    text-align: center;
+    color: var(--color-neutral);
+    width: 75%; /* Take 90% of the screen width on small screens */
+    max-width: 400px; /* On larger screens, card will not exceed 400px width */
+    height: auto;
+}

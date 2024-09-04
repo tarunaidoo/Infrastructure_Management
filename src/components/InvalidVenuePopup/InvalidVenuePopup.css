@@ -1,0 +1,83 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+/* Overlay */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensure it is below the popup */
+}
+
+/* Popup container */
+.popup {
+    width: 80%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000; /* Ensure it is above the overlay */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+}
+
+/* Popup heading */
+.popup-heading {
+    font-weight: bold;
+    font-size: 24px;
+    color: black;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Popup message */
+.popup-message {
+    text-align: center;
+    font-size: 16px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+/* Popup buttons container */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Full width of the popup */
+    gap: 10px; /* Space between buttons */
+}
+
+/* Button styles */
+.popup-button {
+    background-color: var(--color-secondary); /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 1; /* Make buttons take equal space */
+}
+
+.popup-button:hover {
+    background-color: var(--color-highlight); /* Adjust for hover effect */
+}
+
+/* Button spacing for single button */
+.popup-button + .popup-button {
+    margin-left: 10px;
+}

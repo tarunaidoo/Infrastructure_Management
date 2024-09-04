@@ -1,0 +1,51 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+h2{
+    font-size: large;
+    text-align: left;
+    padding-left: 40px;
+    margin: 7px;
+}
+/* Book Event Button */
+.add-venue-button {
+    padding: 0;
+    margin-left: 20px;
+    height: 50px;
+    max-width: 130px;
+    background-color: var(--color-accent);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    align-self: center;
+}
+.input-field {
+    height: 50px;
+    width: 90%;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #e0e0e0;
+    text-align: center;
+}
+.adding-form{
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 7.5px;
+    align-items: center;
+}
