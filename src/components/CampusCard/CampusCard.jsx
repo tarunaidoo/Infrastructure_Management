@@ -5,8 +5,8 @@ import "./CampusCard.css"
 
 const CampusCard = ({campusName}) => {
     return (
-        <section className="campus-card-container">
-            <p className="campus-name-text"> {campusName} </p>
+        <section data-testid="campus-card" className="campus-card-container">
+            <p data-testid="campus-card-text"className="campus-name-text">{campusName}</p>
         </section>
     );
 }

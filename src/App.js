@@ -176,6 +176,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Profile from './pages/ProfilePage/ProfilePage';
 import BookingPage from './pages/BookingPage/BookingPage';
+import AdminHomePage from './pages/AdminHomePage/AdminHomePage';
+import EventsBookedPage from './pages/EventsBookedPage/EventsBookedPage';
+import IssuesReportedPage from './pages/IssuesReportedPage/IssuesReportedPage';
 import ReportIssue from './pages/ReportIssuePage/ReportIssue';
 
 function App() {
@@ -185,6 +188,9 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route path="/admin-home" element={<AdminHomePage/>} />
+        <Route path="/admin-events-booked" element={<EventsBookedPage/>} />
+        <Route path="/admin-issues-reported" element={<IssuesReportedPage/>} />
         <Route path="/report-issue" element = {<ReportIssue/>}/>
       </Routes>
     </Router>
