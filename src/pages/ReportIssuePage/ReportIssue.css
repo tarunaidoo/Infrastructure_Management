@@ -120,3 +120,47 @@
 .report-issue-container button:hover {
     background-color: #141c5c;
 }
+.report-Issue-Popups{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.report-Issue-Popups h2{
+    padding:0;
+
+}
+
+.report-Issue-Popups article{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25%
+
+}
+
+.report-Issue-Popups button {
+    background-color: #001F3F; /* Deep Navy */
+    color: white;
+    padding: 10px 20px;
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .report-Issue-Popups button:hover {
+    background-color: #0047AB; /* Royal Azure, change on hover */
+  }
+  
+  .report-Issue-Popups button:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
+  }

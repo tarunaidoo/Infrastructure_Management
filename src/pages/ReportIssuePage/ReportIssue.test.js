@@ -1,7 +1,8 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent } from "@testing-library/react";
-import ReportIssue from "./ReportIssue"; // Adjust the import based on your file structure
+import { render, fireEvent, waitFor,getByPlaceholderText,findByText,screen } from "@testing-library/react";
+import ReportIssue from "./ReportIssue"; 
+import { createReportIssue } from "../../services/ReportIssuePage/ReportIssuePage.service";
 /**
  * Tests for the 'ReportIssue' component.
  * 
@@ -20,13 +21,19 @@ import ReportIssue from "./ReportIssue"; // Adjust the import based on your file
  * 
  * 7. Input Fields Update: Tests that the issue title and description input fields correctly update their values when the user types into them.
  * 
- * 8. Form Submission: Verifies that the `handleSubmit` function is called when the form is submitted with valid input data.
- * 
  * 9. Form Validation: Checks that the `handleSubmit` function is not called if the form fields are empty upon submission.
  * 
  */
 
 // Group tests related to the 'ReportIssue' component
+
+jest.mock('../../services/ReportIssuePage/ReportIssuePage.service', () => ({
+    createReportIssue: jest.fn(),
+  }));
+  afterEach(() => {
+    jest.clearAllMocks();
+});
+
 describe("ReportIssue", () => {
 
     // Test default rendering
@@ -179,37 +186,7 @@ describe("ReportIssue", () => {
         expect(issueTitleInput.value).toBe('Test Issue Title');
         expect(issueDescriptionInput.value).toBe('Test Issue Description');
     });
-
-    // Test to ensure the report issue button and the warning icon are rendered correctly
-    // it("calls the handleSubmit function when the form is submitted", () => {
-    //     // Create a mock function for handleSubmit
-    //     const handleSubmit = jest.fn();
-
-    //     // Render the 'ReportIssue' component with the mocked handleSubmit function
-    //     const { getByPlaceholderText, getByText } = render(
-    //         <ReportIssue handleSubmit={handleSubmit} />
-    //     );
-
-    //     // Find the input fields and submit button
-    //     const issueTitleInput = getByPlaceholderText("Enter issue title here...");
-    //     const issueDescriptionInput = getByPlaceholderText(
-    //         "Describe the issue here..."
-    //     );
-    //     const submitButton = getByText(/Report Issue/i);
-
-    //     // Fill out the form
-    //     fireEvent.change(issueTitleInput, { target: { value: "Test Issue" } });
-    //     fireEvent.change(issueDescriptionInput, {
-    //         target: { value: "Test Description" },
-    //     });
-
-    //     // Submit the form
-    //     fireEvent.click(submitButton);
-
-    //     // Assert that the handleSubmit function was called exactly once
-    //     expect(handleSubmit).toHaveBeenCalledTimes(1);
-    // });
-
+    
     // Test form validation
     it('does not call handleSubmit if fields are empty', () => {
         // Mock the handleSubmit function
@@ -226,5 +203,76 @@ describe("ReportIssue", () => {
         // Assert that handleSubmit was not called because fields are empty
         expect(handleSubmit).not.toHaveBeenCalled();
     });
+
+    it('calls handleFormSubmit when the form is submitted', async () => {
+        // Mock API response
+        createReportIssue.mockResolvedValueOnce({ success: true });
+    
+        // Render the ReportIssue component
+        render(<ReportIssue />);
+    
+        // Get input fields and submit button
+        const issueTitleInput = screen.getByPlaceholderText("Enter issue title here...");
+        const issueDescriptionInput = screen.getByPlaceholderText("Describe the issue here...");
+        const submitButton = await screen.findByText(/Report Issue/i);
+    
+        // Simulate user typing in the input fields
+        fireEvent.change(issueTitleInput, { target: { value: "Broken Projector" } });
+        fireEvent.change(issueDescriptionInput, { target: { value: "The projector in MSL004 is not working." } });
+    
+        // Simulate form submission
+        fireEvent.click(submitButton);
+    
+        // Confirm the confirmation popup appears and simulate confirming
+        const confirmButton = await screen.findByText(/Yes/i);
+        fireEvent.click(confirmButton);
+    
+        // Ensure API is called
+        expect(createReportIssue).toHaveBeenCalledTimes(1);
+        expect(createReportIssue).toHaveBeenCalledWith({
+            VENUE_ID: 1,
+            REPORTED_BY: "2486457@students.wits.ac.za",
+            REPORT_DATE: expect.any(String),
+            DESCRIPTION: "The projector in MSL004 is not working.",
+            ISSUE_STATUS: "UNRESOLVED",
+        });
+    });
+    it('handles API failure and shows error popup when the form is submitted', async () => {
+        // Mock API rejection
+        createReportIssue.mockRejectedValueOnce(new Error('Something went wrong'));
+    
+        // Render the ReportIssue component
+        render(<ReportIssue />);
+    
+        // Get input fields and submit button
+        const issueTitleInput = screen.getByPlaceholderText("Enter issue title here...");
+        const issueDescriptionInput = screen.getByPlaceholderText("Describe the issue here...");
+        const submitButton = await screen.findByText(/Report Issue/i);
+    
+        // Simulate user typing in the input fields
+        fireEvent.change(issueTitleInput, { target: { value: "Broken Projector" } });
+        fireEvent.change(issueDescriptionInput, { target: { value: "The projector in MSL004 is not working." } });
+    
+        // Simulate form submission
+        fireEvent.click(submitButton);
+    
+        // Confirm the confirmation popup appears and simulate confirming
+        const confirmButton = await screen.findByText(/Yes/i);
+        fireEvent.click(confirmButton);
+    
+        // Check if error popup is displayed
+        const errorPopup = await screen.findByText(/Error Sending Request/i);
+        expect(errorPopup).toBeInTheDocument();
+    
+        // Ensure API is called
+        expect(createReportIssue).toHaveBeenCalledTimes(1);
+        expect(createReportIssue).toHaveBeenCalledWith({
+            VENUE_ID: 1,
+            REPORTED_BY: "2486457@students.wits.ac.za",
+            REPORT_DATE: expect.any(String),
+            DESCRIPTION: "The projector in MSL004 is not working.",
+            ISSUE_STATUS: "UNRESOLVED",
+        });
+});
 });
 
