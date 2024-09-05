@@ -1,0 +1,38 @@
+/*The Navigation bar at the bottom*/
+.MenuBar {
+    background-color: #001f3d;
+    color: white;
+    text-align: center;
+    padding-bottom: 1vh; /* Scales padding with viewport height */
+    position: fixed;
+    bottom: 3vh; /* Moves the footer up by a scalable amount from the bottom */
+    width: 90%; /* Sets the footer width to 90% */
+    left: 50%; /* Centers the footer horizontally */
+    transform: translateX(-50%); /* Adjusts the centering based on reduced width */
+    z-index: 1000;
+    height: 7vh; /* Scales footer height with viewport height */
+    border-radius: 6vh; /* Uses viewport height units for scalable border radius */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+  
+.image-button {
+    background: none;
+    border: none;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2%;
+    cursor: pointer;
+}
+  
+.MenuBar img {
+    filter: invert(1) brightness(5) sepia(1) saturate(5); /*makes svg off-white if black*/
+    width: 3.25em; /* Uses em units for scalable image size */
+    height: 3.25em;
+}
+  
+.MenuBar .main {
+    filter: invert(2) brightness(1) sepia(5) saturate(4); /*makes svg white if black*/
+}
