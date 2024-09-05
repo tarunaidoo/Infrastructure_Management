@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './StudentHomeHeader.jsx'
 import Card from './StudentHomeCard.jsx'
 import Footer from './StudentHomeFooter.jsx';
-import './StudentHomePage.css'
+
 function App() {
   return(
     <>
