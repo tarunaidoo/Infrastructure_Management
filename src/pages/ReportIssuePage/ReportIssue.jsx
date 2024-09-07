@@ -5,10 +5,18 @@ import headingIcon from '../../assets/icons/chevron-left.svg';
 import warningIcon from '../../assets/icons/triangle-warning.svg';
 import Popup from '../../components/Popup/Popup';
 import { createReportIssue } from '../../services/ReportIssuePage/ReportIssuePage.service';
+import { formatDateToISO,getFormattedDate } from '../../utils/dateUtils';
 
 
 
 function ReportIssue() {
+
+    // Format the date i.e 24 August 2024
+    const formattedDate = getFormattedDate();
+
+    // Format the date in YYYY-MM-DD format
+    const formattedDateISO = formatDateToISO(new Date());
+  
 
   //dummy data
   const venues = [
@@ -25,24 +33,6 @@ function ReportIssue() {
   const [popupType, setPopupType] = useState('');
   const [userData, setUserData] = useState(null); // State for user data
 
-
-  // Format the date i.e 24 August 2024
-  const formattedDate = new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date());
-
-  // Format the date in YYYY-MM-DD format
-  const formattedDateISO = formatDateToISO(new Date());
-
-  function formatDateToISO(date) {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based, so add 1
-    const day = date.getDate().toString().padStart(2, '0'); // Pad single-digit days with a leading zero
-
-    return `${year}-${month}-${day}`;
-  }
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
