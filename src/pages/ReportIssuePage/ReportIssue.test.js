@@ -296,5 +296,101 @@ test('displays success popup when issue is successfully reported', async () => {
     const successPopup = await screen.findByText(/Your report has been sent/i);
     expect(successPopup).toBeInTheDocument();
   });
+
+  test('closes error popup when Close button is clicked', async () => {
+    // Act: Render component and trigger error popup
+    render(<ReportIssue />);
+    
+    // Submit the form without entering issue title or description to trigger the error popup
+    fireEvent.click(screen.getByText(/Report Issue/i));
+    
+    // Assert: Error popup should be displayed
+    const errorPopup = screen.getByText(/Invalid Details/i);
+    expect(errorPopup).toBeInTheDocument();
+    
+    // Close the popup
+    fireEvent.click(screen.getByText(/Close/i));
+    
+    // Assert: Popup should be closed (i.e., not in the document)
+    expect(screen.queryByText(/Invalid Details/i)).not.toBeInTheDocument();
+  });
+
+  test('closes confirmation popup when No button is clicked', async () => {
+    // Act: Render component and trigger confirmation popup
+    render(<ReportIssue />);
+
+    // Fill out the form
+    fireEvent.change(screen.getByPlaceholderText(/Enter issue title here.../i), { target: { value: 'Test Issue' } });
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue here.../i), { target: { value: 'Test description' } });
+
+    // Submit the form to trigger the confirmation popup
+    fireEvent.click(screen.getByText(/Report Issue/i));
+
+    // Assert: Confirmation popup should be displayed
+    const confirmPopup = await screen.findByText(/Do you want to report this issue?/i);
+    expect(confirmPopup).toBeInTheDocument();
+
+    // Close the popup by clicking "No"
+    fireEvent.click(screen.getByText(/No/i));
+
+    // Assert: Popup should be closed (i.e., not in the document)
+    expect(screen.queryByText(/Do you want to report this issue?/i)).not.toBeInTheDocument();
+  });
+
+  test('closes success popup when Close button is clicked', async () => {
+    // Arrange: Mock successful report submission
+    createReportIssue.mockResolvedValueOnce({});
+
+    // Act: Render component and submit form
+    render(<ReportIssue />);
+    
+    // Fill out the form fields
+    fireEvent.change(screen.getByPlaceholderText(/Enter issue title here.../i), { target: { value: 'Test Issue' } });
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue here.../i), { target: { value: 'Test description' } });
+
+    // Submit the form
+    fireEvent.click(screen.getByText(/Report Issue/i));
+
+    // Confirm the issue report in the confirmation popup
+    fireEvent.click(await screen.findByText(/Yes/i));
+
+    // Assert: Success popup should be displayed
+    const successPopup = await screen.findByText(/Your report has been sent/i);
+    expect(successPopup).toBeInTheDocument();
+
+    // Close the success popup
+    fireEvent.click(screen.getByText(/Close/i));
+
+    // Assert: Popup should be closed (i.e., not in the document)
+    expect(screen.queryByText(/Your report has been sent/i)).not.toBeInTheDocument();
+  });
+
+  test('closes request-error popup when Close button is clicked', async () => {
+    // Arrange: Mock failed report submission
+    createReportIssue.mockRejectedValueOnce({});
+
+    // Act: Render component and submit form
+    render(<ReportIssue />);
+
+    // Fill out the form fields
+    fireEvent.change(screen.getByPlaceholderText(/Enter issue title here.../i), { target: { value: 'Test Issue' } });
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue here.../i), { target: { value: 'Test description' } });
+
+    // Submit the form
+    fireEvent.click(screen.getByText(/Report Issue/i));
+
+    // Confirm the issue report in the confirmation popup
+    fireEvent.click(await screen.findByText(/Yes/i));
+
+    // Assert: Request-error popup should be displayed
+    const requestErrorPopup = await screen.findByText(/Error Sending Request/i);
+    expect(requestErrorPopup).toBeInTheDocument();
+
+    // Close the request-error popup
+    fireEvent.click(screen.getByText(/Close/i));
+
+    // Assert: Popup should be closed (i.e., not in the document)
+    expect(screen.queryByText(/Error Sending Request/i)).not.toBeInTheDocument();
+  });
 });
 
