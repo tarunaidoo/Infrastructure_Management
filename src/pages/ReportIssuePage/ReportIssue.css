@@ -1,7 +1,7 @@
 .report-issue-layout{
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start;
     background-color: #001F3F;  /* Button color */
     color: white;  /* Button text color */
     font-family: Arial, sans-serif;
