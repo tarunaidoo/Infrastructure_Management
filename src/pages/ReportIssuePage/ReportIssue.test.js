@@ -274,5 +274,27 @@ describe("ReportIssue", () => {
             ISSUE_STATUS: "UNRESOLVED",
         });
 });
+
+test('displays success popup when issue is successfully reported', async () => {
+    // Arrange: Mock successful report submission
+    createReportIssue.mockResolvedValueOnce({}); // resolve the mock to simulate a successful report submission
+
+    // Act: Render component and fill out the form
+    render(<ReportIssue />);
+
+    // Fill out the form fields
+    fireEvent.change(screen.getByPlaceholderText(/Enter issue title here.../i), { target: { value: 'Test Issue' } });
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue here.../i), { target: { value: 'Test description' } });
+
+    // Submit the form
+    fireEvent.click(screen.getByText(/Report Issue/i));
+
+    // Confirm the issue report in the confirmation popup
+    fireEvent.click(await screen.findByText(/Yes/i));
+
+    // Assert: Check that the success popup appears after submission
+    const successPopup = await screen.findByText(/Your report has been sent/i);
+    expect(successPopup).toBeInTheDocument();
+  });
 });
 
