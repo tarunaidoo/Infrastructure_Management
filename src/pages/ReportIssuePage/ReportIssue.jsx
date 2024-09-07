@@ -1,4 +1,4 @@
-import React, {useState,useEffect } from 'react';
+import React, {useState } from 'react';
 import "./ReportIssue.css";
 //import {useNavigate, useLocation } from 'react-router-dom';
 import headingIcon from '../../assets/icons/chevron-left.svg';
@@ -26,27 +26,14 @@ function ReportIssue() {
   ];
   // States
 
-  const [selectedVenue, setSelectedVenue] = useState(venues[0]);
+  const [selectedVenue] = useState(venues[0]);
   const [issueTitle, setIssueTitle] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
-  const [userData, setUserData] = useState(null); // State for user data
+  // const [userData, setUserData] = useState(null); // State for user data
 
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const data = await getUser();
-  //       setUserData(data); // Update state with user data
-  //     } catch (error) {
-  //       console.error('Error fetching user data:', error);
-  //       // Handle errors as needed
-  //     }
-  //   };
-
-  //   fetchUserData();
-  // }, []); // Empty dependency array means this runs once on mount
 
   // Handle form submission
   const handleFormSubmit = async (e) => {
@@ -60,13 +47,7 @@ function ReportIssue() {
     handleReportIssueClick();
   };
 
-  const handleVenueChange = (e) => {
-    const venue = venues.find(v => v.code === e.target.value);
-    setSelectedVenue(venue);
-  };
-
   const handleConfirm = () => {
-    console.log("Handle Confirm Called");
     const reportData = {
       VENUE_ID: selectedVenue.ID,
       REPORTED_BY: "2486457@students.wits.ac.za",
@@ -74,12 +55,14 @@ function ReportIssue() {
       DESCRIPTION: issueDescription,
       ISSUE_STATUS:"UNRESOLVED",
     };
+
     console.log('Submitting data:', reportData);
     console.log(`Date: ${formattedDate}`);
     console.log(`Building: ${selectedVenue.name}`);
     console.log(`Room: ${selectedVenue.code}`);
     console.log(`Issue Title: ${issueTitle}`);
     console.log(`Issue Description: ${issueDescription}`);
+
     createReportIssue(reportData)
     .then(() => {
       setPopupType('success');
