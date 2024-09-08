@@ -46,6 +46,87 @@
           "role": "anonymous"
         }
       ]
+    },
+    "VENUE": {
+      "source": "dbo.VENUE",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "VENUE_FEATURES": {
+      "source": "dbo.VENUE_FEATURES",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "BOOKING": {
+      "source": "dbo.BOOKING",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "BUILDING": {
+      "source": "dbo.BUILDING",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "BUILDING_TAG": {
+      "source": "dbo.BUILDING_TAG",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "FEATURE": {
+      "source": "dbo.FEATURE",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "MAINTENANCE_ISSUE": {
+      "source": "dbo.MAINTENANCE_ISSUE",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "SCHEDULE": {
+      "source": "dbo.SCHEDULE",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "TAG": {
+      "source": "dbo.TAG",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
     }
   }
 }

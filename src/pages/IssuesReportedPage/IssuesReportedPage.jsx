@@ -1,37 +1,112 @@
-import React, {useState} from 'react';
-
+import React, { useState, useEffect } from 'react';
 import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import './IssuesReportedPage.css';
-function IssuesReportedPage(){
-    
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
+import { fetchIssues, fetchVenues, updateVenueAvailability } from '../../services/IssuesReportedPage.service';
 
-    const openPopup = () =>{
+function IssuesReportedPage() {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedIssue, setSelectedIssue] = useState(null);
+    const [issues, setIssues] = useState([]);
+    const [venues, setVenues] = useState([]);
+    const [blockedVenues, setBlockedVenues] = useState(new Set()); // Track blocked venues
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const issuesData = await fetchIssues();
+            const venuesData = await fetchVenues();
+            setIssues(issuesData);
+            setVenues(venuesData);
+
+            // Initialize blocked venues set
+            const blocked = new Set(venuesData.filter(v => v.AVAILABILITY === 'Unavailable').map(v => v.VENUE_ID));
+            setBlockedVenues(blocked);
+        };
+
+        fetchData();
+    }, []);
+
+    const openPopup = (issue) => {
+        setSelectedIssue(issue);
         setIsPopupOpen(true);
     };
-    const closePopup = () =>{
+
+    const closePopup = () => {
         setIsPopupOpen(false);
     };
 
-    return(
-    <>
-        <NavigationHeader title = 'Issues Reported'/>
-        <button className='tester' onClick={openPopup}>Test PopUp Info</button>
-        {isPopupOpen && (
-            <Popup
-                title = 'Broken AC'
-                user = 'JohMary Sue Doe'
-                date = '01 August 2024'
-                time = '14:15 - 17:00'
-                venue = 'FNB Building'
-                room = 'FNB33'
-                description = "AC doesn't turn on"
-                onClose={closePopup}
-            />
-        )}
-    </>);
-    
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const getVenueName = (venueID) => {
+        const venue = venues.find(v => v.VENUE_ID === venueID);
+        return venue ? venue.VENUE_NAME : 'Unknown Venue';
+    };
+
+const handleBlockRoom = async (venueID) => {
+    try {
+        const currentStatus = blockedVenues.has(venueID) ? 'Unavailable' : 'Available';
+        const newStatus = currentStatus === 'Available' ? 'Unavailable' : 'Available';
+
+        // Update venue status in the database
+        await updateVenueAvailability(venueID, newStatus);
+
+        // Update local state
+        setBlockedVenues(prev => {
+            const newBlockedVenues = new Set(prev);
+            if (newStatus === 'Unavailable') {
+                newBlockedVenues.add(venueID);
+            } else {
+                newBlockedVenues.delete(venueID);
+            }
+            return newBlockedVenues;
+        });
+    } catch (error) {
+        console.error('Failed to update venue availability', error);
+    }
+};
+
+
+    return (
+        <>
+            <NavigationHeader title="Reports" />
+
+            <div className="issues-list">
+                {issues.length > 0 ? (
+                    issues.map(issue => (
+                        <IssueListCard
+                            key={issue.ISSUE_ID}
+                            venueName={getVenueName(issue.VENUE_ID)}  // Pass the venue name
+                            isBlocked={blockedVenues.has(issue.VENUE_ID)}  // Determine if venue is blocked
+                            onClick={() => openPopup(issue)}
+                            onBlockRoom={() => handleBlockRoom(issue.VENUE_ID)} // Pass venue ID to handler
+                        />
+                    ))
+                ) : (
+                    <p>No issues found.</p>
+                )}
+            </div>
+
+            {isPopupOpen && selectedIssue && (
+                <Popup
+                    issueID={selectedIssue.ISSUE_ID}
+                    user={selectedIssue.REPORTED_BY}
+                    reportDate={formatDate(selectedIssue.REPORT_DATE)}
+                    resolvedDate={selectedIssue.DATE_RESOLVED ? formatDate(selectedIssue.DATE_RESOLVED) : 'Not Resolved'}
+                    venueName={getVenueName(selectedIssue.VENUE_ID)}
+                    description={selectedIssue.DESCRIPTION}
+                    status={selectedIssue.ISSUE_STATUS}
+                    onClose={closePopup}
+                />
+            )}
+        </>
+    );
 }
 
 export default IssuesReportedPage;
