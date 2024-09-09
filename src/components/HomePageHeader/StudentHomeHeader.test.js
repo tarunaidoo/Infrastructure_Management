@@ -13,11 +13,18 @@ test('placeholder test', () => { //Taruna added this in order to push to AdminAP
 
 
 /*test('should render Header component with an image and a heading', () => {
+=======
+test('should render Header component with an image and a heading', () => {
+
   // Arrange: Render the Header component
   render(<Header />);
 
   // Act: Get elements by test ids or by role
+
    const headerElement = screen.getByRole('banner'); // <header> element has a 'banner' role by default
+
+  const headerElement = screen.getByRole('banner'); // <header> element has a 'banner' role by default
+
   const imageElement = screen.getByRole('img'); // <img> element
   const headingElement = screen.getByRole('heading', { level: 1 }); // <h1> element
 
@@ -27,4 +34,6 @@ test('placeholder test', () => { //Taruna added this in order to push to AdminAP
   expect(headingElement).toBeInTheDocument();
   expect(headingElement).toHaveTextContent('Home');
 });
+
 */
+
