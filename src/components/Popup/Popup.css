@@ -24,7 +24,7 @@
     display: flex;
     justify-content: center;
 
-    width: 80%; /* Takes up 80% of the viewport width */
+    width: 100%; /* Takes up 100% of the viewport width */
     max-width: 500px; /* Optional: Set a max width to prevent the section from being too wide */
     padding: 20px;
 }

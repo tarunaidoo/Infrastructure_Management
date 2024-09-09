@@ -180,6 +180,10 @@ import AdminHomePage from './pages/AdminHomePage/AdminHomePage';
 import EventsBookedPage from './pages/EventsBookedPage/EventsBookedPage';
 import IssuesReportedPage from './pages/IssuesReportedPage/IssuesReportedPage';
 
+import BuildingSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
+import RoomSelectionPage from './pages/RoomSelectionPage/RoomSelectionPage';
+import CampusSelectionPage from './pages/CampusSelectionPage/CampusSelectionPage';
+
 function App() {
   return (
     <Router>
@@ -189,7 +193,10 @@ function App() {
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/admin-home" element={<AdminHomePage/>} />
         <Route path="/admin-events-booked" element={<EventsBookedPage/>} />
-        <Route path="/admin-issues-reported" element={<IssuesReportedPage/>} />
+        <Route path="/admin-issues-reported" element={<IssuesReportedPage/>}/>
+        <Route path="/campus-selection" element={<CampusSelectionPage/>}/>
+        <Route path="/building-selection" element={<BuildingSelectionPage/>}/>
+        <Route path="/room-selection" element={<RoomSelectionPage/>}/>
       </Routes>
     </Router>
   );
