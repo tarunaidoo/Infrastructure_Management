@@ -5,11 +5,12 @@
   "proxy": "http://localhost:4280",
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
+    "@tanstack/react-query": "^5.55.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^18.3.1",
     "react-calendar": "^3.5.0",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
     "react-scripts": "^5.0.1"
   },
