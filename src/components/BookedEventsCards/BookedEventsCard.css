@@ -1,0 +1,84 @@
+:root {
+  --color-main: #001F3F;         /* Deep Navy */
+  --color-secondary: #191970;    /* Midnight Blue */
+  --color-highlight: #0047AB;    /* Royal Azure */
+  --color-accent: #D4A843;       /* Soft Gold */
+  --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.booked-events-card {
+  background-color: var(--color-main);
+  color: white;
+  padding: 20px;
+  margin: 10px auto;             /* Center the card and add vertical margin */
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  position: relative;            /* Needed to position the icon */
+  max-width: 90%;                /* Ensure the card doesn't touch screen edges */
+  width: 500px;                  /* Set a reasonable width for larger screens */
+}
+
+.event-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.event-date {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.info-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  fill: var(--color-highlight);  /* Set the icon's fill color */
+  color: var(--color-highlight); /* Ensure the color property is also set */
+}
+
+.booked-events-card:hover {
+  background-color: var(--color-main);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+  background-color: var(--color-main);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.close-btn:hover {
+  background-color: var(--color-main);
+}

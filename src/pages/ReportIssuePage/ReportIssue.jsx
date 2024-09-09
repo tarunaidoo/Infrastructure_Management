@@ -1,164 +1,180 @@
-import React, {useState} from 'react';
+import React, {useState } from 'react';
 import "./ReportIssue.css";
 //import {useNavigate, useLocation } from 'react-router-dom';
 import headingIcon from '../../assets/icons/chevron-left.svg';
 import warningIcon from '../../assets/icons/triangle-warning.svg';
-//import ConfirmationPopUp from '../../components/ConfirmationPopUp/ConfirmationPopUp'; // Import the ConfirmationPopup
-//import PopUp from '../../components/PopUp/PopUp'; // Import the new Popup component
+import Popup from '../../components/Popup/Popup';
+import { createReportIssue } from '../../services/ReportIssuePage/ReportIssuePage.service';
+import { formatDateToISO,getFormattedDate } from '../../utils/dateUtils';
 
 
 
 function ReportIssue() {
 
-    // const navigate =useNavigate();
+    // Format the date i.e 24 August 2024
+    const formattedDate = getFormattedDate();
 
-    // const location = useLocation();
-    // // Get the building and room from state
+    // Format the date in YYYY-MM-DD format
+    const formattedDateISO = formatDateToISO(new Date());
+  
+
+  //dummy data
+  const venues = [
+    { name: 'Mathematical Science Labs', code: 'MSL004', ID:1},
+    { name: 'Science Building', code: 'SCB001', ID: 11 },
+    // Add other venues as needed
+  ];
+  // States
+
+  const [selectedVenue] = useState(venues[0]);
+  const [issueTitle, setIssueTitle] = useState('');
+  const [issueDescription, setIssueDescription] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupType, setPopupType] = useState('');
+  // const [userData, setUserData] = useState(null); // State for user data
 
 
-    //Pulling building name and room name from previous pages
-    // const { building, room } = location.state || {}; 
 
-    // States
-    const [issueTitle, setIssueTitle] = useState('');
-    const [issueDescription, setIssueDescription] = useState('');
-    //const [showPopup, setShowPopup] = useState(false);
-    //const [showConfirmation, setShowConfirmation] = useState(false);
-    //const [showError, setShowError] = useState(false);
-
-    //Handle when clicking on report a problem
-    // const handleBackClick = () => {
-    //     navigate('/');  // Navigate to the specified route
-    // };
-
-    
-    // //Handle when clicking on building field
-    // const handleBuildingClick = () => {
-    //     navigate('/building');  // Navigate back to the building screen
-    // };
-
-    // //Handle when clicking on room field
-    // const handleRoomClick = () => {
-    //     navigate('/building');  // Navigate back to the room screen
-    // };
-
-    // Handle form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        //Manual checking that issue title and description has been entered
-        if (!issueTitle || !issueDescription) {
-            //setShowError(true);
-        return;
+  // Handle form submission
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (!issueTitle || !issueDescription) {
+      setPopupType('error');
+      setShowPopup(true);
+      return;
     }
-    
-    //setShowConfirmation(true);
+    handleReportIssueClick();
   };
 
-    // Validate description length
-    const handleDescriptionChange = (e) => {
-        const value = e.target.value;
-        if (value.length <= 250) {
-            setIssueDescription(value);
-        }
+  const handleConfirm = () => {
+    const reportData = {
+      VENUE_ID: selectedVenue.ID,
+      REPORTED_BY: "2486457@students.wits.ac.za",
+      REPORT_DATE: formattedDateISO,
+      DESCRIPTION: issueDescription,
+      ISSUE_STATUS:"UNRESOLVED",
     };
 
-    //Printing out to console when user says yes to reporting issue
-    const handleConfirm = () => {
-        console.log(`Date: ${formattedDate}`);
-       // console.log(`Building: ${building}`);
-        //console.log(`Room: ${room}`);
-        console.log(`Issue Title: ${issueTitle}`);
-        console.log(`Issue Description: ${issueDescription}`);
-        //setShowConfirmation(false); // Hide the confirmation popup
-        //setShowPopup(true); // Show the new popup
-      };
-    
-      // const handleCloseConfirmation = () => {
-      //   setShowConfirmation(false); // Hide the confirmation popup without reporting
-      // };
-    
-      // const handleClosePopup = () => {
-      //   setShowPopup(false); // Hide the final popup
-      //   //navigate('/'); // Navigate to the home page 
+    console.log('Submitting data:', reportData);
+    console.log(`Date: ${formattedDate}`);
+    console.log(`Building: ${selectedVenue.name}`);
+    console.log(`Room: ${selectedVenue.code}`);
+    console.log(`Issue Title: ${issueTitle}`);
+    console.log(`Issue Description: ${issueDescription}`);
 
-      // };
-
-      // const handleCloseError = () => {
-      //   setShowError(false); // Hide the error popup
-      // };
-
-      
-    // Format the date i.e 24 August 2024
-    const formattedDate = new Intl.DateTimeFormat('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-    }).format(new Date());
+    createReportIssue(reportData)
+    .then(() => {
+      setPopupType('success');
+      setShowPopup(true);
+    })
+    .catch(() => {
+      setPopupType('request-error');
+      setShowPopup(true);
+    });
+  };
 
 
-    return (
-        <main className='report-issue-layout'>
+  const handleReportIssueClick = () => {
+    setPopupType('confirmation');
+    setShowPopup(true);
+  };
 
-            <article className='report-issue-heading'>
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    if (popupType === 'success') {
+      console.log("successful");
+    }
+    //navigate('/'); // Navigate to the home page 
 
-                <img src={headingIcon} alt='back-arrow' className='report-icons'/>
-                <h1>Report an Issue</h1>
+  };
 
-                </article>
+  // Validate description length
+  const handleDescriptionChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 250) {
+      setIssueDescription(value);
+    }
+  };
 
-            <section className='report-issue-container'>
-                {/* //checking that a value for building and room has been sent in */}
-                <form onSubmit={handleSubmit}>
-                    <p>Date: {formattedDate}</p>
-                    <p>Venue:</p>
-                    <article>
-                     <p >MSL</p>
-                     <p >MSL004</p>
-                     </article>
-                     <label className='issue-title-container'>
-                            Issue Title:
-                            <input
-                                type="text"
-                                value={issueTitle}
-                                onChange={(e) => setIssueTitle(e.target.value)}
-                                placeholder="Enter issue title here..."
-                            />
-                        </label>
-                        <label className='issue-description-container'>
-                            Issue Description:
-                            <textarea
-                                value={issueDescription}
-                                onChange={handleDescriptionChange}
-                                maxLength="250"
-                                placeholder="Describe the issue here..."
-                                style={{ resize: 'none' }} // Disable resizing
-                            />
-                        </label>
-                        <button type="submit"> 
-                        <img src={warningIcon} alt='warning-icon '/>
-                        Report Issue</button>
-                        </form>
+  return (
+    <main className='report-issue-layout'>
+
+      <article className='report-issue-heading'>
+
+        <img src={headingIcon} alt='back-arrow' className='report-icons' />
+        <h1>Report an Issue</h1>
+
+      </article>
+      <section className='report-issue-container'>
+        {/* //checking that a value for building and room has been sent in */}
+        <form onSubmit={handleFormSubmit}>
+          <p>Date: {formattedDate}</p>
+          <p>Venue:</p>
+          <article>
+            <p>{selectedVenue.name}</p>
+            <p>{selectedVenue.code}</p>
+          </article>
+          <label className='issue-title-container'>
+            Issue Title:
+            <input
+              type="text"
+              value={issueTitle}
+              onChange={(e) => setIssueTitle(e.target.value)}
+              placeholder="Enter issue title here..."
+            />
+          </label>
+          <label className='issue-description-container'>
+            Issue Description:
+            <textarea
+              value={issueDescription}
+              onChange={handleDescriptionChange}
+              maxLength="250"
+              placeholder="Describe the issue here..."
+              style={{ resize: 'none' }} // Disable resizing
+            />
+          </label>
+          <button type="submit">
+            <img src={warningIcon} alt='warning-icon ' />
+            Report Issue</button>
+        </form>
       </section>
-      {/* {showConfirmation && (
-        <ConfirmationPopUp
-          onClose={handleCloseConfirmation}
-          onConfirm={handleConfirm}
-          message="Do you want to report this problem?"
-        />
-      )} */}
-      {/* {showPopup && (
-        <PopUp onClose={handleClosePopup} 
-        message="Your report has been sent!"/>
-      )}
-        {showError && (
-        <PopUp
-          onClose={handleCloseError}
-          message="Please fill in all fields."
-        />
-      )} */}
-        </main>
-    );
+      <Popup trigger={showPopup} onClose={handleClosePopup}>
+        {popupType === 'error' && (
+          <article className='report-Issue-Popups'>
+            <h2>Invalid Details</h2>
+            <p>Please fill in all fields</p>
+            <button onClick={handleClosePopup}>Close</button>
+          </article>
+        )}
+        {popupType === 'confirmation' && (
+          <article className='report-Issue-Popups'>
+            <h2>Confirmation</h2>
+            <p>Do you want to report this issue?</p>
+            <article>
+              <button onClick={handleConfirm}>Yes</button>
+              <button onClick={handleClosePopup}>No</button>
+            </article>
+          </article>
+        )}
+        {popupType === 'success' && (
+          <article className='report-Issue-Popups'>
+            <h2>Confirmation</h2>
+            <p>Your report has been sent</p>
+            <button onClick={handleClosePopup}>Close</button>
+          </article>
+        )}
+        {popupType === 'request-error' && (
+          <article className='report-Issue-Popups'>
+            <h2>Confirmation</h2>
+            <p>Error Sending Request</p>
+            <button onClick={handleClosePopup}>Close</button>
+          </article>
+        )}
+      </Popup>
+    </main>
+  );
 }
 
 export default ReportIssue;
+

@@ -34,7 +34,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-neutral);
+    background-color:  white;
+    color: black;
 
     width: 80%;
     border-radius: 15px;

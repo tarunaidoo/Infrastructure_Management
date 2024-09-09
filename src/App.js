@@ -179,6 +179,9 @@ import BookingPage from './pages/BookingPage/BookingPage';
 import AdminHomePage from './pages/AdminHomePage/AdminHomePage';
 import EventsBookedPage from './pages/EventsBookedPage/EventsBookedPage';
 import IssuesReportedPage from './pages/IssuesReportedPage/IssuesReportedPage';
+import AddAddVenuePage from './pages/AdminAddVenuePage/AdminAddVenuePage';
+import StudentsBookingPage from './pages/UserBookingsPage/StudentBookingPage';
+import LecturerBookingPage from './pages/UserBookingsPage/LecturerBookingsPage';import ReportIssue from './pages/ReportIssuePage/ReportIssue';
 
 import BuildingSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
 import RoomSelectionPage from './pages/RoomSelectionPage/RoomSelectionPage';
@@ -193,6 +196,11 @@ function App() {
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/admin-home" element={<AdminHomePage/>} />
         <Route path="/admin-events-booked" element={<EventsBookedPage/>} />
+        <Route path="/admin-issues-reported" element={<IssuesReportedPage/>} />
+        <Route path="/admin-add-venue" element={<AddAddVenuePage/>} />
+        <Route path="/admin-view-stud-booking" element={<StudentsBookingPage/>} />
+        <Route path="/admin-view-lec-booking" element={<LecturerBookingPage/>} />
+        <Route path="/report-issue" element = {<ReportIssue/>}/>
         <Route path="/admin-issues-reported" element={<IssuesReportedPage/>}/>
         <Route path="/campus-selection" element={<CampusSelectionPage/>}/>
         <Route path="/building-selection" element={<BuildingSelectionPage/>}/>
