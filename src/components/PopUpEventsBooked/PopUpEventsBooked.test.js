@@ -1,73 +1,54 @@
-import React from "react";
+// Popup.test.js
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PopupEventsBooked from './PopUpEventsBooked'; // Adjust import path as needed
+import Popup from './PopUpEventsBooked';
 
-// Example props for the PopupEventsBooked component
-const props = {
-  title: "Event Details",
-  studentName: "John Doe",
-  date: "2024-09-15",
-  time: "14:00",
-  venue: "Main Auditorium",
-  room: "101",
-  onClose: () => {} // Mock function for the close handler
-};
+describe('Popup Component', () => {
+  const mockProps = {
+    title: 'Event Booked',
+    studentName: 'John Doe',
+    date: 'Mon Sep 09 2024',
+    time: '14:00',
+    venue: 'Room 101',
+    onClose: jest.fn(),
+  };
 
-test('should render popup component with details provided', () => {
-  render(<PopupEventsBooked {...props} />);
-  const popupElement = screen.getByTestId("popupEvents-1"); // Ensure this matches your component's test ID
-  expect(popupElement).toBeInTheDocument();
-});
+  test('renders the popup with correct content', () => {
+    render(<Popup {...mockProps} />);
+    
+   // Check for the title
+  expect(screen.getByText(mockProps.title)).toBeInTheDocument();
+  
+  // Check for student name, date, time, and venue separately
+  expect(screen.getByText('Student:')).toBeInTheDocument();
+  expect(screen.getByText(mockProps.studentName)).toBeInTheDocument();
+  
+  expect(screen.getByText('Date:')).toBeInTheDocument();
+  expect(screen.getByText(mockProps.date)).toBeInTheDocument();
+  
+  expect(screen.getByText('Time:')).toBeInTheDocument();
+  expect(screen.getByText(mockProps.time)).toBeInTheDocument();
+  
+  expect(screen.getByText('Venue:')).toBeInTheDocument();
+  expect(screen.getByText(mockProps.venue)).toBeInTheDocument();
+  });
 
-test('should render the correct title', () => {
-  render(<PopupEventsBooked {...props} />);
-  const titleElement = screen.getByText(/Event Details/i);
-  expect(titleElement).toBeInTheDocument();
-});
+  test('closes the popup when close button is clicked', () => {
+    render(<Popup {...mockProps} />);
+    
+    const closeButton = screen.getByText('Close');
+    fireEvent.click(closeButton);
+    
+    // Ensure the onClose function is called when close button is clicked
+    expect(mockProps.onClose).toHaveBeenCalledTimes(1);
+  });
 
-//for the following tests, I'm using expected values not testing labels
-
-test('should render the correct student name', () => {
-  render(<PopupEventsBooked {...props} />);
-  const studentNameElement = screen.getByText(/John Doe/i);
-  expect(studentNameElement).toBeInTheDocument();
-});
-
-test('should render the correct date', () => {
-  render(<PopupEventsBooked {...props} />);
-  const dateElement = screen.getByText(/2024-09-15/i);
-  expect(dateElement).toBeInTheDocument();
-});
-
-test('should render the correct time', () => {
-  render(<PopupEventsBooked {...props} />);
-  const timeElement = screen.getByText(/14:00/i);
-  expect(timeElement).toBeInTheDocument();
-});
-
-test('should render the correct venue', () => {
-  render(<PopupEventsBooked {...props} />);
-  const venueElement = screen.getByText(/Main Auditorium/i);
-  expect(venueElement).toBeInTheDocument();
-});
-
-test('should render the correct room number', () => {
-  render(<PopupEventsBooked {...props} />);
-  const roomElement = screen.getByText(/101/i);
-  expect(roomElement).toBeInTheDocument();
-});
-
-test('should render the close button', () => {
-  render(<PopupEventsBooked {...props} />);
-  const closeButton = screen.getByRole('button', { name: /close/i });
-  expect(closeButton).toBeInTheDocument();
-});
-
-test('should call onClose when close button is clicked', () => {
-  const handleClose = jest.fn();
-  render(<PopupEventsBooked {...props} onClose={handleClose} />);
-  const closeButton = screen.getByRole('button', { name: /close/i });
-  fireEvent.click(closeButton);
-  expect(handleClose).toHaveBeenCalledTimes(1);
+  test('has the correct test id', () => {
+    render(<Popup {...mockProps} />);
+    
+    // Check for the correct test id
+    const popupElement = screen.getByTestId('popupEvents-1');
+    expect(popupElement).toBeInTheDocument();
+  });
 });

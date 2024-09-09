@@ -15,15 +15,15 @@ function ReportedIssuePopup({
     return (
         <div className="popup-overlay" data-testid="popIssues-1">
             <div className="popup-content">
-                <h2>Issue No: {issueID}</h2>
-                <p><strong>Reported By:</strong> {user}</p>
-                <p><strong>Report Date:</strong> {reportDate}</p>
-                <p><strong>Resolved Date:</strong> {resolvedDate ? resolvedDate : 'Unresolved'}</p>
-                <p><strong>Venue:</strong> {venueName}</p>
-                <p><strong>Description:</strong> {description}</p>
-                <p><strong>Status:</strong> {status}</p>
-                <button onClick={onResolve} className="resolved-button">Resolve</button>
-                <button onClick={onClose} >Close</button>
+                <h2 data-testid="issueID">Issue No: {issueID}</h2>
+                <p data-testid="reportedBy"><strong>Reported By:</strong> {user}</p>
+                <p data-testid="reportDate"><strong>Report Date:</strong> {reportDate}</p>
+                <p data-testid="resolvedDate"><strong>Resolved Date:</strong> {resolvedDate ? resolvedDate : 'Unresolved'}</p>
+                <p data-testid="venueName"><strong>Venue:</strong> {venueName}</p>
+                <p data-testid="description"><strong>Description:</strong> {description}</p>
+                <p data-testid="status"><strong>Status:</strong> {status}</p>
+                <button onClick={onResolve} data-testid="resolveButton"  className="resolved-button">Resolve</button>
+                <button onClick={onClose} data-testid="closeButton">Close</button>
             </div>
         </div>
     );

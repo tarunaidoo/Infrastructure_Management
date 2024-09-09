@@ -5,7 +5,7 @@ import ExistingVenuePopup from '../../components/ExistingVenuePopup/ExistingVenu
 import AddPopup from '../../components/AddVenuePopup/AddVenuePopup';
 import ConfirmPopup from '../../components/VenueConfirmedPopup/VenueConfirmedPopup';
 import InvalidPopup from '../../components/InvalidVenuePopup/InvalidVenuePopup';
-import { fetchBuilding, createBuilding, fetchVenue, createVenue, fetchTag, updateTag, fetchFeature, addVenueFeature } from "../../services/AdminAddVenuePage.service";
+import { fetchBuilding, createBuilding, fetchVenue, createVenue, fetchTag, updateTag, fetchFeature, addVenueFeature } from "../../services/AdminAddVenuePage/AdminAddVenuePage.service";
 
 
 const AdminAddVenuePage = () => {

@@ -40,47 +40,49 @@ async function fetchVenues() {
 }
 export {fetchVenues};
 
-// Adjusted function to include VENUE_NAME and enhanced error handling
-const updateVenueAvailability = async (venueID, status) => {
+//update availability status
+const updateAvailability = async (venueID, newStatus) => {
     try {
-        // Fetch the venue details to get VENUE_NAME
-        const venuesData = await fetchVenues(); // Fetch all venues
-        console.log('Fetched venues data:', venuesData);
+        // Fetch all the venues
+        const venues = await fetchVenues();
 
-        const venue = venuesData.find(v => v.VENUE_ID === venueID); // Find the venue by ID
+        // Find the specific venue based on venueID
+        const venueToUpdate = venues.find(venue => venue.VENUE_ID === venueID);
 
-        if (!venue) {
-            console.error('Venue not found. Venue ID:', venueID);
-            throw new Error('Venue not found');
+        if (!venueToUpdate) {
+            throw new Error(`Venue with ID ${venueID} not found`);
         }
 
-        const payload = {
-            VENUE_NAME: venue.VENUE_NAME, // Include VENUE_NAME
-            VENUE_STATUS: status, // Update the status
+        // Prepare the updated venue data with all required fields, excluding VENUE_ID
+        const updatedVenue = {
+            BUILDING_ID: venueToUpdate.BUILDING_ID,
+            VENUE_NAME: venueToUpdate.VENUE_NAME,
+            VENUE_CAPACITY: venueToUpdate.VENUE_CAPACITY,
+            VENUE_STATUS: newStatus,
+            // Add other required fields from venueToUpdate if needed
         };
 
-        console.log('Request payload:', payload);
-
-        const response = await fetch(`/data-api/rest/VENUE/${venueID}`, {
+        // Send the update through PUT without VENUE_ID in the body
+        const endpoint = '/data-api/rest/VENUE/VENUE_ID'
+        const response = await fetch(`${endpoint}/${venueID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(updatedVenue),
         });
 
-        const responseData = await response.json();
-        console.log('Response data:', responseData);
-
         if (!response.ok) {
-            console.error('Error response data:', responseData);
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorData = await response.json();
+            console.error('Update Error:', errorData);
+            throw new Error(`Failed to update status for venue: ${venueID}. Status: ${response.status}, Error: ${JSON.stringify(errorData)}`);
         }
 
-        return responseData;
+        return await response.json();
     } catch (error) {
-        console.error('Error updating venue availability:', error);
-        throw error; // Re-throw to be handled by caller
+        console.error('Failed to update venue availability:', error);
+        throw error;
     }
 };
-export {updateVenueAvailability};
+
+export { updateAvailability };

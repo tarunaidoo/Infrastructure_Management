@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/NavigationHeader/NavigationHeader';
 import BookedEventsCard from '../../components/BookedEventsCards/BookedEventsCards';
 import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Import the Popup component
-import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/StudentBookingPage.service';
+import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/StudentBookingPage.service';
 
 function StudentBookingPage() {
     const [bookings, setBookings] = useState([]);

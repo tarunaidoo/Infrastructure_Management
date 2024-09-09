@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/NavigationHeader/NavigationHeader';
 import BookedEventsCard from '../../components/BookedEventsCards/BookedEventsCards';
-import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/LecturerBookingsPage.service';
+import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/LecturerBookingsPage.service';
 
 function LecturerBookingPage() {
     const [bookings, setBookings] = useState([]);

@@ -3,7 +3,7 @@ import NavigationHeader from '../../components/NavigationHeader/NavigationHeader
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import './IssuesReportedPage.css';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
-import { fetchIssues, fetchVenues, updateVenueAvailability } from '../../services/IssuesReportedPage.service';
+import { fetchIssues, fetchVenues, updateAvailability } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 
 function IssuesReportedPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -49,29 +49,33 @@ function IssuesReportedPage() {
         return venue ? venue.VENUE_NAME : 'Unknown Venue';
     };
 
-const handleBlockRoom = async (venueID) => {
-    try {
-        const currentStatus = blockedVenues.has(venueID) ? 'Unavailable' : 'Available';
-        const newStatus = currentStatus === 'Available' ? 'Unavailable' : 'Available';
+    // Toggle room availability and update state
+    const handleBlockRoom = async (venueID) => {
+        try {
+            // Determine current status by checking if the venue is blocked
+            const isBlocked = blockedVenues.has(venueID);
+            const newStatus = isBlocked ? 'Available' : 'Unavailable';
 
-        // Update venue status in the database
-        await updateVenueAvailability(venueID, newStatus);
+            //fetch name of venueID
+            //const venueName = getVenueName(venueID);
 
-        // Update local state
-        setBlockedVenues(prev => {
-            const newBlockedVenues = new Set(prev);
-            if (newStatus === 'Unavailable') {
-                newBlockedVenues.add(venueID);
-            } else {
-                newBlockedVenues.delete(venueID);
-            }
-            return newBlockedVenues;
-        });
-    } catch (error) {
-        console.error('Failed to update venue availability', error);
-    }
-};
+            // Update venue status in the database
+            await updateAvailability(venueID, newStatus);
 
+            // Update local state
+            setBlockedVenues(prev => {
+                const newBlockedVenues = new Set(prev);
+                if (newStatus === 'Unavailable') {
+                    newBlockedVenues.add(venueID);
+                } else {
+                    newBlockedVenues.delete(venueID);
+                }
+                return newBlockedVenues;
+            });
+        } catch (error) {
+            console.error('Failed to update venue availability', error);
+        }
+    };
 
     return (
         <>

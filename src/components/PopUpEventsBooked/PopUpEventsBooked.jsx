@@ -1,5 +1,5 @@
 import React from 'react';
-import './PopUpEventsBooked.css'; // You'll define styles in this file
+import './PopUpEventsBooked.css';
 
 const Popup = ({ title, studentName, date, time, venue, onClose }) => {
   return (
