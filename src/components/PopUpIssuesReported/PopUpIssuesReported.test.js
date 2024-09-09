@@ -1,169 +1,57 @@
-import React from "react";
-import {render, screen, fireEvent} from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PopUpIssuesReported from './PopUpIssuesReported';
-
-const props = {
-    title: 'Tester Issue',
-    user: 'John Doe',
-    date: '2024-09-01',
-    time: '14:00',
-    venue: 'Main Hall',
-    room: '101',
-    description: 'This is a test issue description.',
-    onClose: () => {}, //mock function for close handler
-};
-
-test('should render popup component with details provided', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const popupElement = screen.getByTestId("popIssues-1"); // Ensure this matches your component's test ID
-    expect(popupElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct title', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const titleElement = screen.getByText(/Test Issue/i);
-    expect(titleElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct user', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const userElement = screen.getByText(/John Doe/i);
-    expect(userElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct date', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const dateElement = screen.getByText(/2024-09-01/i);
-    expect(dateElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct time', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const timeElement = screen.getByText(/14:00/i);
-    expect(timeElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct venue', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const venueElement = screen.getByText(/Main Hall/i);
-    expect(venueElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct room number', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const roomElement = screen.getByText(/101/i);
-    expect(roomElement).toBeInTheDocument();
-  });
-  
-  test('should render the correct description', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const descriptionElement = screen.getByText(/This is a test issue description./i);
-    expect(descriptionElement).toBeInTheDocument();
-  });
-  
-  test('should render the close button', () => {
-    render(<PopUpIssuesReported {...props} />);
-    const closeButton = screen.getByRole('button', { name: /Close/i });
-    expect(closeButton).toBeInTheDocument();
-  });
-  
-  test('should call onClose when close button is clicked', () => {
-    const handleClose = jest.fn();
-    render(<PopUpIssuesReported {...props} onClose={handleClose} />);
-    const closeButton = screen.getByRole('button', { name: /Close/i });
-    fireEvent.click(closeButton);
-    expect(handleClose).toHaveBeenCalledTimes(1);
-  });
-
-  //test dependent on user inputs - uses dynamic props
-/*import React from "react";
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import PopUpIssuesReported from './PopUpIssuesReported'; // Adjust import path as needed
+import ReportedIssuePopup from './PopUpIssuesReported';
 
-// Function to create a set of props with dynamic values
-const createProps = (overrides = {}) => ({
-  title: 'Tester Issue',
-  user: 'John Doe',
-  date: '2024-09-01',
-  time: '14:00',
-  venue: 'Main Hall',
-  room: '101',
-  description: 'This is a test issue description.',
-  onClose: () => {}, // mock function for close handler
-  ...overrides,
-});
+describe('ReportedIssuePopup Component', () => {
+    const mockProps = {
+        issueID: '12345',
+        user: 'John Doe',
+        reportDate: 'Mon Sep 09 2024',
+        resolvedDate: null,
+        venueName: 'Room101',
+        description: 'Projector malfunctioning',
+        status: 'Pending',
+        onResolve: jest.fn(),
+        onClose: jest.fn(),
+    };
 
-test('should render popup component with details provided', () => {
-  const props = createProps();
-  render(<PopUpIssuesReported {...props} />);
-  const popupElement = screen.getByTestId("popIssues-1"); // Ensure this matches your component's test ID
-  expect(popupElement).toBeInTheDocument();
-});
+    test('renders the popup with correct content', () => {
+        render(<ReportedIssuePopup {...mockProps} />);
 
-test('should render the correct title', () => {
-  const props = createProps({ title: 'Custom Title' });
-  render(<PopUpIssuesReported {...props} />);
-  const titleElement = screen.getByText(/Custom Title/i);
-  expect(titleElement).toBeInTheDocument();
-});
+        expect(screen.getByTestId('issueID')).toHaveTextContent(`Issue No: ${mockProps.issueID}`);
+        expect(screen.getByTestId('reportedBy')).toHaveTextContent(`Reported By: ${mockProps.user}`);
+        expect(screen.getByTestId('reportDate')).toHaveTextContent(`Report Date: ${mockProps.reportDate}`);
+        expect(screen.getByTestId('resolvedDate')).toHaveTextContent('Resolved Date: Unresolved');
+        expect(screen.getByTestId('venueName')).toHaveTextContent(`Venue: ${mockProps.venueName}`);
+        expect(screen.getByTestId('description')).toHaveTextContent(`Description: ${mockProps.description}`);
+        expect(screen.getByTestId('status')).toHaveTextContent(`Status: ${mockProps.status}`);
+    });
 
-test('should render the correct user', () => {
-  const props = createProps({ user: 'Jane Doe' });
-  render(<PopUpIssuesReported {...props} />);
-  const userElement = screen.getByText(/Jane Doe/i);
-  expect(userElement).toBeInTheDocument();
-});
+    test('calls onResolve when the resolve button is clicked', () => {
+        render(<ReportedIssuePopup {...mockProps} />);
 
-test('should render the correct date', () => {
-  const props = createProps({ date: '2024-10-01' });
-  render(<PopUpIssuesReported {...props} />);
-  const dateElement = screen.getByText(/2024-10-01/i);
-  expect(dateElement).toBeInTheDocument();
-});
+        const resolveButton = screen.getByTestId('resolveButton');
+        fireEvent.click(resolveButton);
 
-test('should render the correct time', () => {
-  const props = createProps({ time: '16:00' });
-  render(<PopUpIssuesReported {...props} />);
-  const timeElement = screen.getByText(/16:00/i);
-  expect(timeElement).toBeInTheDocument();
-});
+        // Ensure the onResolve function was called
+        expect(mockProps.onResolve).toHaveBeenCalledTimes(1);
+    });
 
-test('should render the correct venue', () => {
-  const props = createProps({ venue: 'Secondary Hall' });
-  render(<PopUpIssuesReported {...props} />);
-  const venueElement = screen.getByText(/Secondary Hall/i);
-  expect(venueElement).toBeInTheDocument();
-});
+    test('calls onClose when the close button is clicked', () => {
+        render(<ReportedIssuePopup {...mockProps} />);
 
-test('should render the correct room number', () => {
-  const props = createProps({ room: '202' });
-  render(<PopUpIssuesReported {...props} />);
-  const roomElement = screen.getByText(/202/i);
-  expect(roomElement).toBeInTheDocument();
-});
+        const closeButton = screen.getByTestId('closeButton');
+        fireEvent.click(closeButton);
 
-test('should render the correct description', () => {
-  const props = createProps({ description: 'Updated issue description.' });
-  render(<PopUpIssuesReported {...props} />);
-  const descriptionElement = screen.getByText(/Updated issue description./i);
-  expect(descriptionElement).toBeInTheDocument();
-});
+        // Ensure the onClose function was called
+        expect(mockProps.onClose).toHaveBeenCalledTimes(1);
+    });
 
-test('should render the close button', () => {
-  const props = createProps();
-  render(<PopUpIssuesReported {...props} />);
-  const closeButton = screen.getByRole('button', { name: /Close/i });
-  expect(closeButton).toBeInTheDocument();
+    test('has the correct test id for the popup', () => {
+        render(<ReportedIssuePopup {...mockProps} />);
+        
+        const popupElement = screen.getByTestId('popIssues-1');
+        expect(popupElement).toBeInTheDocument();
+    });
 });
-
-test('should call onClose when close button is clicked', () => {
-  const handleClose = jest.fn();
-  const props = createProps({ onClose: handleClose });
-  render(<PopUpIssuesReported {...props} />);
-  const closeButton = screen.getByRole('button', { name: /Close/i });
-  fireEvent.click(closeButton);
-  expect(handleClose).toHaveBeenCalledTimes(1);
-});
-*/
