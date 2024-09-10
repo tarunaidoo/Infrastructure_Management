@@ -6,10 +6,9 @@
   background-color: white;
   color: black;
   width: 100vw;
-  height: 100vh;
+  height: 85vh;
   border-top-left-radius: 80px ;
   border-top-right-radius: 80px ;
-  padding-top: 5vh;
   }
 /* Dropdown itself */
 .predefined-field select {
@@ -49,24 +48,24 @@
 }
 
 
-  .booking-layout{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    background-color: #001F3F;  /* Button color */
-    color: white;  /* Button text color */
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-    
-  }
+.booking-layout{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #001F3F;  /* Button color */
+  color: white;  /* Button text color */
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  
+}
 
-  .booking-heading{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 15vh;
-    gap: 10px;
+.booking-heading{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 15vh;
+  gap: 10px;
 
 }
 .booking-icons{
@@ -93,13 +92,14 @@
 
 /* Calendar Placeholder */
 .calendar-placeholder {
-    width: 100%;
+    width: 90%;
+    height: 45%;
     background-color: white;
-    height: auto;
-    margin: 20px 0;
+   
     display: flex;
     justify-content: center;
     align-content: center;
+    align-self: center;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -107,7 +107,7 @@
   
   /* Booking Form Fields */
   .booking-form {
-    margin-top: 5rem;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     width: 100%;

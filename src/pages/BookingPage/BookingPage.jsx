@@ -4,6 +4,7 @@ import headingIcon from '../../assets/icons/chevron-left.svg';
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { createBooking } from '../../services/BookingPage/BookingPage.service';
+import "./Calendar.css";
 
 // Mock data
 const data = {
