@@ -1,5 +1,5 @@
 import React from "react";
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import CampusCard from "../../components/CampusCard/CampusCard";
@@ -10,7 +10,6 @@ import "./CampusSelectionPage.css";
 const CampusSelectionPage = () => {
     // Variables
     const navigate = useNavigate();
-    const location = useLocation();
     const campusNames = ["East Campus", "West Campus"];
 
     // Function & Logic
