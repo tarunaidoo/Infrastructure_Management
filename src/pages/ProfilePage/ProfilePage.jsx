@@ -16,7 +16,10 @@ const Profile = () => {
       <div className="profile_container">
         <img 
         src={user.picture} 
-        alt={user.name}
+        alt={user.name} 
+        onError={(e) => { 
+            e.target.src = "fallback-image-url.jpg"; // had problems using user.image but this on error fixes it
+        }} 
         />
         <p>Name: {user.name}</p>
         <p>Email: {user.email}</p>
