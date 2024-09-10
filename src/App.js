@@ -183,6 +183,10 @@ import AddAddVenuePage from './pages/AdminAddVenuePage/AdminAddVenuePage';
 import StudentsBookingPage from './pages/UserBookingsPage/StudentBookingPage';
 import LecturerBookingPage from './pages/UserBookingsPage/LecturerBookingsPage';import ReportIssue from './pages/ReportIssuePage/ReportIssue';
 
+import BuildingSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
+import RoomSelectionPage from './pages/RoomSelectionPage/RoomSelectionPage';
+import CampusSelectionPage from './pages/CampusSelectionPage/CampusSelectionPage';
+
 function App() {
   return (
     <Router>
@@ -197,6 +201,10 @@ function App() {
         <Route path="/admin-view-stud-booking" element={<StudentsBookingPage/>} />
         <Route path="/admin-view-lec-booking" element={<LecturerBookingPage/>} />
         <Route path="/report-issue" element = {<ReportIssue/>}/>
+        <Route path="/admin-issues-reported" element={<IssuesReportedPage/>}/>
+        <Route path="/campus-selection" element={<CampusSelectionPage/>}/>
+        <Route path="/building-selection" element={<BuildingSelectionPage/>}/>
+        <Route path="/room-selection" element={<RoomSelectionPage/>}/>
       </Routes>
     </Router>
   );

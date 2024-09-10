@@ -6,9 +6,9 @@ import BuildingCard from "./BuildingCard";
 
 // Mock Data
 const buildings = [
-    {"BUILDING_ID": 0, "BUILDING_NAME": "Mathematical Science Labs", "TAGS": ["Computer Labs"]},
-    {"BUILDING_ID": 1, "BUILDING_NAME": "Wits Science Stadium", "TAGS": ["Tutorial Rooms", "Lecture Halls"]},
-    {"BUILDING_ID": 2, "BUILDING_NAME": "FNB Building", "TAGS": ["Computer Labs", "Tutorial Rooms", "Lecture Halls"]},
+    {"BUILDING_ID": 0, "BUILDING_NAME": "Mathematical Science Labs", "TAGS": [{"TAG_ID": 0, "TAG_NAME": "Computer Labs"}]},
+    {"BUILDING_ID": 1, "BUILDING_NAME": "Wits Science Stadium", "TAGS": [{"TAG_ID": 1, "TAG_NAME": "Tutorial Rooms"}, {"TAG_ID": 2, "TAG_NAME": "Lecture Halls"}]},
+    {"BUILDING_ID": 2, "BUILDING_NAME": "FNB Building", "TAGS": [{"TAG_ID": 0, "TAG_NAME": "Computer Labs"}, {"TAG_ID": 1, "TAG_NAME": "Tutorial Rooms"}, {"TAG_ID": 2, "TAG_NAME": "Lecture Halls"}]},
     {"BUILDING_ID": 3, "BUILDING_NAME": "Old Mutual Sports Hall", "TAGS": []}
 ];
 
@@ -56,10 +56,10 @@ describe(BuildingCard, () => {
     it("should display correct building card tags", () => {
         buildings.forEach(building => {
             const { getByText } = render(<BuildingCard buildingName={building.BUILDING_NAME} buildingTags={building.TAGS} />);
-            
+
             building.TAGS.forEach(tag => {
-              const tagElement = getByText(tag);
-              expect(tagElement).toBeInTheDocument();
+                const tagElement = getByText(tag.TAG_NAME);
+                expect(tagElement).toBeInTheDocument();
             });
 
             cleanup(); // Manually clean up after each iteration
