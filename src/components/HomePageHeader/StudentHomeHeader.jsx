@@ -1,3 +1,4 @@
+import React from 'react';
 import hat from './assets/graduation-cap.svg'
 
 function Header(){
