@@ -5,50 +5,65 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { createBooking } from '../../services/BookingPage/BookingPage.service';
 
-//Mock data
+// Mock data
 const data = {
-  BUILDING_ID:1,
+  BUILDING_ID: 1,
   BUILDING_NAME: "Mathematical Science Labs",
   VENUE_ID: 1,
   VENUE_NAME: "MSL001"
-}
+};
 
-// Fetch function for getting venue details
+// Predefined time slots
+const timeSlots = [
+  { start: "08:00:00", end: "09:45:00" },
+  { start: "10:00:00", end: "11:45:00" },
+  { start: "12:00:00", end: "13:45:00" },
+  { start: "14:00:00", end: "15:45:00" },
+  { start: "16:00:00", end: "17:45:00" }
+];
 
 const BookingPage = () => {
+
+
+  
   const [eventReason, setEventReason] = useState('');
   const [date, setDate] = useState(new Date());
   const [activeStartDate, setActiveStartDate] = useState(new Date());
-
-  // fetch building and venue name
-  
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');  // Start with empty selection
 
   const handleSubmit = () => {
+    if (!selectedTimeSlot) {
+      alert("Please select a time slot");
+      return;
+    }
+
     const bookingData = {
       VENUE_ID: data.VENUE_ID,        // Get the venue ID
       USER_ID: "2623035@students.wits.ac.za",  // Hardcoded user ID for now
-      DATE: "2024-09-12",  // Format the date to 'YYYY-MM-DD'
-      START_TIME: "08:00:00",         // Example start time, can be dynamic
-      END_TIME: "09:45:00",           // Example end time, can be dynamic
-      DATE_CREATED:"2024-09-09",  // Date when the booking is created
-      BOOKING_STATUS: "Confirmed",    // Example booking status
-      
+      DATE: date.toISOString().split('T')[0],  // Format the date to 'YYYY-MM-DD'
+      START_TIME: selectedTimeSlot.start,      // Selected start time
+      END_TIME: selectedTimeSlot.end,          // Selected end time
+      DATE_CREATED: new Date().toISOString().split('T')[0],  // Date when the booking is created
+      BOOKING_STATUS: "Confirmed"              // Example booking status
     };
+
     console.log("Booking Data:", bookingData);
 
-
     createBooking(bookingData)
-    .then(() => {
-     console.log("Booking Done")
-    })
-    .catch(() => {
-     console.log("Booking Failed!")
-    });
-  
+      .then(() => {
+        console.log("Booking Done");
+      })
+      .catch(() => {
+        console.log("Booking Failed!");
+      });
+  };
 
-    };
- 
-  
+  const handleTimeSlotChange = (e) => {
+    const index = e.target.value;
+    if (index !== "") {
+      setSelectedTimeSlot(timeSlots[index]);
+    }
+  };
 
   const tileDisabled = ({ date, view }) => {
     if (view === 'month') {
@@ -97,15 +112,25 @@ const BookingPage = () => {
             onChange={(e) => setEventReason(e.target.value)}
             className="input-field"
           />
-            <>
-              <div className="predefined-field">{data.BUILDING_NAME}</div>
-              <div className="predefined-field">{data.VENUE_NAME}</div>
-            </>
-          
+          <>
+            <div className="predefined-field">{data.BUILDING_NAME}</div>
+            <div className="predefined-field">{data.VENUE_NAME}</div>
+          </>
 
+          {/* Time Slot Dropdown */}
           <div className="predefined-field">
-            Time Slot
+           
+            <select value={selectedTimeSlot ? timeSlots.indexOf(selectedTimeSlot) : ''} onChange={handleTimeSlotChange}>
+              <option value="">Time Slot</option> {/* Placeholder option */}
+              {timeSlots.map((slot, index) => (
+                <option key={index} value={index}>
+                  {`${slot.start} - ${slot.end}`}
+                </option>
+              ))}
+            </select>
           </div>
+
+
           <button className="book-button" onClick={handleSubmit}>
             Book event
           </button>

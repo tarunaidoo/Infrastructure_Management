@@ -1,6 +1,6 @@
 
 async function createBooking(data) {
-    const endpoint = '/data-api/rest/BOOKING';  // Full URL
+    const endpoint = '/data-api/rest/BOOKING'; 
     try {
       const response = await fetch(endpoint, {
         method: "POST",
