@@ -4,14 +4,14 @@ import Square from '../../assets/icons/square-plus.svg';
 import User from '../../assets/icons/user-filled.svg';
 import './AdminHomeFooter.css';
 
-function Footer() {
+function Footer({onAddVenueClick}) {
   return (
     <footer className="MenuBar" data-testid="Footer-1">
       {/* Each image is wrapped in a button element */}
       <button className="image-button" data-testid="home-btn">
         <img src={Home} alt="Home" className="main" data-testid="home-img" />
       </button>
-      <button className="image-button" data-testid="square-btn">
+      <button className="image-button" data-testid="square-btn" onClick={onAddVenueClick}>
         <img src={Square} alt="Square" data-testid="square-img" />
       </button>
       <button className="image-button" data-testid="user-btn">
