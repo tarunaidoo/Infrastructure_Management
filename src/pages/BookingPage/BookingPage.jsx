@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import './BookingPage.css';
+import { useMutation } from 'react-query';
 import headingIcon from '../../assets/icons/chevron-left.svg';
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { createBooking } from '../../services/BookingPage/BookingPage.service';
+
+import "react-calendar/dist/Calendar.css";
 import "./Calendar.css";
+import './BookingPage.css';
 
 // Mock data
 const data = {
@@ -32,6 +34,10 @@ const BookingPage = () => {
   const [activeStartDate, setActiveStartDate] = useState(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');  // Start with empty selection
 
+    const mutation = useMutation((newBooking) => 
+        createBooking(newBooking),
+    );
+
   const handleSubmit = () => {
     if (!selectedTimeSlot) {
       alert("Please select a time slot");
@@ -40,7 +46,7 @@ const BookingPage = () => {
 
     const bookingData = {
       VENUE_ID: data.VENUE_ID,        // Get the venue ID
-      USER_ID: "2623035@students.wits.ac.za",  // Hardcoded user ID for now
+      USER_ID: "2584925@students.wits.ac.za",  // Hardcoded user ID for now
       DATE: date.toISOString().split('T')[0],  // Format the date to 'YYYY-MM-DD'
       START_TIME: selectedTimeSlot.start,      // Selected start time
       END_TIME: selectedTimeSlot.end,          // Selected end time
@@ -50,15 +56,20 @@ const BookingPage = () => {
 
     console.log("Booking Data:", bookingData);
 
-    createBooking(bookingData)
-      .then(() => {
-        console.log("Booking Done");
-      })
-      .catch(() => {
-        console.log("Booking Failed!");
-      });
+    mutation.mutate(bookingData);
   };
 
+  if (mutation.isLoading) {
+    return <span>Submitting...</span>;
+  }
+
+  if (mutation.isError) {
+    return <span>Error: {mutation.error.message}</span>;
+  }
+
+  if (mutation.isSuccess) {
+    return <span>Post submitted!</span>;
+  }
   const handleTimeSlotChange = (e) => {
     const index = e.target.value;
     if (index !== "") {
