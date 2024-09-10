@@ -28,18 +28,18 @@ describe('Date Utils', () => {
     global.Date = originalDate;
   });
 
-  test('getFormattedDate should correctly format today\'s date', () => {
-    // Mocking Date to ensure consistent results
-    const today = new Date();
-    const formattedToday = `${String(today.getDate()).padStart(2, '0')} ${today.toLocaleString('en-GB', { month: 'long' })} ${today.getFullYear()}`;
-
-    // Mock Date to return a fixed date
+  test('getFormattedDate should correctly format a fixed date', () => {
+    // Define a fixed date for testing
+    const fixedDate = new Date('2024-09-07');
+    const expectedFormattedDate = `${String(fixedDate.getDate()).padStart(2, '0')} ${fixedDate.toLocaleString('en-GB', { month: 'long' })} ${fixedDate.getFullYear()}`;
+  
+    // Mock Date to return the fixed date
     const originalDate = Date;
-    global.Date = jest.fn(() => new originalDate('2024-09-07'));
-
+    global.Date = jest.fn(() => fixedDate);
+  
     const result = getFormattedDate();
-    expect(result).toBe(formattedToday);
-
+    expect(result).toBe(expectedFormattedDate);
+  
     // Restore original Date after test
     global.Date = originalDate;
   });
