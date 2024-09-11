@@ -1,7 +1,8 @@
 import React from 'react';
-import hat from './assets/graduation-cap.svg'
+import hat from '../../assets/icons/graduation-cap.svg';
+import './HomePageHeader.css';
 
-function Header(){
+function StudentHeader(){
     return(
         <header className="header">
             <section className="headerBlock">
@@ -11,4 +12,4 @@ function Header(){
         </header>
     );
 }
-export default Header;
+export default StudentHeader;

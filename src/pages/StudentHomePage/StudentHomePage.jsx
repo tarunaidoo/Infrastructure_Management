@@ -1,31 +1,87 @@
-import React from 'react';
-import Header from './StudentHomeHeader.jsx'
-import Card from './StudentHomeCard.jsx'
-import Footer from './StudentHomeFooter.jsx';
+import React, { useState, useEffect } from 'react';
+import Header from '../../components/HomePageHeader/StudentHomeHeader';
+import Card from '../../components/HomePageCard/HomePageCard';
+import Footer from '../../components/NavigationBar/StudentHomeFooter';
+import './StudentHomePage.css';
+import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePages/HomePage.service";
 
-function App() {
-  return(
+function StudentHomePage() {
+  const userID = '2546838@students.wits.ac.za';
+
+  // State for bookings, venues, buildings, and loading/error handling
+  const [bookings, setBookings] = useState([]);
+  const [venues, setVenues] = useState([]);
+  const [buildings, setBuildings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch bookings first
+        const fetchedBookings = await fetchBooking(userID);
+        setBookings(fetchedBookings);
+
+        // Fetch venues based on bookings
+        const venuePromises = fetchedBookings.map(booking => fetchVenue(booking.VENUE_ID));
+        const fetchedVenues = await Promise.all(venuePromises);
+        setVenues(fetchedVenues);
+
+        // Fetch buildings based on venues
+        const buildingPromises = fetchedVenues.map(venue => fetchBuilding(venue.BUILDING_ID));
+        const fetchedBuildings = await Promise.all(buildingPromises);
+        setBuildings(fetchedBuildings);
+
+        console.log('User Bookings', fetchedBookings);
+        console.log('Booking Venues', fetchedVenues);
+        console.log('Venue Buildings', fetchedBuildings);
+
+        setLoading(false); // Data has finished loading
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(`Failed to load data: ${error.message}`);
+        setLoading(false); // Set loading to false even if there is an error
+      }
+    };
+
+    fetchData();
+  }, [userID]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  return (
     <>
-      <Header/>
+      <Header />
       <section className='content'>
-      <Card 
-          event="React Conference" 
-          date="2024-09-01" 
-          time="10:00 AM" 
-          venue="Main Hall" 
-          room="Room 101" 
-      />
-      <Card 
-          event="React Conference" 
-          date="2024-09-01" 
-          time="10:00 AM" 
-          venue="Main Hall" 
-          room="Room 101" 
-      />
+        {bookings.length > 0 ? (
+          bookings.map((booking, index) => {
+            const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
+            const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
+
+            return (
+              <Card
+                key={index}
+                event={booking.EVENT_NAME}
+                date={booking.DATE}
+                time={`${booking.START_TIME} - ${booking.END_TIME}`}
+                venue={building?.BUILDING_NAME || 'Unknown Building'}
+                room={venue?.VENUE_NAME || 'Unknown Room'}
+              />
+            );
+          })
+        ) : (
+          <div>No bookings found.</div>
+        )}
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 }
 
-export default App
+export default StudentHomePage;
