@@ -31,6 +31,7 @@ const RoomSelectionPage = () => {
     const handleHeaderBackIconClick = () => {
         const backPageDetails = {
             SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+            DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
             CAMPUS_NAME: previousPageDetails.CAMPUS_NAME
         }
         navigate("/building-selection", {state : backPageDetails});
@@ -46,15 +47,13 @@ const RoomSelectionPage = () => {
     }
 
     const handleRoomCardClick = (venue) => {
-        const bookingInfo = {
-            BUILDING_ID: previousPageDetails.BUILDING_ID,
-            BUILDING_NAME: previousPageDetails.BUILDING_NAME,
-            CAMPUS_NAME: previousPageDetails.CAMPUS_NAME,
+        const nextPageDetails = {
+            ...previousPageDetails,
             VENUE_ID: venue.VENUE_ID,
             VENUE_NAME: venue.VENUE_NAME
         };
 
-        navigate(previousPageDetails.SOURCE_PAGE, {state : bookingInfo});
+        navigate(previousPageDetails.DESTINATION_PAGE, {state : nextPageDetails});
     }
 
     // HTML code
@@ -88,8 +87,10 @@ const RoomSelectionPage = () => {
                     {venue ? 
                     venue.map((venue) => (
                         <RoomCard key={venue.VENUE_ID} roomName={venue.VENUE_NAME} onClick={() => handleRoomCardClick(venue)}> 
-                            <img className="circle-question-icon" src={circleQuestionIcon} 
+                            {previousPageDetails.DESTINATION_PAGE === "/booking" ?
+                                <img className="circle-question-icon" src={circleQuestionIcon} 
                                 alt="circle question mark icon" onClick={() => handleQuestionIconClick(venue)}/>
+                            : ""}
                         </RoomCard>
                     ))
                     : "" }

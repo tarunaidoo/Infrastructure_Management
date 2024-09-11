@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
+import { useNavigate, useLocation } from 'react-router-dom';
 import headingIcon from '../../assets/icons/chevron-left.svg';
 import Calendar from "react-calendar";
 import { createBooking } from '../../services/BookingPage/BookingPage.service';
@@ -9,12 +10,12 @@ import "./Calendar.css";
 import './BookingPage.css';
 
 // Mock data
-const data = {
-  BUILDING_ID: 1,
-  BUILDING_NAME: "Mathematical Science Labs",
-  VENUE_ID: 1,
-  VENUE_NAME: "MSL001"
-};
+// const data = {
+//   BUILDING_ID: 1,
+//   BUILDING_NAME: "Mathematical Science Labs",
+//   VENUE_ID: 1,
+//   VENUE_NAME: "MSL001"
+// };
 
 // Predefined time slots
 const timeSlots = [
@@ -26,8 +27,9 @@ const timeSlots = [
 ];
 
 const BookingPage = () => {
-
-
+  const navigate = useNavigate();
+  const location = useLocation();
+  const selectedVenue = location.state || {};
   
   const [eventReason, setEventReason] = useState('');
   const [date, setDate] = useState(new Date());
@@ -45,7 +47,7 @@ const BookingPage = () => {
     }
 
     const bookingData = {
-      VENUE_ID: data.VENUE_ID,        // Get the venue ID
+      VENUE_ID: selectedVenue.VENUE_ID,        // Get the venue ID
       USER_ID: "2584925@students.wits.ac.za",  // Hardcoded user ID for now
       DATE: date.toISOString().split('T')[0],  // Format the date to 'YYYY-MM-DD'
       START_TIME: selectedTimeSlot.start,      // Selected start time
@@ -70,6 +72,15 @@ const BookingPage = () => {
   if (mutation.isSuccess) {
     return <span>Post submitted!</span>;
   }
+
+  const handleOnVenueSelectionClick = () => {
+    const venueSelectionDetails = {
+      SOURCE_PAGE: "/booking",
+      DESTINATION_PAGE: "/booking"
+    }
+    navigate("/campus-selection", { state: venueSelectionDetails });
+  }
+
   const handleTimeSlotChange = (e) => {
     const index = e.target.value;
     if (index !== "") {
@@ -125,8 +136,12 @@ const BookingPage = () => {
             className="input-field"
           />
           <>
-            <div className="predefined-field">{data.BUILDING_NAME}</div>
-            <div className="predefined-field">{data.VENUE_NAME}</div>
+            <div onClick={handleOnVenueSelectionClick} className="predefined-field">
+              {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Choose a venue"}
+            </div>
+            <div className="predefined-field">
+              {selectedVenue.VENUE_NAME}
+            </div>
           </>
 
           {/* Time Slot Dropdown */}

@@ -25,7 +25,11 @@ const BuildingSelectionPage = () => {
 
     // Function & Logic
     const handleHeaderBackIconClick = () => {
-        navigate("/campus-selection");
+        const backPageDetails = {
+            SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+            DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE
+        }
+        navigate("/campus-selection", {state: backPageDetails});
     }
     
     const handleBuildingCardClick = ( building ) => {

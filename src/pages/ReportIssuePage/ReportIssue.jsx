@@ -1,6 +1,6 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import "./ReportIssue.css";
-//import {useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import headingIcon from '../../assets/icons/chevron-left.svg';
 import warningIcon from '../../assets/icons/triangle-warning.svg';
 import Popup from '../../components/Popup/Popup';
@@ -10,6 +10,17 @@ import { formatDateToISO,getFormattedDate } from '../../utils/dateUtils';
 
 
 function ReportIssue() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    // Contain the required details from the Venue Selection Page
+    const previousPageDetails = location.state || {}; 
+
+    const selectedVenue = {
+      BUILDING_ID: previousPageDetails.BUILDING_ID,
+      BUILDING_NAME: previousPageDetails.BUILDING_NAME,
+      VENUE_ID: previousPageDetails.VENUE_ID,
+      VENUE_NAME: previousPageDetails.VENUE_NAME
+    }
 
     // Format the date i.e 24 August 2024
     const formattedDate = getFormattedDate();
@@ -19,14 +30,13 @@ function ReportIssue() {
   
 
   //dummy data
-  const venues = [
-    { name: 'Mathematical Science Labs', code: 'MSL004', ID:1},
-    { name: 'Science Building', code: 'SCB001', ID: 11 },
-    // Add other venues as needed
-  ];
+  // const venues = [
+  //   { name: 'Mathematical Science Labs', code: 'MSL004', ID:1},
+  //   { name: 'Science Building', code: 'SCB001', ID: 11 },
+  //   // Add other venues as needed
+  // ];
   // States
 
-  const [selectedVenue] = useState(venues[0]);
   const [issueTitle, setIssueTitle] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
   const [showPopup, setShowPopup] = useState(false);
@@ -49,7 +59,7 @@ function ReportIssue() {
 
   const handleConfirm = () => {
     const reportData = {
-      VENUE_ID: selectedVenue.ID,
+      VENUE_ID: selectedVenue.VENUE_ID,
       TITLE: issueTitle,
       REPORTED_BY: "2486457@students.wits.ac.za",
       REPORT_DATE: formattedDateISO,
@@ -75,6 +85,16 @@ function ReportIssue() {
     });
   };
 
+  const handleHeaderBackIconClick = () => {
+    const backPageDetails = {
+      SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+      DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
+      CAMPUS_NAME: previousPageDetails.CAMPUS_NAME,
+      BUILDING_ID: previousPageDetails.BUILDING_ID,
+      BUILDING_NAME: previousPageDetails.BUILDING_NAME
+    }
+    navigate("/room-selection", { state: backPageDetails });
+  }
 
   const handleReportIssueClick = () => {
     setPopupType('confirmation');
@@ -86,7 +106,7 @@ function ReportIssue() {
     if (popupType === 'success') {
       console.log("successful");
     }
-    //navigate('/'); // Navigate to the home page 
+    navigate(previousPageDetails.SOURCE_PAGE); // Navigate to the home page 
 
   };
 
@@ -103,7 +123,7 @@ function ReportIssue() {
 
       <article className='report-issue-heading'>
 
-        <img src={headingIcon} alt='back-arrow' className='report-icons' />
+        <img onClick={handleHeaderBackIconClick} src={headingIcon} alt='back-arrow' className='report-icons' />
         <h1>Report an Issue</h1>
 
       </article>
@@ -113,8 +133,8 @@ function ReportIssue() {
           <p>Date: {formattedDate}</p>
           <p>Venue:</p>
           <article>
-            <p>{selectedVenue.name}</p>
-            <p>{selectedVenue.code}</p>
+            <p>{selectedVenue.BUILDING_NAME}</p>
+            <p>{selectedVenue.VENUE_NAME}</p>
           </article>
           <label className='issue-title-container'>
             Issue Title:
