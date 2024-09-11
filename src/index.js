@@ -6,8 +6,6 @@ import './index.css';
 import App from './App';
 import { Auth0Provider } from '@auth0/auth0-react';
 
-import { QueryClient, QueryClientProvider } from "react-query";
-
 const queryClient = new QueryClient();
 
 ReactDOM.render(
