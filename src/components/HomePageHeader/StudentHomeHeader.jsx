@@ -6,7 +6,7 @@ function StudentHeader(){
     return(
         <header className="header">
             <section className="headerBlock">
-            <img src={hat}></img>
+            <img src={hat} alt="Page Icon"></img>
             <h1>Home</h1>
             </section>
         </header>
