@@ -1,5 +1,5 @@
 import React from 'react';
-
+//import './HomePageCard.test'
 function Card({ event, date, time, venue, room }) {
   return (
     <section className="Card" data-testid="Card-1">
