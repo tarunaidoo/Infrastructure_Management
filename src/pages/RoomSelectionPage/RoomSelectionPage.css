@@ -1,3 +1,11 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
 .room-selection-content-section {
     display: flex;
     justify-content: flex-start;
@@ -14,4 +22,21 @@
 
 .circle-question-icon {
     width: 8%;
+}
+
+.features-container {
+    align-self: self-start;
+    /* background-color: blueviolet; */
+    margin-left: 10%;
+    font-size: medium;
+}
+
+.features-list {
+    text-align: start;
+    margin-left: 20%;
+}
+
+.features-popup-button {
+    width: 35%;
+    background-color: var(--color-highlight);
 }
