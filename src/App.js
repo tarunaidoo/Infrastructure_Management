@@ -186,6 +186,7 @@ import LecturerBookingPage from './pages/UserBookingsPage/LecturerBookingsPage';
 import BuildingSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
 import RoomSelectionPage from './pages/RoomSelectionPage/RoomSelectionPage';
 import CampusSelectionPage from './pages/CampusSelectionPage/CampusSelectionPage';
+import StudentHomePage from './pages/StudentHomePage/StudentHomePage';
 
 function App() {
   return (
@@ -205,6 +206,7 @@ function App() {
         <Route path="/campus-selection" element={<CampusSelectionPage/>}/>
         <Route path="/building-selection" element={<BuildingSelectionPage/>}/>
         <Route path="/room-selection" element={<RoomSelectionPage/>}/>
+        <Route path="/student-home" element = {<StudentHomePage/>}/>
       </Routes>
     </Router>
   );
