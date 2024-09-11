@@ -16,23 +16,24 @@ const RoomSelectionPage = () => {
     // Variables
     const navigate = useNavigate();
     const location = useLocation();
-    const buildingDetails = location.state || {};
+    const previousPageDetails = location.state || {};
 
     const [selectedVenue, setSelectedVenue] = useState({});
     const [displayPopup, setDisplayPopup] = useState(false);
 
     // Function & Logic
     const { data : venue, error: venueError, isLoading: venueLoading} = useQuery(
-        ["roomData", buildingDetails.BUILDING_ID], async () => {
-            const venues = await getVenuesFromBuildingID(buildingDetails.BUILDING_ID);
+        ["roomData", previousPageDetails.BUILDING_ID], async () => {
+            const venues = await getVenuesFromBuildingID(previousPageDetails.BUILDING_ID);
             return getVenueFeatureNamesFromVenues(venues);
     });
 
     const handleHeaderBackIconClick = () => {
-        const campusDetails = {
-            CAMPUS_NAME: buildingDetails.CAMPUS_NAME
+        const backPageDetails = {
+            SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+            CAMPUS_NAME: previousPageDetails.CAMPUS_NAME
         }
-        navigate("/building-selection", {state : campusDetails});
+        navigate("/building-selection", {state : backPageDetails});
     }
     
     const handleQuestionIconClick = (venue) => {
@@ -46,12 +47,14 @@ const RoomSelectionPage = () => {
 
     const handleRoomCardClick = (venue) => {
         const bookingInfo = {
-            ...buildingDetails,
+            BUILDING_ID: previousPageDetails.BUILDING_ID,
+            BUILDING_NAME: previousPageDetails.BUILDING_NAME,
+            CAMPUS_NAME: previousPageDetails.CAMPUS_NAME,
             VENUE_ID: venue.VENUE_ID,
             VENUE_NAME: venue.VENUE_NAME
         };
 
-        navigate("/booking", {state : bookingInfo});
+        navigate(previousPageDetails.SOURCE_PAGE, {state : bookingInfo});
     }
 
     // HTML code

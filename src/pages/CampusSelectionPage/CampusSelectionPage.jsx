@@ -10,6 +10,7 @@ import "./CampusSelectionPage.css";
 const CampusSelectionPage = () => {
     // Variables
     const navigate = useNavigate();
+    const previousPageDetails = {SOURCE_PAGE: "/booking"};
     const campusNames = ["East Campus", "West Campus"];
 
     // Function & Logic
@@ -18,8 +19,8 @@ const CampusSelectionPage = () => {
     }
 
     const handleCampusCardClick = ( campusName ) => {
-        const campusDetails = {CAMPUS_NAME: campusName}
-        navigate("/building-selection", {state : campusDetails});
+        const currentPageDetails = {...previousPageDetails, CAMPUS_NAME: campusName};
+        navigate("/building-selection", {state : currentPageDetails});
     }
 
     // HTML code
