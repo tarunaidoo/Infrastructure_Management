@@ -13,7 +13,7 @@ function AdminHomePage(){
     const navigate = useNavigate();
 
     const eventsCardClick = () =>{
-        navigate('/admin-view-stud-booking'); //move from this page to Events page
+        navigate('/admin-view-booking'); //move from this page to Events page
     };
 
     const issuesCardClick = () =>{

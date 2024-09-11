@@ -86,6 +86,7 @@ function IssuesReportedPage() {
                     issues.map(issue => (
                         <IssueListCard
                             key={issue.ISSUE_ID}
+                            title={issue.TITLE}
                             venueName={getVenueName(issue.VENUE_ID)}  // Pass the venue name
                             isBlocked={blockedVenues.has(issue.VENUE_ID)}  // Determine if venue is blocked
                             onClick={() => openPopup(issue)}
@@ -99,7 +100,7 @@ function IssuesReportedPage() {
 
             {isPopupOpen && selectedIssue && (
                 <Popup
-                    issueID={selectedIssue.ISSUE_ID}
+                    title={selectedIssue.TITLE}
                     user={selectedIssue.REPORTED_BY}
                     reportDate={formatDate(selectedIssue.REPORT_DATE)}
                     resolvedDate={selectedIssue.DATE_RESOLVED ? formatDate(selectedIssue.DATE_RESOLVED) : 'Not Resolved'}
