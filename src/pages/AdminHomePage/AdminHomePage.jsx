@@ -20,6 +20,10 @@ function AdminHomePage(){
         navigate('/admin-issues-reported'); //move from this page to Issues page
     };
 
+    const handleAddVenueClick = () => {
+        navigate('/admin-add-venue');
+    };
+
     return(
         <>
             
@@ -27,7 +31,7 @@ function AdminHomePage(){
             {/* <img src={AdminIcon} alt='admin icon' className='adminIcon'/> not appearing over header element */}
             <AdminIssuesCard onClick={issuesCardClick} className="cards"/>
             <AdminEventsCard onClick={eventsCardClick} className="cards"/>
-            <Footer/>
+            <Footer onAddVenueClick={handleAddVenueClick}/>
         </>
         
         

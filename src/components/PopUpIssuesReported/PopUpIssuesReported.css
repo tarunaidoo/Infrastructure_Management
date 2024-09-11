@@ -43,3 +43,8 @@
 .popup-content button:hover {
     background-color: #0047AB; /* Royal Azure */
 }
+
+button{
+    width: 130px;
+    gap: 3px;
+}

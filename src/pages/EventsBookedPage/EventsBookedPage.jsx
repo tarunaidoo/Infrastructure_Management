@@ -7,14 +7,6 @@ import './EventsBookedPage.css'
 function EventsBookedPage(){
     const navigate = useNavigate();
 
-    // const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-    // const openPopup = () =>{
-    //     setIsPopupOpen(true);
-    // };
-    // const closePopup = () =>{
-    //     setIsPopupOpen(false);
-    // };
     const studentBookings = () =>{
         navigate('/admin-view-stud-booking'); //move from this page to Issues page
     };
