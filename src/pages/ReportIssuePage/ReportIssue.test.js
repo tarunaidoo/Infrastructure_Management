@@ -231,6 +231,7 @@ describe("ReportIssue", () => {
         expect(createReportIssue).toHaveBeenCalledTimes(1);
         expect(createReportIssue).toHaveBeenCalledWith({
             VENUE_ID: 1,
+            TITLE: "Broken Projector",
             REPORTED_BY: "2486457@students.wits.ac.za",
             REPORT_DATE: expect.any(String),
             DESCRIPTION: "The projector in MSL004 is not working.",
@@ -268,6 +269,7 @@ describe("ReportIssue", () => {
         expect(createReportIssue).toHaveBeenCalledTimes(1);
         expect(createReportIssue).toHaveBeenCalledWith({
             VENUE_ID: 1,
+            TITLE:"Broken Projector",
             REPORTED_BY: "2486457@students.wits.ac.za",
             REPORT_DATE: expect.any(String),
             DESCRIPTION: "The projector in MSL004 is not working.",

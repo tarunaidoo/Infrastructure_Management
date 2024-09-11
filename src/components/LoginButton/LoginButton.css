@@ -6,7 +6,7 @@
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
-button {
+.login-button {
     background-color: var(--color-main); /* Background color */
     color: var(--color-neutral); /* Text color */
     border: none; /* Removes default border */
@@ -19,6 +19,6 @@ button {
 
 }
 
-button:hover{
+.login-button:hover{
     background-color: var(--color-highlight); 
 }

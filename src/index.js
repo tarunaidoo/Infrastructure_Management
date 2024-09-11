@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import './index.css';
 import App from './App';
 import { Auth0Provider } from '@auth0/auth0-react';
