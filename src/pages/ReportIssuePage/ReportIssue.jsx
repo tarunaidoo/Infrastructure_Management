@@ -50,6 +50,7 @@ function ReportIssue() {
   const handleConfirm = () => {
     const reportData = {
       VENUE_ID: selectedVenue.ID,
+      TITLE: issueTitle,
       REPORTED_BY: "2486457@students.wits.ac.za",
       REPORT_DATE: formattedDateISO,
       DESCRIPTION: issueDescription,
