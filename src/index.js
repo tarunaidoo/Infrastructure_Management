@@ -15,11 +15,12 @@ ReactDOM.render(
     authorizationParams={{
       redirect_uri: window.location.origin,
     }}
-  > 
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-    
+  >
+  
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+
   </Auth0Provider>,
   document.getElementById('root')
 );
