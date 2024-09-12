@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import StudentHeader from './StudentHeader';
+import StudentHeader from './StudentHomeHeader';
 
 test('should render StudentHeader component with an image and heading', () => {
   // Arrange: Render the StudentHeader component
