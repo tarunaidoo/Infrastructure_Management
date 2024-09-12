@@ -57,6 +57,7 @@ function StudentHomePage() {
 
   return (
     <>
+    <body className='home-body'>
       <Header />
       <section className='content'>
         {bookings.length > 0 ? (
@@ -80,6 +81,7 @@ function StudentHomePage() {
         )}
       </section>
       <Footer />
+      </body>
     </>
   );
 }
