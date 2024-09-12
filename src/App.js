@@ -186,6 +186,7 @@ import LecturerBookingPage from './pages/UserBookingsPage/LecturerBookingsPage';
 import BuildingSelectionPage from './pages/BuildingSelectionPage/BuildingSelectionPage';
 import RoomSelectionPage from './pages/RoomSelectionPage/RoomSelectionPage';
 import CampusSelectionPage from './pages/CampusSelectionPage/CampusSelectionPage';
+import StudentHomePage from './pages/StudentHomePage/StudentHomePage';
 
 import AdminEditVenuePage from './pages/AdminEditVenuePage/AdminEditVenuePage';
 
@@ -208,6 +209,7 @@ function App() {
         <Route path="/building-selection" element={<BuildingSelectionPage/>}/>
         <Route path="/room-selection" element={<RoomSelectionPage/>}/>
         <Route path ="edit-venue" element = {<AdminEditVenuePage/>}/>
+        <Route path="/student-home" element = {<StudentHomePage/>}/>
       </Routes>
     </Router>
   );
