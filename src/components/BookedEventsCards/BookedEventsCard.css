@@ -6,14 +6,11 @@
   --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;                 /* Ensure body and html take full height */
+body{                 /* Ensure body and html take full height */
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.zz {
+.event-cards-container{
   display: flex;
   justify-content: center;      /* Center cards horizontally */
   align-items: center;          /* Center cards vertically */
