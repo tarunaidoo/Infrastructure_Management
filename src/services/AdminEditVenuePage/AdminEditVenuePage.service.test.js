@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 describe('API Functions', () => {
-    test('should return building data when building is found', async () => {
+    it('should return building data when building is found', async () => {
         const mockResponse = {
             value: [
                 { BUILDING_ID: '1', BUILDING_NAME: 'Mathematical Science Labs' }
@@ -28,7 +28,7 @@ describe('API Functions', () => {
         });
     });
 
-    test('should return null when building is not found', async () => {
+    it('should return null when building is not found', async () => {
         const mockResponse = { value: [] };
 
         fetch.mockResolvedValueOnce({
@@ -41,7 +41,7 @@ describe('API Functions', () => {
         expect(buildingData).toBeNull();
     });
 
-    test('should handle errors when fetching building data', async () => {
+    it('should handle errors when fetching building data', async () => {
         // Mock a failed fetch response
         fetch.mockResolvedValueOnce({
             ok: false,
@@ -51,7 +51,7 @@ describe('API Functions', () => {
         await expect(getBuilding('Mathematical Science Labs')).rejects.toThrow('Network error');
     });
 
-    test('should return venue data when venue is found', async () => {
+    it('should return venue data when venue is found', async () => {
         const mockResponse = {
             value: [
                 {
@@ -79,7 +79,7 @@ describe('API Functions', () => {
         });
     });
 
-    test('should return null when venue is not found', async () => {
+    it('should return null when venue is not found', async () => {
         const mockResponse = { value: [] };
 
         fetch.mockResolvedValueOnce({
@@ -92,7 +92,7 @@ describe('API Functions', () => {
         expect(venueData).toBeNull();
     });
 
-    test('should handle errors when fetching venue data', async () => {
+    it('should handle errors when fetching venue data', async () => {
         // Mock a fetch response that will fail when calling response.json()
         fetch.mockResolvedValueOnce({
             ok: false,
@@ -102,7 +102,7 @@ describe('API Functions', () => {
         await expect(getVenue('MSL004')).rejects.toThrow('Network error');
     });
 
-    test('getFeatureNames should return all features with correct names', async () => {
+    it('getFeatureNames should return all features with correct names', async () => {
         const mockResponse = {
             value: [
                 { FEATURE_ID: '1', FEATURE_NAME: 'Computers' },
@@ -131,7 +131,7 @@ describe('API Functions', () => {
         ]);
     });
 
-    test('getFeatures should return features associated with a venue', async () => {
+    it('getFeatures should return features associated with a venue', async () => {
         const mockResponse = {
             value: [
                 { ROOM_FEATURE_ID: '10', FEATURE_ID: '6', VENUE_ID: 'V1' },
@@ -154,7 +154,7 @@ describe('API Functions', () => {
         });
     });
 
-    test('getFeatures should handle no features found for a venue', async () => {
+    it('getFeatures should handle no features found for a venue', async () => {
         const mockResponse = { value: [] };
 
         fetch.mockResolvedValueOnce({
@@ -166,7 +166,7 @@ describe('API Functions', () => {
 
         expect(featureData).toBeNull();
     });
-    test('should update venue data successfully', async () => {
+    it('should update venue data successfully', async () => {
         const mockData = { venue_name: 'Updated Venue', venue_capacity: 300 };
         const venueId = '1';
         const mockResponse = { success: true };
@@ -190,7 +190,7 @@ describe('API Functions', () => {
         expect(result).toEqual(mockResponse);
     });
 
-    test('should handle HTTP errors when updating venue data', async () => {
+    it('should handle HTTP errors when updating venue data', async () => {
         const mockData = { venue_name: 'Updated Venue', venue_capacity: 300 };
         const venueId = '1';
         const mockErrorResponse = { error: 'Update failed' };
@@ -206,7 +206,7 @@ describe('API Functions', () => {
         );
     });
 
-    test('should handle errors in the response', async () => {
+    it('should handle errors in the response', async () => {
         const mockData = { venue_name: 'Updated Venue', venue_capacity: 300 };
         const venueId = '1';
 
@@ -219,7 +219,7 @@ describe('API Functions', () => {
         await expect(updateVenue(mockData, venueId)).rejects.toThrow('Response JSON error');
     });
 
-    test('should handle network errors', async () => {
+    it('should handle network errors', async () => {
         const mockData = { venue_name: 'Updated Venue', venue_capacity: 300 };
         const venueId = '1';
 
