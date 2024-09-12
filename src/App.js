@@ -177,7 +177,6 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import Profile from './pages/ProfilePage/ProfilePage';
 import BookingPage from './pages/BookingPage/BookingPage';
 import AdminHomePage from './pages/AdminHomePage/AdminHomePage';
-import EventsBookedPage from './pages/EventsBookedPage/EventsBookedPage';
 import IssuesReportedPage from './pages/IssuesReportedPage/IssuesReportedPage';
 import AddAddVenuePage from './pages/AdminAddVenuePage/AdminAddVenuePage';
 import UserBookingPage from './pages/UserBookingsPage/UserBookingsPage';
@@ -196,7 +195,6 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/admin-home" element={<AdminHomePage/>} />
-        <Route path="/admin-events-booked" element={<EventsBookedPage/>} />
         <Route path="/admin-issues-reported" element={<IssuesReportedPage/>} />
         <Route path="/admin-add-venue" element={<AddAddVenuePage/>} />
         <Route path="/admin-view-booking" element={<UserBookingPage/>} />

@@ -11,58 +11,41 @@ body {
 }
 
 /* Container for centering the cards */
-.card-container {
+.issues-card-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    max-width: 800px;
     padding: 20px;
-    box-sizing: border-box;/* Include padding in container width and height */
+    min-height: 100vh; /* Ensures the container takes full height based on content */
 }
 
 /* Styling for individual cards */
-.issues-list-card{
-    border: 1px solid var(--color-main);
+.issues-list-card {
     background-color: var(--color-main);
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px var(--color-neutral);
-    padding: 25px;
-    margin: 10px;
-    text-align: center;
-    color: var(--color-neutral);
-    width: 100%;
-    max-width: 400px;
-    height: auto;
+    color: white;
+    padding: 1.5rem;
+    margin: 10px 0; /* Increased margin for better spacing */
+    border-radius: 0.8rem;
+    width: 90%;
+    max-width: 300px;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: transform 0.2s ease-in-out; /* Optional: Add smooth scaling effect */
 }
 
-/* Card content to ensure content is above the icon */
-.card-content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
+/* Scale card slightly on hover */
+.issues-list-card:hover {
+    transform: scale(1.05); /* Optional: Adds a hover effect */
 }
 
 /* Title of the card */
 .card-title {
-    font-size: 18px;
+    font-size: 25px;
     margin-bottom: 8px;
     font-weight: bold;
-}
-
-/* Description of the card */
-.card-description {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px; /* Add margin below description to create space for the button */
 }
 
 /* Button styling */
@@ -80,40 +63,35 @@ body {
 }
 
 .block-room-button:hover {
-    background-color: darkgoldenrod;}
+    background-color: darkgoldenrod;
+}
 
 /* Icon styling */
-.info-icon {
-    width: 24px; /* Set a fixed size for the icon */
-    height: 24px;
+.admin-issues-info-icon {
+    width: 25px;
+    height: 25px;
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 2; /* Ensure the icon is above the content */
+    z-index: 2;
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (min-width: 600px) {
     .issues-list-card {
-        width: 90%; /* Increase width on smaller screens */
-        padding: 15px;
+        width: 80%; /* Increase the width slightly on larger screens */
+    }
+}
+
+@media (min-width: 900px) {
+    .issues-card-container {
+        flex-direction: row; /* Arrange cards horizontally on large screens */
+        flex-wrap: wrap; /* Allow wrapping */
     }
 
-    .card-title {
-        font-size: 16px;
-    }
-
-    .card-description {
-        font-size: 12px;
-        margin-bottom: 15px; /* Adjust margin for smaller screens */
-    }
-
-    .block-room-button {
-        width: 80px; /* Adjust button width on smaller screens */
-    }
-
-    .info-icon {
-        width: 20px; /* Adjust icon size on smaller screens */
-        height: 20px;
+    .issues-list-card {
+        width: 45%; /* Adjust width for side-by-side cards on large screens */
+        max-width: 400px; /* Adjust max width for larger cards */
+        margin: 20px; /* Increase margin for larger screens */
     }
 }

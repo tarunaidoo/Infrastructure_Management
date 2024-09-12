@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './BookedEventsCard.css';
-// import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';
 import InfoIcon from '../../assets/icons/circle-info.svg';
 
 const BookedEventsCard = ({ eventName, eventDetails, onClick }) => {
@@ -16,7 +15,7 @@ const BookedEventsCard = ({ eventName, eventDetails, onClick }) => {
 
   return (
     <>
-    <div className="cards-container">
+    <div className="event-cards-container">
     <section className="admin-event-card" data-testid="Card-1" onClick={handleCardClick}>
       <p><b>{eventName}</b></p>
       <p>Date: {eventDetails.date}</p>

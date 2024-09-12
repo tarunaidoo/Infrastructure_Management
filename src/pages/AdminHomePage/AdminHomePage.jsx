@@ -26,10 +26,12 @@ function AdminHomePage(){
 
     return(
         <>
-            <NavigationHeader title = "Home" className="heading" />
+            <NavigationHeader title = "Home" className="admin-header" />
             <img src={AdminIcon} alt='admin icon' className='adminIcon'/> 
-            <AdminIssuesCard onClick={issuesCardClick} className="cards"/>
-            <AdminEventsCard onClick={eventsCardClick} className="cards"/>
+            <div className="admin-home-container">
+            <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
+            <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
+            </div>
             <Footer onAddVenueClick={handleAddVenueClick}/>
         </>
         
