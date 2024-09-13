@@ -24,6 +24,10 @@ function AdminHomePage(){
         navigate('/admin-add-venue');
     };
 
+    const handleEditVenueClick = () =>{
+        navigate('/edit-venue');
+    };
+
     return(
         <>
             <NavigationHeader title = "Home" className="admin-header" />
@@ -32,7 +36,7 @@ function AdminHomePage(){
             <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
             <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
             </div>
-            <Footer onAddVenueClick={handleAddVenueClick}/>
+            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick}/>
         </>
         
         
