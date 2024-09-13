@@ -38,7 +38,7 @@ function StudentHomePage() {
 
         setLoading(false); // Data has finished loading
       } catch (error) {
-        console.error('Error fetching data:', error);~
+        console.error('Error fetching data:', error);
         setError(`Failed to load data: ${error.message}`);
         setLoading(false); // Set loading to false even if there is an error
       }
