@@ -2,8 +2,9 @@ import "./AdminEditVenuePage.css";
 import React, { useState, useEffect } from "react";
 import Switch from "react-switch";
 import arrowIcon from '../../assets/icons/chevron-left.svg';
-import { getBuilding, getVenue, getFeatures, getFeatureNames, updateVenue } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
+import { getBuilding, getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
 import Popup from "../../components/Popup/Popup";
+
 const AdminEditVenuePage = () => {
 
     const [buildingName, setBuildingName] = useState("");
@@ -19,12 +20,18 @@ const AdminEditVenuePage = () => {
     const [popupType, setPopupType] = useState('');
     const [message, setMessage] = useState("");
     const [validInfo, setValidInfo] = useState(true);
+    const [loading, setLoading] = useState(false); // New state for loading
 
-
-
+    const [initialValues, setInitialValues] = useState({
+        venueName: "",
+        capacity: "",
+        isAvailable: false,
+        features: []
+    });
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true); // Show loading popup
             try {
                 const buildingData = await getBuilding("Mathematical Science Labs");
                 if (buildingData !== null) {
@@ -42,11 +49,16 @@ const AdminEditVenuePage = () => {
                     if (venueFeatures) {
                         const roomFeatureIDData = venueFeatures.featureDetails.map(detail => detail.ROOM_FEATURE_ID);
                         const featureIds = venueFeatures.featureDetails.map(detail => detail.FEATURE_ID);
-                        setroomFeatureIDs(roomFeatureIDData)
+                        setroomFeatureIDs(roomFeatureIDData);
                         setFeatures(featureIds);
+                        setInitialValues({
+                            venueName: venueData.venue_name,
+                            capacity: venueData.venue_capacity,
+                            isAvailable: venueData.venue_status === "Available",
+                            features: featureIds
+                        });
                     }
-                }
-                else {
+                } else {
                     setVenueName("Error");
                     setCapacity(-1);
                     setFeatures([]);
@@ -56,6 +68,8 @@ const AdminEditVenuePage = () => {
                 featureNames ? setAllFeatures(featureNames) : setAllFeatures([]);
             } catch (error) {
                 console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false); // Hide loading popup
             }
         };
 
@@ -64,20 +78,19 @@ const AdminEditVenuePage = () => {
 
     const handleFeatureToggle = (featureId) => {
         setFeatures(prevFeatures =>
-          prevFeatures.includes(featureId)
-            ? prevFeatures.filter(id => id !== featureId)
-            : [...prevFeatures, featureId]
+            prevFeatures.includes(featureId)
+                ? prevFeatures.filter(id => id !== featureId)
+                : [...prevFeatures, featureId]
         );
-      };
+    };
+
     const handleClosePopup = () => {
         setShowPopup(false);
         if (popupType === 'success') {
             console.log("successful");
         }
         //navigate('/'); // Navigate to the home page 
-
     };
-
 
     const handleSwitchChange = (checked) => {
         setIsAvailable(checked);
@@ -106,65 +119,81 @@ const AdminEditVenuePage = () => {
             return;
         }
 
-
         if (validInfo) {
+            // Check if there are any updates
+            if (
+                venueName === initialValues.venueName &&
+                capacity === initialValues.capacity &&
+                isAvailable === initialValues.isAvailable &&
+                features.length === initialValues.features.length &&
+                features.every(id => initialValues.features.includes(id))
+            ) {
+                setPopupType('error');
+                setMessage("No changes have been made.");
+                setShowPopup(true);
+                return;
+            }
+
             handleUpdateVenueClick();
         }
+    };
 
-    }
-
-    const handleUpdate = (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
+        setLoading(true); // Show loading popup
 
         // Determine status based on isAvailable
         const updatedStatus = isAvailable ? "Available" : "Unavailable";
-
-        // Log the values to ensure correctness
-        console.log(isAvailable);
-        console.log("Venue Status:", updatedStatus);
 
         // Prepare the data for updating the venue
         const updateVenueData = {
             VENUE_NAME: venueName,
             BUILDING_ID: buildingID,
             VENUE_CAPACITY: capacity,
-            VENUE_STATUS: updatedStatus // Use the computed status
+            VENUE_STATUS: updatedStatus
         };
 
-        // Call the function to update the venue
-        updateVenue(updateVenueData, venueID)
-            .then(() => {
-                console.log("Updated Venue Name:", venueName);
-                console.log("Updated Capacity:", capacity);
-                console.log("Venue Status:", updatedStatus);
-                console.log("Selected Features:", features);
-                console.log("Room Feature ID:", roomFeatureIDs);
+        try {
+            // Update venue details
+            await updateVenue(updateVenueData, venueID);
+            console.log("Updated Venue Name:", venueName);
+            console.log("Updated Capacity:", capacity);
+            console.log("Venue Status:", updatedStatus);
 
-                // Show success popup
-                setPopupType('success');
-                setShowPopup(true);
-            })
-            .catch((error) => {
-                console.error("Error updating venue:", error);
-                // Handle the error appropriately
-            });
+            // Update venue features
+            await updateVenueFeatures(venueID, features);
+            console.log("Selected Features:", features);
+            console.log("Room Feature ID:", roomFeatureIDs);
+
+            // Show success popup
+            setPopupType('success');
+            setShowPopup(true);
+            window.location.reload();
+
+        } catch (error) {
+            console.error("Error updating venue:", error);
+            // Handle the error appropriately
+            setPopupType('error');
+            setMessage("Failed to update the venue.");
+            setShowPopup(true);
+        } finally {
+            setLoading(false); // Hide loading popup
+        }
     };
 
     return (
         <main className="edit-venue-layout">
             <article className='edit-venue-heading'>
-
                 <img src={arrowIcon} alt='arrow-icon' className='edit-venue-icons' />
                 <h1>Edit a Venue</h1>
-
             </article>
             <section className="edit-venue-container">
                 <form onSubmit={handleFormSubmit}>
-                    <article className="edit-venue-inputs">
+                    <article className="edit-venue-articles" >
                         <h2>Building:</h2>
                         <p>{buildingName}</p>
                     </article>
-                    <article className="edit-venue-inputs">
+                    <article className="edit-venue-articles" >
                         <h2>Venue Name:</h2>
                         <input
                             type="text"
@@ -172,21 +201,22 @@ const AdminEditVenuePage = () => {
                             onChange={(e) => setVenueName(e.target.value)}
                         />
                     </article>
-                    <article className="edit-venue-inputs">
+                    <article className="edit-venue-articles">
                         <h2>Capacity:</h2>
                         <input
                             type="number"
                             value={capacity || ""}
                             onChange={(e) => setCapacity(e.target.value)}
-                            min="0" // Optional: Ensures only positive numbers or zero
-                            step="1" // Optional: Sets increment steps to whole numbers
+                            min="0" 
+                            step="1" 
                         />
                     </article>
-                    <article className="edit-venue-inputs">
-                        <h2>Venue Status:</h2>
+                    <article className="edit-venue-articles" >
+                        <h2>Availability:</h2>
                         <Switch
                             checked={isAvailable}
                             onChange={handleSwitchChange}
+                            className="switch-wrapper"
                             offColor="#888"
                             onColor="#D4A843"
                             handleDiameter={20}
@@ -194,37 +224,46 @@ const AdminEditVenuePage = () => {
                             width={48}
                         />
                     </article>
-                    <article className="edit-venue-features-layout">
+                    <article className="edit-venue-articles">
                         <h2>Features:</h2>
+                        <p></p>
+                        </article>
+                        <article className="edit-venue-checkboxes">
                         {allFeatures.map((feature) => (
-                            <article key={feature.FEATURE_ID}>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        className="edit-venue-checkbox-input"
-                                        checked={features.includes(feature.FEATURE_ID)}
-                                        onChange={() => handleFeatureToggle(feature.FEATURE_ID)}
-                                    />
-                                    <span className="edit-venue-checkbox-custom"></span>
-                                    {feature.FEATURE_NAME}
-                                </label>
-                            </article>
+                           <article key={feature.FEATURE_ID}>
+                           <label className="edit-venue-checkbox-label">
+                             <input
+                               type="checkbox"
+                               className="edit-venue-checkbox-input"
+                               checked={features.includes(feature.FEATURE_ID)}
+                               onChange={() => handleFeatureToggle(feature.FEATURE_ID)}
+                             />
+                             <span className="edit-venue-checkbox-custom"></span>
+                             <span className="edit-venue-checkbox-text">{feature.FEATURE_NAME}</span>
+                           </label>
+                         </article>
                         ))}
-                    </article>
+                        </article>
                     <article className="edit-venue-button-layout">
                         <button className="edit-venue-button" type="submit" >Update Venue</button>
                     </article>
                 </form>
             </section>
             <Popup trigger={showPopup} onClose={handleClosePopup}>
-                {popupType === 'error' && (
+                {loading && (
                     <article className='edit-venue-Popups'>
-                        <h2>Invalid Details</h2>
+                        <h2>Loading...</h2>
+                        <p>Please wait while we process your request.</p>
+                    </article>
+                )}
+                {popupType === 'error' && !loading && (
+                    <article className='edit-venue-Popups'>
+                        <h2>Error</h2>
                         <p>{message}</p>
                         <button onClick={handleClosePopup}>Close</button>
                     </article>
                 )}
-                {popupType === 'confirmation' && (
+                {popupType === 'confirmation' && !loading && (
                     <article className='edit-venue-Popups'>
                         <h2>Confirmation</h2>
                         <p>Do you want to update this venue?</p>
@@ -234,9 +273,9 @@ const AdminEditVenuePage = () => {
                         </article>
                     </article>
                 )}
-                {popupType === 'success' && (
+                {popupType === 'success' && !loading && (
                     <article className='edit-venue-Popups'>
-                        <h2>Confirmation</h2>
+                        <h2>Success</h2>
                         <p>The venue has been updated!</p>
                         <button onClick={handleClosePopup}>Close</button>
                     </article>
@@ -244,8 +283,6 @@ const AdminEditVenuePage = () => {
             </Popup>
         </main>
     );
-
-
 };
 
 export default AdminEditVenuePage;

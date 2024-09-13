@@ -135,7 +135,71 @@ async function updateVenue(data,venue_id){
         console.error('Failed to update venue availability:', error);
         throw error;
     }
-
 }
 
-export { getBuilding, getVenue, getFeatures, getFeatureNames,updateVenue}
+async function updateVenueFeatures(venueId, newFeatureIds) {
+    const endpoint = '/data-api/rest/VENUE_FEATURES';
+
+    try {
+        // Fetch existing features for the venue
+        const response = await fetch(endpoint, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+        }
+
+        const data = await response.json();
+        const existingFeatures = data.value || [];
+        const existingFeatureIds = existingFeatures
+            .filter(f => f.VENUE_ID === venueId) // Filter features for the specific venue
+            .map(f => ({
+                id: f.FEATURE_ID,
+                roomFeatureId: f.ROOM_FEATURE_ID
+            }));
+
+        // Determine features to add and remove
+        const featuresToAdd = newFeatureIds.filter(id => !existingFeatureIds.some(f => f.id === id));
+        const featuresToRemove = existingFeatureIds.filter(f => !newFeatureIds.includes(f.id));
+
+        // Perform add operations
+        for (const featureId of featuresToAdd) {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    VENUE_ID: venueId,
+                    FEATURE_ID: featureId
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to add feature ${featureId}: ${errorText}`);
+            }
+        }
+
+        // Perform remove operations
+        for (const { roomFeatureId } of featuresToRemove) {
+            const response = await fetch(`${endpoint}/ROOM_FEATURE_ID/${roomFeatureId}`, {
+                method: "DELETE"
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Failed to delete feature with ROOM_FEATURE_ID ${roomFeatureId}: ${errorText}`);
+            }
+        }
+
+        console.log("Venue features updated successfully");
+    } catch (error) {
+        console.error("Error updating venue features:", error);
+        throw error;
+    }
+}
+
+
+export { getBuilding, getVenue, getFeatures, getFeatureNames,updateVenue, updateVenueFeatures}
