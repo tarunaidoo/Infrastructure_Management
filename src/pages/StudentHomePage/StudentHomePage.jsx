@@ -34,12 +34,12 @@ function StudentHomePage() {
     }
   }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch bookings first
-                const fetchedBookings = await fetchBooking(userID);
-                setBookings(fetchedBookings);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch bookings first
+        const fetchedBookings = await fetchBooking(userID);
+        setBookings(fetchedBookings);
 
         // Get today's date in YYYY-MM-DD format
         const today = new Date().toISOString().split('T')[0];
@@ -56,42 +56,43 @@ function StudentHomePage() {
         const fetchedVenues = await Promise.all(venuePromises);
         setVenues(fetchedVenues);
 
-                // Fetch buildings based on venues
-                const buildingPromises = fetchedVenues.map(venue => fetchBuilding(venue?.BUILDING_ID));
-                const fetchedBuildings = await Promise.all(buildingPromises);
-                setBuildings(fetchedBuildings);
+        // Fetch buildings based on venues
+        const buildingPromises = fetchedVenues.map(venue => fetchBuilding(venue?.BUILDING_ID));
+        const fetchedBuildings = await Promise.all(buildingPromises);
+        setBuildings(fetchedBuildings);
 
-                console.log('User Bookings', fetchedBookings);
-                console.log('Booking Venues', fetchedVenues);
-                console.log('Venue Buildings', fetchedBuildings);
+        console.log('User Bookings', fetchedBookings);
+        console.log('Booking Venues', fetchedVenues);
+        console.log('Venue Buildings', fetchedBuildings);
 
-                setLoading(false); // Data has finished loading
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError(`Failed to load data: ${error.message}`);
-                setLoading(false); // Set loading to false even if there is an error
-            }
-        };
+        setLoading(false); // Data has finished loading
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(`Failed to load data: ${error.message}`);
+        setLoading(false); // Set loading to false even if there is an error
+      }
+    };
 
-        fetchData();
-    }, [userID]);
+    fetchData();
+  }, [userID]);
 
-    const handleOnReportIssueClick = () => {
-        const venueSelectionDetails = {
-            SOURCE_PAGE: "/student-home",
-            USER_ID: userID,
-            DESTINATION_PAGE: "/report-issue"
-        }
-        navigate("/campus-selection", { state: venueSelectionDetails });
+  const handleOnReportIssueClick = () => {
+    const venueSelectionDetails = {
+        SOURCE_PAGE: "/student-home",
+        USER_ID: userID,
+        DESTINATION_PAGE: "/report-issue"
     }
+    navigate("/campus-selection", { state: venueSelectionDetails });
+  }
 
-    if (loading) {
-        return <div>Connecting...</div>; // Display 'Connecting...' while loading
-    }
+  if (loading) {
+    return <div>Connecting...</div>; // Display 'Connecting...' while loading
+  }
 
-    if (error) {
-        return <div>{error}</div>; // Display error message if there's an issue
-    }
+  if (error) {
+    return <div>{error}</div>; // Display error message if there's an issue
+  }
+
   return (
     <>
       {isPopupOpen && (
@@ -120,7 +121,7 @@ function StudentHomePage() {
             <div>No bookings found.</div>
           )}
         </section>
-        <Footer onReportIssueClick={handleOnReportIssueClick} />
+        <Footer onReportIssueClick={handleOnReportIssueClick}/>
       </section>
     </>
   );
