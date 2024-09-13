@@ -18,6 +18,13 @@ describe('BookedEventsCard Component', () => {
     expect(eventNameElement).toHaveTextContent('Sample Event');
   });
 
+  test('renders event details correctly', () => {
+    render(<BookedEventsCard eventName="Sample Event" eventDetails={mockEventDetails} />);
+    expect(screen.getByText(/Date: 2024-09-01/i)).toBeInTheDocument();
+    expect(screen.getByText(/Time: 10:00 AM/i)).toBeInTheDocument();
+    expect(screen.getByText(/Venue: Conference Room/i)).toBeInTheDocument();
+  });
+
   test('opens the popup when the card is clicked', () => {
     render(<BookedEventsCard eventName="Sample Event" eventDetails={mockEventDetails} />);
     const card = screen.getByTestId('booked-events-card');
@@ -25,6 +32,15 @@ describe('BookedEventsCard Component', () => {
     const popup = screen.getByTestId('popupEvents-1');
     expect(popup).toBeInTheDocument();
   });
+
+  test('displays correct event details in the popup', () => {
+    render(<BookedEventsCard eventName="Sample Event" eventDetails={mockEventDetails} />);
+    const card = screen.getByTestId('booked-events-card'); // Update with correct test ID
+    fireEvent.click(card);
+    expect(screen.getByText(/Event Title/i)).toBeInTheDocument();
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+  });
+  
 
   test('closes the popup when the Close button is clicked', () => {
     render(<BookedEventsCard eventName="Sample Event" eventDetails={mockEventDetails} />);

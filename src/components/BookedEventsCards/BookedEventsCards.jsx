@@ -16,11 +16,11 @@ const BookedEventsCard = ({ eventName, eventDetails, onClick }) => {
   return (
     <>
     <div className="event-cards-container">
-    <section className="admin-event-card" data-testid="Card-1" onClick={handleCardClick}>
-      <p><b>{eventName}</b></p>
-      <p>Date: {eventDetails.date}</p>
-      <p>Time: {eventDetails.time}</p>
-      <p>Venue: {eventDetails.venue}</p>
+    <section className="admin-event-card" data-testid="booked-events-card" onClick={handleCardClick}>
+      <p data-testid="event-name" className="booking-title"><b>{eventName}</b></p>
+      <p className="booking-details">Date: {eventDetails.date}</p>
+      <p className="booking-details">Time: {eventDetails.time}</p>
+      <p className="booking-details">Venue: {eventDetails.venue}</p>
       <img src={InfoIcon} alt="Info Icon" className="infoIcon" data-testid="info-icon"/>
     </section>
     </div>

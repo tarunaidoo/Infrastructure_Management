@@ -17,10 +17,18 @@ function LoginPage() {
             if (isAuthenticated) {//if authenticated then check if user is in db, if not, add them
                 try {
                     const data=await list(user.email);
-                    if(data.length===0){//user isnt in db, add them
+                    if(data.length===0){//user isnt in db, add them, only applies to a student, admin already in db
                         createUser(user.email,user.given_name,user.family_name);
                     }
-                    navigate('/profile'); // Navigate to the ProfilePage
+                    if(data[0].USER_ROLE==="Admin"){
+                        navigate('/admin-home'); //navigate to the admin home 
+                    }
+                    else{
+                        localStorage.setItem('showPopupOnStudentHome', 'true');
+                        localStorage.setItem('userEmail', user.email);//
+                        navigate('/student-home'); // Navigate to the student home
+                    }
+                    
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
