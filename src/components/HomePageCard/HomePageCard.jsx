@@ -1,4 +1,5 @@
 import React from 'react';
+import './HomePageCard.css';
 
 function Card({ event, date, time, venue, room }) {
   return (

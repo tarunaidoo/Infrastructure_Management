@@ -1,10 +1,11 @@
 import React from 'react';
-import home from './assets/house-2.svg';
-import square from './assets/square-plus.svg';
-import horn from './assets/bullhorn.svg';
-import user from './assets/user-filled.svg';
+import home from '../../assets/icons/house-2.svg';
+import square from '../../assets/icons/square-plus.svg';
+import horn from '../../assets/icons/bullhorn.svg';
+import user from '../../assets/icons/user-filled.svg';
+import './HomePageFooter.css';
 
-function Footer() {
+function StudentFooter() {
   return (
     <footer className="MenuBar">
       {/* Each image is wrapped in a button element */}
@@ -24,4 +25,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default StudentFooter;
