@@ -35,44 +35,39 @@ const BookingPage = () => {
   const [date, setDate] = useState(new Date());
   const [activeStartDate, setActiveStartDate] = useState(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');  // Start with empty selection
-  const [popupState, setPopupState] = useState("Booking Failed");
-  const [displayPopup, setDisplayPopup] = useState(true);
+  const [popupState, setPopupState] = useState("");
+  const [displayPopup, setDisplayPopup] = useState(false);
 
-  const mutation = useMutation((newBooking) => 
-      createBooking(newBooking),
+  const mutation = useMutation((newBooking) => createBooking(newBooking), {
+        onSuccess: () => {
+          setPopupState("Booking Successful");
+          setDisplayPopup(true);
+        },
+
+        onError: () => {
+          setPopupState("Booking Failed");
+          setDisplayPopup(true);
+        },
+
+        onSettled: () => {
+          // IDK, but might need it later :)
+        }
+      }
   );
 
   const handleSubmit = () => {
-    if (!selectedTimeSlot) {
-      alert("Please select a time slot");
+    if (selectedVenue == {} || !selectedTimeSlot) {
+      setPopupState("Invalid Details");
+      setDisplayPopup(true);
       return;
     }
 
-    const bookingData = {
-      VENUE_ID: selectedVenue.VENUE_ID,        // Get the venue ID
-      USER_ID: selectedVenue.USER_ID,          // User ID
-      DATE: date.toISOString().split('T')[0],  // Format the date to 'YYYY-MM-DD'
-      START_TIME: selectedTimeSlot.start,      // Selected start time
-      END_TIME: selectedTimeSlot.end,          // Selected end time
-      DATE_CREATED: new Date().toISOString().split('T')[0],  // Date when the booking is created
-      BOOKING_STATUS: "Confirmed"              // Example booking status
-    };
-
-    console.log("Booking Data:", bookingData);
-
-    mutation.mutate(bookingData);
+    setPopupState("Confirm Booking");
+    setDisplayPopup(true);
   };
 
   if (mutation.isLoading) {
     return <span>Submitting...</span>;
-  }
-
-  if (mutation.isError) {
-    return <span>Error: {mutation.error.message}</span>;
-  }
-
-  if (mutation.isSuccess) {
-    return <span>Post submitted!</span>;
   }
 
   const handleOnVenueSelectionClick = () => {
@@ -105,6 +100,38 @@ const BookingPage = () => {
     }
     return null;
   };
+
+  const handleBackToVenueBookingClick = () => {
+    setPopupState("");
+    setDisplayPopup(false);
+  }
+
+  const handleConfirmBookingClick = () => {
+    setPopupState("")
+    setDisplayPopup(false);
+
+    const bookingData = {
+      VENUE_ID: selectedVenue.VENUE_ID,        // Get the venue ID
+      USER_ID: selectedVenue.USER_ID,          // User ID
+      DATE: date.toISOString().split('T')[0],  // Format the date to 'YYYY-MM-DD'
+      START_TIME: selectedTimeSlot.start,      // Selected start time
+      END_TIME: selectedTimeSlot.end,          // Selected end time
+      DATE_CREATED: new Date().toISOString().split('T')[0],  // Date when the booking is created
+      BOOKING_STATUS: "Confirmed"              // Example booking status
+    };
+
+    console.log("Booking Data:", bookingData);
+
+    mutation.mutate(bookingData);
+  }
+
+  const handleBookingSuccessfulClick = () => {
+    setDisplayPopup(false);
+
+    navigate("/student-home");
+  }
+
+  console.log(popupState);
 
   return (
     <>
@@ -172,7 +199,7 @@ const BookingPage = () => {
         <Popup trigger={displayPopup}>
           <h2> Invalid Details </h2>
           <p> Please fill in all fields </p>
-          <button>Close</button>
+          <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
         </Popup>
       : ""}
 
@@ -181,8 +208,8 @@ const BookingPage = () => {
           <h2> Confirmation </h2>
           <p> Do you want to place a booking for this event? </p>
           <article className='confirm-booking-button-container'>
-            <button>Yes</button> 
-            <button>No</button>
+            <button onClick={handleConfirmBookingClick} className='booking-popup-button'>Yes</button> 
+            <button onClick={handleBackToVenueBookingClick}className='booking-popup-button'>No</button>
           </article>
         </Popup>
       : ""}
@@ -191,7 +218,7 @@ const BookingPage = () => {
         <Popup trigger={displayPopup}>
           <h2> Confirmation </h2>
           <p> Your event has been booked! </p>
-          <button>Close</button>
+          <button onClick={handleBookingSuccessfulClick} className='booking-popup-button'>Close</button>
         </Popup>
       : ""}
 
@@ -199,7 +226,7 @@ const BookingPage = () => {
         <Popup trigger={displayPopup}>
           <h2> Booking Error </h2>
           <p> Failed to book your event! </p>
-          <button>Close</button>
+          <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
         </Popup>
       : ""}
     </>

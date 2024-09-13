@@ -160,5 +160,30 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20%;
+}
+
+.booking-popup-button {
+  background-color: #001F3F; /* Deep Navy */
+    color: white;
+    padding: 10px 20px;
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.booking-popup-button:hover {
+  background-color: #0047AB; /* Royal Azure, change on hover */
+}
+
+.booking-popup-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
 }
