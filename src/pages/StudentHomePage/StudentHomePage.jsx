@@ -65,6 +65,15 @@ function StudentHomePage() {
         return <div>{error}</div>; // Display error message if there's an issue
     }
 
+  return (
+    <>
+    <body className='home-body'>
+      <Header />
+      <section className='content'>
+        {bookings.length > 0 ? (
+          bookings.map((booking, index) => {
+            const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
+            const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
     return (
         <>
             <Header />
@@ -74,6 +83,25 @@ function StudentHomePage() {
                         const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
                         const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
 
+            return (
+              <Card
+                key={index}
+                event={booking.EVENT_NAME}
+                date={booking.DATE}
+                time={`${booking.START_TIME} - ${booking.END_TIME}`}
+                venue={building?.BUILDING_NAME || 'Unknown Building'}
+                room={venue?.VENUE_NAME || 'Unknown Room'}
+              />
+            );
+          })
+        ) : (
+          <div>No bookings found.</div>
+        )}
+      </section>
+      <Footer />
+      </body>
+    </>
+  );
                         return (
                             <Card
                                 key={index}

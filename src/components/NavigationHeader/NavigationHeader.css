@@ -9,10 +9,8 @@ body {
 }
 
 
-.header {
-  top:0;
-  position: fixed;
-  height: 15vh;
+.navheader {
+  height: 12vh;
   width: 100%; /* Explicitly set width to the full viewport width */
   display: flex;
   justify-content: center;
