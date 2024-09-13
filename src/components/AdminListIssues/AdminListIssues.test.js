@@ -12,7 +12,8 @@ describe('AdminListIssues Component', () => {
 
     render(
       <AdminListIssues 
-        venueName="Test Venue"
+      title="Test Venue"  
+      venueName="Test Venue"
         date={tesdate}
         isBlocked={false} 
         onClick={mockOnClick} 
