@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
-import Popup from '../../components/NotificationPopup/NotificationPopup';
+import NotificationPopup from '../../components/NotificationPopup/NotificationPopup';
 import './StudentHomePage.css';
 import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePages/HomePage.service";
 
@@ -85,9 +85,9 @@ function StudentHomePage() {
   return (
     <>
       {isPopupOpen && (
-        <Popup arrayOfNames={eventNames} onClose={handleClosePopup} />
+        <NotificationPopup arrayOfNames={eventNames} onClose={handleClosePopup} />
       )}
-      <div className='home-body'>
+      <section className='home-body'>
         <Header />
         <section className='content'>
           {bookings.length > 0 ? (
@@ -111,7 +111,7 @@ function StudentHomePage() {
           )}
         </section>
         <Footer />
-      </div>
+      </section>
     </>
   );
 }
