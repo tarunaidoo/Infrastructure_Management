@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
-import StudentFooter from '../../components/NavigationBar/StudentHomeFooter';
+import Footer from '../../components/NavigationBar/StudentHomeFooter';
 import './StudentHomePage.css';
 import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePages/HomePage.service";
 
@@ -64,24 +64,15 @@ function StudentHomePage() {
     if (error) {
         return <div>{error}</div>; // Display error message if there's an issue
     }
-
   return (
     <>
-    <body className='home-body'>
+    <section className='home-body'>
       <Header />
       <section className='content'>
         {bookings.length > 0 ? (
           bookings.map((booking, index) => {
             const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
             const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
-    return (
-        <>
-            <Header />
-            <section className='content'>
-                {bookings.length > 0 ? (
-                    bookings.map((booking, index) => {
-                        const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
-                        const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
 
             return (
               <Card
@@ -98,28 +89,10 @@ function StudentHomePage() {
           <div>No bookings found.</div>
         )}
       </section>
-      <Footer />
-      </body>
+        <Footer onReportIssueClick={handleOnReportIssueClick} />
+      </section>
     </>
   );
-                        return (
-                            <Card
-                                key={index}
-                                event={booking.EVENT_NAME}
-                                date={booking.DATE}
-                                time={`${booking.START_TIME} - ${booking.END_TIME}`}
-                                venue={building?.BUILDING_NAME || 'Unknown Building'}
-                                room={venue?.VENUE_NAME || 'Unknown Room'}
-                            />
-                        );
-                    })
-                ) : (
-                    <div>No bookings found.</div>
-                )}
-            </section>
-            <StudentFooter onReportIssueClick={handleOnReportIssueClick} />
-        </>
-    );
 }
 
 export default StudentHomePage;
