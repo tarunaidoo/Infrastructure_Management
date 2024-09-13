@@ -47,6 +47,11 @@ function ReportIssue() {
     handleReportIssueClick();
   };
 
+  const handleReportIssueClick = () => {
+    setPopupType('confirmation');
+    setShowPopup(true);
+  };
+
   const handleConfirm = () => {
     const reportData = {
       VENUE_ID: selectedVenue.ID,
@@ -76,10 +81,7 @@ function ReportIssue() {
   };
 
 
-  const handleReportIssueClick = () => {
-    setPopupType('confirmation');
-    setShowPopup(true);
-  };
+
 
   const handleClosePopup = () => {
     setShowPopup(false);
