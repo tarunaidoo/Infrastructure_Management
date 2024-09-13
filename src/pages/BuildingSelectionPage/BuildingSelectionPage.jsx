@@ -27,6 +27,7 @@ const BuildingSelectionPage = () => {
     const handleHeaderBackIconClick = () => {
         const backPageDetails = {
             SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+            USER_ID: previousPageDetails.USER_ID,
             DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE
         }
         navigate("/campus-selection", {state: backPageDetails});

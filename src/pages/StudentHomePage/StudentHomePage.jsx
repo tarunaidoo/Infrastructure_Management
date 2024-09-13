@@ -9,6 +9,7 @@ import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePage
 
 function StudentHomePage() {
   const userID = localStorage.getItem('userEmail'); // get userID
+  const navigate = useNavigate();
 
   // State for bookings, venues, buildings, and loading/error handling
   const [bookings, setBookings] = useState([]);
@@ -78,6 +79,7 @@ function StudentHomePage() {
     const handleOnReportIssueClick = () => {
         const venueSelectionDetails = {
             SOURCE_PAGE: "/student-home",
+            USER_ID: userID,
             DESTINATION_PAGE: "/report-issue"
         }
         navigate("/campus-selection", { state: venueSelectionDetails });

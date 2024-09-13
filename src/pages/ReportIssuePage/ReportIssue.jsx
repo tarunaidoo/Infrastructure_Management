@@ -16,6 +16,7 @@ function ReportIssue() {
     const previousPageDetails = location.state || {}; 
 
     const selectedVenue = {
+      USER_ID: previousPageDetails.USER_ID,
       BUILDING_ID: previousPageDetails.BUILDING_ID,
       BUILDING_NAME: previousPageDetails.BUILDING_NAME,
       VENUE_ID: previousPageDetails.VENUE_ID,
@@ -61,7 +62,7 @@ function ReportIssue() {
     const reportData = {
       VENUE_ID: selectedVenue.VENUE_ID,
       TITLE: issueTitle,
-      REPORTED_BY: "2486457@students.wits.ac.za",
+      REPORTED_BY: selectedVenue.USER_ID,
       REPORT_DATE: formattedDateISO,
       DESCRIPTION: issueDescription,
       ISSUE_STATUS:"UNRESOLVED",
@@ -88,6 +89,7 @@ function ReportIssue() {
   const handleHeaderBackIconClick = () => {
     const backPageDetails = {
       SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+      USER_ID: previousPageDetails.USER_ID,
       DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
       CAMPUS_NAME: previousPageDetails.CAMPUS_NAME,
       BUILDING_ID: previousPageDetails.BUILDING_ID,
