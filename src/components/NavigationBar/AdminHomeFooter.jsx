@@ -2,9 +2,10 @@ import React from 'react';
 import Home from '../../assets/icons/house-2.svg';
 import Square from '../../assets/icons/square-plus.svg';
 import User from '../../assets/icons/user-filled.svg';
+import Pencil from '../../assets/icons/pen-writing-filled.svg';
 import './AdminHomeFooter.css';
 
-function Footer({onAddVenueClick}) {
+function Footer({onAddVenueClick, onEditVenueClick}) {
   return (
     <footer className="MenuBar" data-testid="Footer-1">
       {/* Each image is wrapped in a button element */}
@@ -13,6 +14,9 @@ function Footer({onAddVenueClick}) {
       </button>
       <button className="image-button" data-testid="square-btn" onClick={onAddVenueClick}>
         <img src={Square} alt="Square" data-testid="square-img" />
+      </button>
+      <button className="image-button" data-testid="edit-btn" onClick={onEditVenueClick}>
+        <img src={Pencil} alt="Pencil" data-testid="edit-img"/>
       </button>
       <button className="image-button" data-testid="user-btn">
         <img src={User} alt="User" data-testid="user-img"/>

@@ -10,14 +10,45 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.cards{
-    content: wrap;
+.admin-header {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: var(--color-main);
+    color: white;
+    position: fixed; /* Fix the header to the top */
+    width: 100%; /* Ensure header spans the full width */
+    top: 0; /* Align header to the top */
+    z-index: 1000; /* Ensure header is above other content */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
-.adminIcon{
-    padding: none;
-    margin-top: 0;
-    filter: invert(1) brightness(7) sepia(1) saturate(6);
-    width: 3.25em; /* Uses em units for scalable image size */
-    height: 3.25em;
+
+.admin-home-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the top */
+    min-height: 100vh; /* Full viewport height */
+    padding: 2px; /* Add padding if necessary */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.admin-home-cards {
+    background-color: #00203f;
+    color: white;
+    margin-top: 7px; /* Adjusted margin to reduce space above each card */
+    padding: 1.5rem; /* Scalable padding */
+    border-radius: 0.8rem; /* Scalable border radius */
+    width: 90%; /* Responsive card width */
+    max-width: 300px; /* Prevents the card from getting too large */
+}
+
+/* Optional: Responsive adjustments */
+@media (max-width: 600px) {
+    .admin-home-cards {
+        width: 95%; /* Increase width on smaller screens */
+        padding: 1rem;
+    }
 }
