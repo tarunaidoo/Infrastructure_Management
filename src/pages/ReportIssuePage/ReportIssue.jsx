@@ -58,6 +58,11 @@ function ReportIssue() {
     handleReportIssueClick();
   };
 
+  const handleReportIssueClick = () => {
+    setPopupType('confirmation');
+    setShowPopup(true);
+  };
+
   const handleConfirm = () => {
     const reportData = {
       VENUE_ID: selectedVenue.VENUE_ID,
@@ -98,10 +103,7 @@ function ReportIssue() {
     navigate("/room-selection", { state: backPageDetails });
   }
 
-  const handleReportIssueClick = () => {
-    setPopupType('confirmation');
-    setShowPopup(true);
-  };
+
 
   const handleClosePopup = () => {
     setShowPopup(false);
