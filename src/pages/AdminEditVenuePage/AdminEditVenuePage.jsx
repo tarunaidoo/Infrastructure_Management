@@ -1,14 +1,17 @@
 import "./AdminEditVenuePage.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Switch from "react-switch";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import arrowIcon from '../../assets/icons/chevron-left.svg';
-import { getBuilding, getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
+import { getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
 import Popup from "../../components/Popup/Popup";
 
 const AdminEditVenuePage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const previousPageDetails = useMemo(() => location.state || {}, [location.state]);
 
-    const [buildingName, setBuildingName] = useState("");
-    const [buildingID, setBuildingID] = useState("");
     const [venueID, setVenueID] = useState("");
     const [venueName, setVenueName] = useState("");
     const [capacity, setCapacity] = useState("");
@@ -33,13 +36,7 @@ const AdminEditVenuePage = () => {
         const fetchData = async () => {
             setLoading(true); // Show loading popup
             try {
-                const buildingData = await getBuilding("Mathematical Science Labs");
-                if (buildingData !== null) {
-                    setBuildingName(buildingData.building_name);
-                    setBuildingID(buildingData.building_id);
-                }
-
-                const venueData = await getVenue("MSL004");
+                const venueData = await getVenue(previousPageDetails.VENUE_NAME);
                 if (venueData) {
                     setVenueID(venueData.venue_id);
                     setVenueName(venueData.venue_name);
@@ -74,7 +71,7 @@ const AdminEditVenuePage = () => {
         };
 
         fetchData();
-    }, []);
+    }, [previousPageDetails]);
 
     const handleFeatureToggle = (featureId) => {
         setFeatures(prevFeatures =>
@@ -100,6 +97,18 @@ const AdminEditVenuePage = () => {
         setPopupType('confirmation');
         setShowPopup(true);
     };
+
+    const handleHeaderBackIconClick = () => {
+        const backPageDetails = {
+          SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+          USER_ID: previousPageDetails.USER_ID,
+          DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
+          CAMPUS_NAME: previousPageDetails.CAMPUS_NAME,
+          BUILDING_ID: previousPageDetails.BUILDING_ID,
+          BUILDING_NAME: previousPageDetails.BUILDING_NAME
+        }
+        navigate("/room-selection", { state: backPageDetails });
+    }
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -148,7 +157,7 @@ const AdminEditVenuePage = () => {
         // Prepare the data for updating the venue
         const updateVenueData = {
             VENUE_NAME: venueName,
-            BUILDING_ID: buildingID,
+            BUILDING_ID: previousPageDetails.BUILDING_ID,
             VENUE_CAPACITY: capacity,
             VENUE_STATUS: updatedStatus
         };
@@ -184,14 +193,14 @@ const AdminEditVenuePage = () => {
     return (
         <main className="edit-venue-layout">
             <article className='edit-venue-heading'>
-                <img src={arrowIcon} alt='arrow-icon' className='edit-venue-icons' />
+                <img onClick={handleHeaderBackIconClick} src={arrowIcon} alt='arrow-icon' className='edit-venue-icons' />
                 <h1>Edit a Venue</h1>
             </article>
             <section className="edit-venue-container">
                 <form onSubmit={handleFormSubmit}>
                     <article className="edit-venue-articles" >
                         <h2>Building:</h2>
-                        <p>{buildingName}</p>
+                        <p>{previousPageDetails.BUILDING_NAME}</p>
                     </article>
                     <article className="edit-venue-articles" >
                         <h2>Venue Name:</h2>
