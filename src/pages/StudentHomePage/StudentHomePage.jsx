@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
@@ -74,15 +73,6 @@ function StudentHomePage() {
 
     fetchData();
   }, [userID]);
-
-  const handleOnReportIssueClick = () => {
-    const venueSelectionDetails = {
-        SOURCE_PAGE: "/student-home",
-        USER_ID: userID,
-        DESTINATION_PAGE: "/report-issue"
-    }
-    navigate("/campus-selection", { state: venueSelectionDetails });
-  }
 
   if (loading) {
     return <div>Connecting...</div>; // Display 'Connecting...' while loading

@@ -1,105 +1,215 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
 import AdminEditVenuePage from './AdminEditVenuePage';
+import { getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from '../../services/AdminEditVenuePage/AdminEditVenuePage.service';
 
-// Mocking the services
 jest.mock('../../services/AdminEditVenuePage/AdminEditVenuePage.service', () => ({
-    getBuilding: jest.fn(() => Promise.resolve({ building_name: 'Mathematical Science Labs', building_id: '123' })),
-    getVenue: jest.fn(() => Promise.resolve({
-        venue_id: '456',
-        venue_name: 'MSL004',
-        venue_capacity: 100,
-        venue_status: 'Available'
-    })),
-    getFeatures: jest.fn(() => Promise.resolve({
-        featureDetails: [
-            { ROOM_FEATURE_ID: 1, FEATURE_ID: 101 },
-            { ROOM_FEATURE_ID: 2, FEATURE_ID: 102 }
-        ]
-    })),
-    getFeatureNames: jest.fn(() => Promise.resolve([
-        { FEATURE_ID: 101, FEATURE_NAME: 'Projector' },
-        { FEATURE_ID: 102, FEATURE_NAME: 'Whiteboard' }
-    ])),
-    updateVenue: jest.fn(),
-    updateVenueFeatures: jest.fn(),
+  getVenue: jest.fn(),
+  getFeatures: jest.fn(),
+  getFeatureNames: jest.fn(),
+  updateVenue: jest.fn(),
+  updateVenueFeatures: jest.fn(),
 }));
 
-describe('AdminEditVenuePage Component', () => {
-    it('renders static elements correctly', async () => {
-        render(<AdminEditVenuePage />);
-        
-        // Check that heading and labels are rendered after async data loads
-        expect(await screen.findByText(/Edit a Venue/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Building:/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Venue Name:/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Capacity:/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Availability:/i)).toBeInTheDocument();
-        expect(await screen.findByText(/Features:/i)).toBeInTheDocument();
+jest.mock('../../components/Popup/Popup', () => ({ trigger, children }) => (
+  <div data-testid="popup">
+    {trigger && <div>{children}</div>}
+  </div>
+));
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn()
+}));
+
+const mockNavigate = jest.fn();
+
+describe('AdminEditVenuePage', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    // Setup default mock implementation
+    getVenue.mockResolvedValue({
+      venue_id: '1',
+      venue_name: 'Test Venue',
+      venue_capacity: '100',
+      venue_status: 'Available'
     });
 
-    it('renders venue name and capacity inputs correctly', async () => {
-        render(<AdminEditVenuePage />);
-
-        // Wait for the venue name and capacity inputs to appear
-        const venueInput = await screen.findByDisplayValue('MSL004');
-        const capacityInput = await screen.findByDisplayValue('100');
-        
-        expect(venueInput).toBeInTheDocument();
-        expect(capacityInput).toBeInTheDocument();
+    getFeatures.mockResolvedValue({
+      featureDetails: [
+        { ROOM_FEATURE_ID: '1', FEATURE_ID: 'feature1' },
+        { ROOM_FEATURE_ID: '2', FEATURE_ID: 'feature2' }
+      ]
     });
 
-    it('toggles availability switch correctly', async () => {
-        render(<AdminEditVenuePage />);
+    getFeatureNames.mockResolvedValue([
+      { FEATURE_ID: 'feature1', FEATURE_NAME: 'Feature 1' },
+      { FEATURE_ID: 'feature2', FEATURE_NAME: 'Feature 2' }
+    ]);
 
-        // Select the availability switch using getByLabelText
-        const availabilitySwitch = await screen.findByRole('switch');
-        
-        expect(availabilitySwitch).toBeChecked(); // Initially 'Available'
-        fireEvent.click(availabilitySwitch);
-        expect(availabilitySwitch).not.toBeChecked(); // After toggling, should be 'Unavailable'
-    });
+    updateVenue.mockResolvedValue({});
+    updateVenueFeatures.mockResolvedValue({});
 
-    it('checks and unchecks feature checkboxes correctly', async () => {
-        render(<AdminEditVenuePage />);
-        
-        // Wait for the checkboxes to appear
-        const projectorCheckbox = await screen.findByLabelText('Projector');
-        const whiteboardCheckbox = await screen.findByLabelText('Whiteboard');
+    useNavigate.mockImplementation(() => mockNavigate);
+  });
 
-        expect(projectorCheckbox.checked).toBe(true); // Initially checked
-        expect(whiteboardCheckbox.checked).toBe(true); // Initially checked
-        
-        // Toggle projector off
-        fireEvent.click(projectorCheckbox);
-        expect(projectorCheckbox.checked).toBe(false); 
-        
-        // Toggle whiteboard off
-        fireEvent.click(whiteboardCheckbox);
-        expect(whiteboardCheckbox.checked).toBe(false);
-    });
+  let mockLocationState;
 
-    it('submits form and updates venue correctly', async () => {
-        render(<AdminEditVenuePage />);
+  beforeEach(() => {
+    // Mock the location state
+    mockLocationState = {
+      VENUE_NAME: 'Test Venue',
+      SOURCE_PAGE: 'source',
+      USER_ID: 'user123',
+      DESTINATION_PAGE: 'destination',
+      CAMPUS_NAME: 'Campus A',
+      BUILDING_ID: 'building123',
+      BUILDING_NAME: 'Building 1',
+      features: [
+        { FEATURE_ID: 1, FEATURE_NAME: 'Feature 1' },
+        { FEATURE_ID: 2, FEATURE_NAME: 'Feature 2' }
+      ],
+      capacity: 100,
+      isAvailable: true
+    };
+  });
 
-        // Wait for elements to appear and fill in new values
-        const venueInput = await screen.findByDisplayValue('MSL004');
-        fireEvent.change(venueInput, { target: { value: 'New Venue Name' } });
+  test('renders all main elements of the AdminEditVenuePage', () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
 
-        const capacityInput = await screen.findByDisplayValue('100');
-        fireEvent.change(capacityInput, { target: { value: '150' } });
+    // Check if the layout is rendered
+    expect(screen.getByTestId('edit-venue-layout')).toBeInTheDocument();
 
-        const projectorCheckbox = await screen.findByLabelText('Projector');
-        fireEvent.click(projectorCheckbox); // Toggle off
+    // Check if the heading section is rendered
+    expect(screen.getByTestId('edit-venue-heading')).toBeInTheDocument();
+    expect(screen.getByTestId('edit-venue-heading-text')).toHaveTextContent('Edit a Venue');
+    expect(screen.getByTestId('back-arrow-icon')).toBeInTheDocument();
 
-        // Submit form
-        const updateButton = screen.getByText('Update Venue');
-        fireEvent.click(updateButton);
+    // Check if the form and its sections are rendered
+    expect(screen.getByTestId('edit-venue-container')).toBeInTheDocument();
+    expect(screen.getByTestId('edit-venue-form')).toBeInTheDocument();
 
-        // Validate that the changes are reflected
-        expect(venueInput.value).toBe('New Venue Name');
-        expect(capacityInput.value).toBe('150');
-        expect(projectorCheckbox.checked).toBe(false);
-    });
+    // Check building name section
+    expect(screen.getByTestId('building-name-section')).toBeInTheDocument();
+    expect(screen.getByTestId('building-name')).toBeInTheDocument();
+
+    // Check venue name input
+    expect(screen.getByTestId('venue-name-section')).toBeInTheDocument();
+    expect(screen.getByTestId('venue-name-input')).toBeInTheDocument();
+
+    // Check capacity input
+    expect(screen.getByTestId('capacity-section')).toBeInTheDocument();
+    expect(screen.getByTestId('capacity-input')).toBeInTheDocument();
+
+    // Check availability switch
+    expect(screen.getByTestId('availability-section')).toBeInTheDocument();
+    expect(screen.getByTestId('availability-switch')).toBeInTheDocument();
+
+    // Check features section and checkboxes
+    expect(screen.getByTestId('features-section')).toBeInTheDocument();
+    expect(screen.getByTestId('features-checkboxes')).toBeInTheDocument();
+
+    // Check update venue button
+    expect(screen.getByTestId('update-venue-button')).toBeInTheDocument();
+
+    // Check popup and its various types
+    expect(screen.getByTestId('popup')).toBeInTheDocument();
+  });
+
+  test('shows venue name error popup when venue name is invalid', () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByTestId('venue-name-input'), { target: { value: '' } });
+    fireEvent.click(screen.getByTestId('update-venue-button'));
+
+    expect(screen.getByTestId('venue-name-error-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('venue-name-error-message')).toHaveTextContent('Please fill in a valid venue name.');
+  });
+
+  test('shows capacity error popup when capacity is invalid', () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByTestId('capacity-input'), { target: { value: '-1' } });
+    fireEvent.click(screen.getByTestId('update-venue-button'));
+
+    expect(screen.getByTestId('capacity-error-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('capacity-error-message')).toHaveTextContent('Please fill in a valid capacity.');
+  });
+
+  test('shows features error popup when there is an error with features', () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
+
+    // Simulate an error with features
+    getFeatures.mockRejectedValueOnce(new Error('Features fetch error'));
+
+    fireEvent.click(screen.getByTestId('update-venue-button'));
+
+    expect(screen.getByTestId('features-error-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('features-error-message')).toHaveTextContent('Error fetching features.');
+  });
+
+  test('shows no changes error popup when no changes are made', () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
+
+    // Set values to match initial values
+    fireEvent.change(screen.getByTestId('venue-name-input'), { target: { value: 'Test Venue' } });
+    fireEvent.change(screen.getByTestId('capacity-input'), { target: { value: '100' } });
+    fireEvent.click(screen.getByTestId('update-venue-button'));
+
+    expect(screen.getByTestId('no-changes-error-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('no-changes-error-message')).toHaveTextContent('No changes have been made.');
+  });
+
+  test('shows confirmation popup when update button is clicked', () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByTestId('venue-name-input'), { target: { value: 'Updated Venue' } });
+    fireEvent.click(screen.getByTestId('update-venue-button'));
+
+    expect(screen.getByTestId('confirmation-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('confirmation-popup')).toHaveTextContent('Do you want to update this venue?');
+  });
+
+  test('shows success popup when venue is successfully updated', async () => {
+    render(
+      <MemoryRouter initialEntries={[{ state: mockLocationState }]}>
+        <AdminEditVenuePage />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByTestId('venue-name-input'), { target: { value: 'Updated Venue' } });
+    fireEvent.click(screen.getByTestId('update-venue-button'));
+    fireEvent.click(screen.getByTestId('confirmation-yes-button'));
+
+    // Check if the success popup appears
+    expect(screen.getByTestId('success-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('success-popup')).toHaveTextContent('The venue has been updated!');
+  });
 });
