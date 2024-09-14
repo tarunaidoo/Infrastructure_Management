@@ -21,6 +21,7 @@ h2 {
     padding: 0;
     margin-left: 20px;
     height: 50px;
+    width: 300px;
     max-width: 130px;
     background-color: var(--color-accent);
     color: white;
@@ -116,7 +117,9 @@ select.input-field {
     font-size: 16px;
     color: #333; /* Color of the dropdown arrow */
 }
-
+#building-location, #building-tag{
+    width: 100%;
+}
 /* Checklist styles */
 .checkbox-list {
     display: flex;

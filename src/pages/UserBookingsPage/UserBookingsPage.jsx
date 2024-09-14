@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/NavigationHeader/NavigationHeader';
 import BookedEventsCard from '../../components/BookedEventsCards/BookedEventsCards';
 import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Import the Popup component
-import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/StudentBookingPage.service';
-
+import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
 function StudentBookingPage() {
     const [bookings, setBookings] = useState([]);
     //const [venues, setVenues] = useState([]);
@@ -57,6 +56,9 @@ function StudentBookingPage() {
                 const bookingsWithVenues = studentBookings.map(booking => ({
                     ...booking,
                     venueName: venueMap.get(booking.VENUE_ID) || 'Unknown Venue',  // Handle missing venues
+                    eventName: booking.EVENT_NAME
+                    ? booking.EVENT_NAME
+                    : `Booking for ${booking.USER_ID.split('@')[0]}`,  // Handle null EVENT_NAME
                 }));
 
                 console.log('Processed student bookings with venues:', bookingsWithVenues);
@@ -93,7 +95,7 @@ function StudentBookingPage() {
 
     return (
         <>
-            <Header title={"Student Bookings"} />
+            <Header title={"All Bookings"} />
             <div className="bookings-list">
                 {bookings.length > 0 ? (
                     bookings.map(booking => {
@@ -103,7 +105,7 @@ function StudentBookingPage() {
                         return (
                             <BookedEventsCard
                                 key={booking.BOOKING_ID}
-                                eventName={`Booking for: ${username} on ${booking.DATE}`}
+                                eventName={booking.eventName}
                                 eventDetails={{
                                     title: `Booking for: ${username}`,
                                     studentName: username,

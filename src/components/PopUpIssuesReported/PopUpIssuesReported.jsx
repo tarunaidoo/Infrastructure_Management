@@ -2,7 +2,7 @@ import React from 'react';
 import './PopUpIssuesReported.css';
 
 function ReportedIssuePopup({ 
-    issueID, 
+    title, 
     user, 
     reportDate, 
     resolvedDate, 
@@ -15,7 +15,7 @@ function ReportedIssuePopup({
     return (
         <div className="popup-overlay" data-testid="popIssues-1">
             <div className="popup-content">
-                <h2 data-testid="issueID">Issue No: {issueID}</h2>
+                <h2 data-testid="issueID">{title}</h2>
                 <p data-testid="reportedBy"><strong>Reported By:</strong> {user}</p>
                 <p data-testid="reportDate"><strong>Report Date:</strong> {reportDate}</p>
                 <p data-testid="resolvedDate"><strong>Resolved Date:</strong> {resolvedDate ? resolvedDate : 'Unresolved'}</p>

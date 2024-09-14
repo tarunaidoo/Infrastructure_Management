@@ -1,39 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Header from './StudentHomeHeader';
+import StudentHeader from './StudentHomeHeader';
 
-describe.skip('StudentHomeHeader Tests', () => {
-  // tests are commented out
-});
+test('should render StudentHeader component with an image and heading', () => {
+  // Arrange: Render the StudentHeader component
+  render(<StudentHeader />);
 
-test('placeholder test', () => { //Taruna added this in order to push to AdminAPI_1 successfully - please remove afterwards :)
-  expect(true).toBe(true);
-});
+  // Act: Find the image and heading elements
+  const imageElement = screen.getByAltText('Page Icon');
+  const headingElement = screen.getByRole('heading', { level: 1 });
 
-
-/*test('should render Header component with an image and a heading', () => {
-=======
-test('should render Header component with an image and a heading', () => {
-
-  // Arrange: Render the Header component
-  render(<Header />);
-
-  // Act: Get elements by test ids or by role
-
-   const headerElement = screen.getByRole('banner'); // <header> element has a 'banner' role by default
-
-  const headerElement = screen.getByRole('banner'); // <header> element has a 'banner' role by default
-
-  const imageElement = screen.getByRole('img'); // <img> element
-  const headingElement = screen.getByRole('heading', { level: 1 }); // <h1> element
-
-  // Assert: Check if the elements are in the document
-  expect(headerElement).toBeInTheDocument();
+  // Assert: Check if the image and heading are in the document
   expect(imageElement).toBeInTheDocument();
   expect(headingElement).toBeInTheDocument();
   expect(headingElement).toHaveTextContent('Home');
 });
-
-*/
-

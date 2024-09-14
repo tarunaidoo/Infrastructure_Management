@@ -7,13 +7,13 @@ import AdminIssuesCard from '../../components/AdminIssuesCard/AdminIssuesCard'
 import AdminEventsCard from '../../components/AdminEventsCard/AdminEventsCard';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
 import './AdminHomePage.css';
-
+import AdminIcon from '../../assets/icons/admin-home-icon.svg';
 function AdminHomePage(){
 
     const navigate = useNavigate();
 
     const eventsCardClick = () =>{
-        navigate('/admin-events-booked'); //move from this page to Events page
+        navigate('/admin-view-booking'); //move from this page to Events page
     };
 
     const issuesCardClick = () =>{
@@ -24,14 +24,19 @@ function AdminHomePage(){
         navigate('/admin-add-venue');
     };
 
+    const handleEditVenueClick = () =>{
+        navigate('/edit-venue');
+    };
+
     return(
         <>
-            
-            <NavigationHeader title = "Home" className="heading"/>
-            {/* <img src={AdminIcon} alt='admin icon' className='adminIcon'/> not appearing over header element */}
-            <AdminIssuesCard onClick={issuesCardClick} className="cards"/>
-            <AdminEventsCard onClick={eventsCardClick} className="cards"/>
-            <Footer onAddVenueClick={handleAddVenueClick}/>
+            <NavigationHeader title = "Home" className="admin-header" />
+            <img src={AdminIcon} alt='admin icon' className='adminIcon'/> 
+            <div className="admin-home-container">
+            <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
+            <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
+            </div>
+            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick}/>
         </>
         
         

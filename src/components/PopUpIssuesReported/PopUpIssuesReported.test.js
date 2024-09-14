@@ -5,7 +5,7 @@ import ReportedIssuePopup from './PopUpIssuesReported';
 
 describe('ReportedIssuePopup Component', () => {
     const mockProps = {
-        issueID: '12345',
+        title: 'Title',
         user: 'John Doe',
         reportDate: 'Mon Sep 09 2024',
         resolvedDate: null,
@@ -19,7 +19,7 @@ describe('ReportedIssuePopup Component', () => {
     test('renders the popup with correct content', () => {
         render(<ReportedIssuePopup {...mockProps} />);
 
-        expect(screen.getByTestId('issueID')).toHaveTextContent(`Issue No: ${mockProps.issueID}`);
+        expect(screen.getByTestId('issueID')).toHaveTextContent(mockProps.title);
         expect(screen.getByTestId('reportedBy')).toHaveTextContent(`Reported By: ${mockProps.user}`);
         expect(screen.getByTestId('reportDate')).toHaveTextContent(`Report Date: ${mockProps.reportDate}`);
         expect(screen.getByTestId('resolvedDate')).toHaveTextContent('Resolved Date: Unresolved');
