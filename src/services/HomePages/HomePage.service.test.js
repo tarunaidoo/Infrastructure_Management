@@ -1,13 +1,14 @@
-import { fetchBooking, fetchVenue, fetchBuilding } from "./HomePage.service";
+import { fetchBooking, fetchVenue, fetchBuilding, deleteBooking } from './HomePage.service';
 
 // Mock the fetch API globally
 global.fetch = jest.fn();
 
-describe("Building and Venue Services", () => {
+describe("Building, Venue, and Booking Services", () => {
     beforeEach(() => {
         jest.resetAllMocks(); // Reset mocks before each test
     });
 
+    // Test for fetchBuilding
     it("should return the correct building for a given building ID", async () => {
         const mockBuildingData = {
             value: [
@@ -49,6 +50,7 @@ describe("Building and Venue Services", () => {
         expect(fetch).toHaveBeenCalledWith("/data-api/rest/BUILDING/");
     });
 
+    // Test for fetchVenue
     it("should return the correct venue for a given venue ID", async () => {
         const mockVenueData = {
             value: [
@@ -90,6 +92,7 @@ describe("Building and Venue Services", () => {
         expect(fetch).toHaveBeenCalledWith("/data-api/rest/VENUE/");
     });
 
+    // Test for fetchBooking
     it("should return the correct bookings for a given user ID", async () => {
         const mockBookingData = {
             value: [
@@ -133,5 +136,41 @@ describe("Building and Venue Services", () => {
 
         expect(result).toEqual([]);
         expect(fetch).toHaveBeenCalledWith("/data-api/rest/BOOKING/");
+    });
+
+    // Test for deleteBooking
+    it("should delete a booking with a given booking ID", async () => {
+        // Mock the fetch response for delete operation
+        fetch.mockResolvedValueOnce({
+            ok: true,
+        });
+
+        const bookingID = 1;
+        await deleteBooking(bookingID);
+
+        // Assert that the fetch was called with the correct endpoint and DELETE method
+        expect(fetch).toHaveBeenCalledWith(`/data-api/rest/BOOKING/BOOKING_ID/1`, {
+            method: "DELETE",
+        });
+        expect(fetch).toHaveBeenCalledTimes(1); // Ensure it was called exactly once
+    });
+
+    it("should handle failure when deleting a booking", async () => {
+        // Mock a failed fetch response for delete operation
+        fetch.mockResolvedValueOnce({
+            ok: false,
+            text: jest.fn().mockResolvedValueOnce('Delete failed'),
+        });
+
+        const bookingID = 2;
+        await deleteBooking(bookingID);
+
+        // Assert that the fetch was called with the correct endpoint and DELETE method
+        expect(fetch).toHaveBeenCalledWith(`/data-api/rest/BOOKING/BOOKING_ID/2`, {
+            method: "DELETE",
+        });
+
+        // Verify fetch is called even in case of failure
+        expect(fetch).toHaveBeenCalledTimes(1);
     });
 });
