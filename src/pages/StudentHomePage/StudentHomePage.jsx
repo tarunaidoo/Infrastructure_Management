@@ -71,6 +71,10 @@ function StudentHomePage() {
     navigate("/campus-selection", { state: venueSelectionDetails });
   }
 
+  const handleOnBookVenueClick = () => {
+    navigate("/booking");
+  }
+
   if (loading) {
     return <div>Connecting...</div>;
   }
@@ -113,7 +117,7 @@ function StudentHomePage() {
             <div>No bookings found.</div>
           )}
         </section>
-        <Footer onReportIssueClick={handleOnReportIssueClick}/>
+        <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick}/>
       </div>
     </>
   );

@@ -116,20 +116,19 @@
     
   }
   
-  .input-field {
+  .booking-form .input-field {
     height: 50px;
-    width: 90%;
-    font-size: 16px;
+    width: 80%;
+    /* font-size: 16px; */
     border-radius: 10px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    background-color: #e0e0e0;
     text-align: center;
   }
   
   .predefined-field {
     height: 50px;
-    width: 90%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,6 +141,7 @@
   /* Book Event Button */
   .book-button {
     height: 50px;
+    width: 80%;
     background-color: #d4af37;
     color: white;
     font-size: 18px;
