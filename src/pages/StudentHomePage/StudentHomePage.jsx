@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
@@ -10,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 
 function StudentHomePage() {
   const userID = localStorage.getItem('userEmail'); // get userID
-  const navigate = useNavigate();
 
   // State for bookings, venues, buildings, and loading/error handling
   const [bookings, setBookings] = useState([]);
