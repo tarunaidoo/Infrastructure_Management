@@ -16,23 +16,26 @@ const RoomSelectionPage = () => {
     // Variables
     const navigate = useNavigate();
     const location = useLocation();
-    const buildingDetails = location.state || {};
+    const previousPageDetails = location.state || {};
 
     const [selectedVenue, setSelectedVenue] = useState({});
     const [displayPopup, setDisplayPopup] = useState(false);
 
     // Function & Logic
     const { data : venue, error: venueError, isLoading: venueLoading} = useQuery(
-        ["roomData", buildingDetails.BUILDING_ID], async () => {
-            const venues = await getVenuesFromBuildingID(buildingDetails.BUILDING_ID);
+        ["roomData", previousPageDetails.BUILDING_ID], async () => {
+            const venues = await getVenuesFromBuildingID(previousPageDetails.BUILDING_ID);
             return getVenueFeatureNamesFromVenues(venues);
     });
 
     const handleHeaderBackIconClick = () => {
-        const campusDetails = {
-            CAMPUS_NAME: buildingDetails.CAMPUS_NAME
+        const backPageDetails = {
+            SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+            USER_ID: previousPageDetails.USER_ID,
+            DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
+            CAMPUS_NAME: previousPageDetails.CAMPUS_NAME
         }
-        navigate("/building-selection", {state : campusDetails});
+        navigate("/building-selection", {state : backPageDetails});
     }
     
     const handleQuestionIconClick = (venue) => {
@@ -45,13 +48,13 @@ const RoomSelectionPage = () => {
     }
 
     const handleRoomCardClick = (venue) => {
-        const bookingInfo = {
-            ...buildingDetails,
+        const nextPageDetails = {
+            ...previousPageDetails,
             VENUE_ID: venue.VENUE_ID,
             VENUE_NAME: venue.VENUE_NAME
         };
 
-        navigate("/booking", {state : bookingInfo});
+        navigate(previousPageDetails.DESTINATION_PAGE, {state : nextPageDetails});
     }
 
     // HTML code
@@ -85,8 +88,10 @@ const RoomSelectionPage = () => {
                     {venue ? 
                     venue.map((venue) => (
                         <RoomCard key={venue.VENUE_ID} roomName={venue.VENUE_NAME} onClick={() => handleRoomCardClick(venue)}> 
-                            <img className="circle-question-icon" src={circleQuestionIcon} 
+                            {previousPageDetails.DESTINATION_PAGE === "/booking" ?
+                                <img className="circle-question-icon" src={circleQuestionIcon} 
                                 alt="circle question mark icon" onClick={() => handleQuestionIconClick(venue)}/>
+                            : ""}
                         </RoomCard>
                     ))
                     : "" }

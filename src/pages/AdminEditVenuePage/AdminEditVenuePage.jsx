@@ -1,14 +1,17 @@
 import "./AdminEditVenuePage.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Switch from "react-switch";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import arrowIcon from '../../assets/icons/chevron-left.svg';
-import { getBuilding, getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
+import { getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
 import Popup from "../../components/Popup/Popup";
 
 const AdminEditVenuePage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const previousPageDetails = useMemo(() => location.state || {}, [location.state]);
 
-    const [buildingName, setBuildingName] = useState("");
-    const [buildingID, setBuildingID] = useState("");
     const [venueID, setVenueID] = useState("");
     const [venueName, setVenueName] = useState("");
     const [capacity, setCapacity] = useState("");
@@ -19,7 +22,7 @@ const AdminEditVenuePage = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [popupType, setPopupType] = useState('');
     const [message, setMessage] = useState("");
-    const [validInfo, setValidInfo] = useState(true);
+    const [ setValidInfo] = useState(true);
     const [loading, setLoading] = useState(false); // New state for loading
 
     const [initialValues, setInitialValues] = useState({
@@ -33,13 +36,7 @@ const AdminEditVenuePage = () => {
         const fetchData = async () => {
             setLoading(true); // Show loading popup
             try {
-                const buildingData = await getBuilding("Mathematical Science Labs");
-                if (buildingData !== null) {
-                    setBuildingName(buildingData.building_name);
-                    setBuildingID(buildingData.building_id);
-                }
-
-                const venueData = await getVenue("MSL004");
+                const venueData = await getVenue(previousPageDetails.VENUE_NAME);
                 if (venueData) {
                     setVenueID(venueData.venue_id);
                     setVenueName(venueData.venue_name);
@@ -74,7 +71,7 @@ const AdminEditVenuePage = () => {
         };
 
         fetchData();
-    }, []);
+    }, [previousPageDetails]);
 
     const handleFeatureToggle = (featureId) => {
         setFeatures(prevFeatures =>
@@ -101,41 +98,64 @@ const AdminEditVenuePage = () => {
         setShowPopup(true);
     };
 
+    const handleHeaderBackIconClick = () => {
+        const backPageDetails = {
+          SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+          USER_ID: previousPageDetails.USER_ID,
+          DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
+          CAMPUS_NAME: previousPageDetails.CAMPUS_NAME,
+          BUILDING_ID: previousPageDetails.BUILDING_ID,
+          BUILDING_NAME: previousPageDetails.BUILDING_NAME
+        }
+        navigate("/room-selection", { state: backPageDetails });
+    }
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-
+        
+        // Reset error state before validation
+        setValidInfo(true);
+    
+        // Validate the form inputs
         if (!venueName) {
-            setPopupType('error');
+            setPopupType('venueNameError');
             setShowPopup(true);
-            setMessage("Please fill in a valid venue name.");
-            setValidInfo(false);
+            setMessage("Please provide a valid venue name.");
             return;
         }
+        
         if (!capacity || isNaN(capacity) || capacity <= 0) {
-            setPopupType('error');
+            setPopupType('capacityError');
             setShowPopup(true);
-            setValidInfo(false);
-            setMessage("Please fill in a valid capacity.");
+            setMessage("Please provide a valid capacity.");
             return;
         }
-
-        if (validInfo) {
-            // Check if there are any updates
-            if (
-                venueName === initialValues.venueName &&
-                capacity === initialValues.capacity &&
-                isAvailable === initialValues.isAvailable &&
-                features.length === initialValues.features.length &&
-                features.every(id => initialValues.features.includes(id))
-            ) {
-                setPopupType('error');
-                setMessage("No changes have been made.");
-                setShowPopup(true);
-                return;
-            }
-
-            handleUpdateVenueClick();
+    
+        if (features.length === 0) {
+            setPopupType('featuresError');
+            setShowPopup(true);
+            setMessage("Please select at least one feature.");
+            return;
         }
+    
+        // Check if no changes have been made
+        const noChangesMade = (
+            venueName === initialValues.venueName &&
+            capacity === initialValues.capacity &&
+            isAvailable === initialValues.isAvailable &&
+            features.length === initialValues.features.length &&
+            features.every(id => initialValues.features.includes(id))
+        );
+    
+        if (noChangesMade) {
+            setPopupType('noChangesError');
+            setMessage("No changes have been made.");
+            setShowPopup(true);
+            return;
+        }
+    
+        // If there are valid changes, proceed with the update
+        handleUpdateVenueClick();
     };
 
     const handleUpdate = async (e) => {
@@ -148,7 +168,7 @@ const AdminEditVenuePage = () => {
         // Prepare the data for updating the venue
         const updateVenueData = {
             VENUE_NAME: venueName,
-            BUILDING_ID: buildingID,
+            BUILDING_ID: previousPageDetails.BUILDING_ID,
             VENUE_CAPACITY: capacity,
             VENUE_STATUS: updatedStatus
         };
@@ -182,106 +202,149 @@ const AdminEditVenuePage = () => {
     };
 
     return (
-        <main className="edit-venue-layout">
-            <article className='edit-venue-heading'>
-                <img src={arrowIcon} alt='arrow-icon' className='edit-venue-icons' />
-                <h1>Edit a Venue</h1>
+        <main className="edit-venue-layout" data-testid="edit-venue-layout">
+        <article className='edit-venue-heading' data-testid="edit-venue-heading">
+            <img 
+                onClick={handleHeaderBackIconClick} 
+                src={arrowIcon} 
+                alt='arrow-icon' 
+                className='edit-venue-icons' 
+                data-testid="back-arrow-icon" 
+            />
+            <h1 data-testid="edit-venue-heading-text">Edit a Venue</h1>
+        </article>
+        <section className="edit-venue-container" data-testid="edit-venue-container">
+            <form onSubmit={handleFormSubmit} data-testid="edit-venue-form">
+                <article className="edit-venue-articles" data-testid="building-name-section">
+                    <h2>Building:</h2>
+                    <p data-testid="building-name">{previousPageDetails.BUILDING_NAME}</p>
+                </article>
+                <article className="edit-venue-articles" data-testid="venue-name-section">
+                    <h2>Venue Name:</h2>
+                    <input
+                        type="text"
+                        value={venueName || ""}
+                        onChange={(e) => setVenueName(e.target.value)}
+                        data-testid="venue-name-input"
+                    />
+                </article>
+                <article className="edit-venue-articles" data-testid="capacity-section">
+                    <h2>Capacity:</h2>
+                    <input
+                        type="number"
+                        value={capacity || ""}
+                        onChange={(e) => setCapacity(e.target.value)}
+                        min="0" 
+                        step="1" 
+                        data-testid="capacity-input"
+                    />
+                </article>
+                <article className="edit-venue-articles" data-testid="availability-section">
+                    <h2>Availability:</h2>
+                    <Switch
+                        checked={isAvailable}
+                        onChange={handleSwitchChange}
+                        className="switch-wrapper"
+                        offColor="#888"
+                        onColor="#D4A843"
+                        handleDiameter={20}
+                        height={20}
+                        width={48}
+                        data-testid="availability-switch"
+                    />
+                </article>
+                <article className="edit-venue-articles" data-testid="features-section">
+                    <h2>Features:</h2>
+                    <p></p>
+                </article>
+                <article className="edit-venue-checkboxes" data-testid="features-checkboxes">
+                    {allFeatures.map((feature) => (
+                        <article key={feature.FEATURE_ID} data-testid={`feature-${feature.FEATURE_ID}`}>
+                            <label className="edit-venue-checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    className="edit-venue-checkbox-input"
+                                    checked={features.includes(feature.FEATURE_ID)}
+                                    onChange={() => handleFeatureToggle(feature.FEATURE_ID)}
+                                    data-testid={`feature-checkbox-${feature.FEATURE_ID}`}
+                                />
+                                <span className="edit-venue-checkbox-custom"></span>
+                                <span className="edit-venue-checkbox-text" data-testid={`feature-text-${feature.FEATURE_ID}`}>{feature.FEATURE_NAME}</span>
+                            </label>
+                        </article>
+                    ))}
+                </article>
+                <article className="edit-venue-button-layout" data-testid="update-venue-button-layout">
+                    <button className="edit-venue-button" type="submit" data-testid="update-venue-button">Update Venue</button>
+                </article>
+            </form>
+        </section>
+        <Popup trigger={showPopup} onClose={handleClosePopup} data-testid="popup">
+    {loading && (
+        <article className='edit-venue-Popups' data-testid="loading-popup">
+            <h2>Loading...</h2>
+            <p>Please wait while we process your request.</p>
+        </article>
+    )}
+    
+    {/* Venue Name Error Popup */}
+    {popupType === 'venueNameError' && !loading && (
+        <article className='edit-venue-Popups' data-testid="venue-name-error-popup">
+            <h2>Invalid Details</h2>
+            <p>{message}</p>
+            <button onClick={handleClosePopup} data-testid="venue-name-error-close-button">Close</button>
+        </article>
+    )}
+
+    {/* Capacity Error Popup */}
+    {popupType === 'capacityError' && !loading && (
+        <article className='edit-venue-Popups' data-testid="capacity-error-popup">
+            <h2>Invalid Details</h2>
+            <p>{message}</p>
+            <button onClick={handleClosePopup} data-testid="capacity-error-close-button">Close</button>
+        </article>
+    )}
+
+    {/* Features Error Popup */}
+    {popupType === 'featuresError' && !loading && (
+        <article className='edit-venue-Popups' data-testid="features-error-popup">
+            <h2>Features Error</h2>
+            <p>{message}</p>
+            <button onClick={handleClosePopup} data-testid="features-error-close-button">Close</button>
+        </article>
+    )}
+
+    {/* No Changes Error Popup */}
+    {popupType === 'noChangesError' && !loading && (
+        <article className='edit-venue-Popups' data-testid="no-changes-error-popup">
+            <h2>Invalid Details</h2>
+            <p>{message}</p>
+            <button onClick={handleClosePopup} data-testid="no-changes-error-close-button">Close</button>
+        </article>
+    )}
+
+    {/* Confirmation Popup */}
+    {popupType === 'confirmation' && !loading && (
+        <article className='edit-venue-Popups' data-testid="confirmation-popup">
+            <h2>Confirmation</h2>
+            <p>Do you want to update this venue?</p>
+            <article>
+                <button onClick={handleUpdate} data-testid="confirmation-yes-button">Yes</button>
+                <button onClick={handleClosePopup} data-testid="confirmation-no-button">No</button>
             </article>
-            <section className="edit-venue-container">
-                <form onSubmit={handleFormSubmit}>
-                    <article className="edit-venue-articles" >
-                        <h2>Building:</h2>
-                        <p>{buildingName}</p>
-                    </article>
-                    <article className="edit-venue-articles" >
-                        <h2>Venue Name:</h2>
-                        <input
-                            type="text"
-                            value={venueName || ""}
-                            onChange={(e) => setVenueName(e.target.value)}
-                        />
-                    </article>
-                    <article className="edit-venue-articles">
-                        <h2>Capacity:</h2>
-                        <input
-                            type="number"
-                            value={capacity || ""}
-                            onChange={(e) => setCapacity(e.target.value)}
-                            min="0" 
-                            step="1" 
-                        />
-                    </article>
-                    <article className="edit-venue-articles" >
-                        <h2>Availability:</h2>
-                        <Switch
-                            checked={isAvailable}
-                            onChange={handleSwitchChange}
-                            className="switch-wrapper"
-                            offColor="#888"
-                            onColor="#D4A843"
-                            handleDiameter={20}
-                            height={20}
-                            width={48}
-                        />
-                    </article>
-                    <article className="edit-venue-articles">
-                        <h2>Features:</h2>
-                        <p></p>
-                        </article>
-                        <article className="edit-venue-checkboxes">
-                        {allFeatures.map((feature) => (
-                           <article key={feature.FEATURE_ID}>
-                           <label className="edit-venue-checkbox-label">
-                             <input
-                               type="checkbox"
-                               className="edit-venue-checkbox-input"
-                               checked={features.includes(feature.FEATURE_ID)}
-                               onChange={() => handleFeatureToggle(feature.FEATURE_ID)}
-                             />
-                             <span className="edit-venue-checkbox-custom"></span>
-                             <span className="edit-venue-checkbox-text">{feature.FEATURE_NAME}</span>
-                           </label>
-                         </article>
-                        ))}
-                        </article>
-                    <article className="edit-venue-button-layout">
-                        <button className="edit-venue-button" type="submit" >Update Venue</button>
-                    </article>
-                </form>
-            </section>
-            <Popup trigger={showPopup} onClose={handleClosePopup}>
-                {loading && (
-                    <article className='edit-venue-Popups'>
-                        <h2>Loading...</h2>
-                        <p>Please wait while we process your request.</p>
-                    </article>
-                )}
-                {popupType === 'error' && !loading && (
-                    <article className='edit-venue-Popups'>
-                        <h2>Error</h2>
-                        <p>{message}</p>
-                        <button onClick={handleClosePopup}>Close</button>
-                    </article>
-                )}
-                {popupType === 'confirmation' && !loading && (
-                    <article className='edit-venue-Popups'>
-                        <h2>Confirmation</h2>
-                        <p>Do you want to update this venue?</p>
-                        <article>
-                            <button onClick={handleUpdate}>Yes</button>
-                            <button onClick={handleClosePopup}>No</button>
-                        </article>
-                    </article>
-                )}
-                {popupType === 'success' && !loading && (
-                    <article className='edit-venue-Popups'>
-                        <h2>Success</h2>
-                        <p>The venue has been updated!</p>
-                        <button onClick={handleClosePopup}>Close</button>
-                    </article>
-                )}
-            </Popup>
-        </main>
+        </article>
+    )}
+
+    {/* Success Popup */}
+    {popupType === 'success' && !loading && (
+        <article className='edit-venue-Popups' data-testid="success-popup">
+            <h2>Success</h2>
+            <p>The venue has been updated!</p>
+            <button onClick={handleClosePopup} data-testid="success-close-button">Close</button>
+        </article>
+    )}
+</Popup>
+    </main>
     );
 };
 

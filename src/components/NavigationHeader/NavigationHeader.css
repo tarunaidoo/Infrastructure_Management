@@ -13,25 +13,23 @@ body {
   height: 12vh;
   width: 100%; /* Explicitly set width to the full viewport width */
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding-left: 16px;
   background-color: var(--color-main); /* The dark blue color */
   color: white;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+  gap: 5%;
 }
 
 .chevron-icon {
   width: 1.8em;
   height: 1.8em;
-  margin-right: 2em;
-  margin-left: 3em;
 }
 
 .header-title {
   font-size: 1.8em;
   font-weight: 600;
-  margin: 0;
   line-height: 1.2;
 }
