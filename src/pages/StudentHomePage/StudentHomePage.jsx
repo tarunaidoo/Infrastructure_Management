@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
@@ -8,6 +9,7 @@ import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePage
 
 function StudentHomePage() {
   const userID = localStorage.getItem('userEmail'); // get userID
+  const navigate = useNavigate();
 
   // State for bookings, venues, buildings, and loading/error handling
   const [bookings, setBookings] = useState([]);
@@ -74,6 +76,15 @@ function StudentHomePage() {
     fetchData();
   }, [userID]);
 
+  const handleOnReportIssueClick = () => {
+    const venueSelectionDetails = {
+        SOURCE_PAGE: "/student-home",
+        USER_ID: userID,
+        DESTINATION_PAGE: "/report-issue"
+    }
+    navigate("/campus-selection", { state: venueSelectionDetails });
+  }
+
   if (loading) {
     return <div>Connecting...</div>; // Display 'Connecting...' while loading
   }
@@ -110,7 +121,7 @@ function StudentHomePage() {
             <div>No bookings found.</div>
           )}
         </section>
-        <Footer />
+        <Footer onReportIssueClick={handleOnReportIssueClick}/>
       </div>
     </>
   );
