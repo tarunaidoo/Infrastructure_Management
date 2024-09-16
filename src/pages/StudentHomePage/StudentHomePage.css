@@ -7,10 +7,10 @@
   overflow: hidden; /* Prevents the entire body from scrolling */
 }
 
-.content {
+.home-content {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   overflow-y: auto; /* Enables scrolling for this section */
   padding: 2vh 2vw; /* Scales padding with viewport size */
