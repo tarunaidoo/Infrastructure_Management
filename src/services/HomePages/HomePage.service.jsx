@@ -80,4 +80,21 @@ async function fetchBooking(user_id) {
   return retryFetch(fetchFn);
 }
 
-export { fetchBooking, fetchVenue, fetchBuilding };
+// Deletes Booking based of booking ID
+async function deleteBooking(booking_id) 
+{
+  const endpoint = `/data-api/rest/BOOKING/`
+  const response = await fetch(`${endpoint}/BOOKING_ID/${booking_id}`, {
+    method: "DELETE"
+  });
+  if(response.ok){
+    console.log(`Deleted Booking with ID ${booking_id}`);
+  }
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.log(`Failed to delete Booking with ID ${booking_id}`);
+    console.error(errorText);
+  }
+}
+
+export { fetchBooking, fetchVenue, fetchBuilding, deleteBooking };

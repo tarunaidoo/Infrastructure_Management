@@ -1,0 +1,41 @@
+.event-body {
+  font-family: sans-serif;
+  margin: 0;
+  padding-top: 15vh; /* Uses viewport height units to scale with screen size */
+  padding-bottom: 7vh; /* Uses viewport height units to scale with screen size */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevents the entire body from scrolling */
+}
+
+.event-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto; /* Enables scrolling for this section */
+  padding: 2vh 2vw; /* Scales padding with viewport size */
+  position: absolute; /* Allows the card to be positioned relative to its container */
+  top: 13vh; /* Positioned below the header using viewport height */
+  bottom: 0vh; /* Positioned above the footer using viewport height */
+  left: 0;
+  right: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto; /* Centers the card horizontally */
+  background-color: white;
+  color: black;
+  max-width: 100vw; /* Ensures the card doesn't exceed the viewport width */
+  height: calc(100% + 2vh); /* Adjusts the height to account for the upward movement */
+  z-index: 1101; /* Set a higher z-index to ensure the card is above the header */
+  border-radius: 10vh;
+}
+
+.event-button {
+  padding: 1vh;
+  width: 36vh;
+  font-size: 1.25em;
+  border-radius: 1.2vh;
+  height: 6.2vh;
+  background-color: #180180;
+  color: white;
+}
