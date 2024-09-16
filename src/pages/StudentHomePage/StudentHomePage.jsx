@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
-import NotificationPopup from '../../components/NotificationPopup/NotificationPopup';
+import Popup from '../../components/NotificationPopup/NotificationPopup';
 import './StudentHomePage.css';
 import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePages/HomePage.service";
+import { useNavigate } from 'react-router-dom';
 
 function StudentHomePage() {
   const userID = localStorage.getItem('userEmail'); // get userID
-  const navigate = useNavigate();
 
   // State for bookings, venues, buildings, and loading/error handling
   const [bookings, setBookings] = useState([]);
@@ -19,15 +18,14 @@ function StudentHomePage() {
   const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [eventNames, setEventNames] = useState([]);
+  const navigate = useNavigate();
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
 
   useEffect(() => {
-    // Check localStorage to see if the popup should be shown
     const shouldShowPopup = localStorage.getItem('showPopupOnStudentHome');
-    
     if (shouldShowPopup === 'true') {
       setIsPopupOpen(true);
       localStorage.removeItem('showPopupOnStudentHome');
@@ -37,39 +35,27 @@ function StudentHomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch bookings first
         const fetchedBookings = await fetchBooking(userID);
         setBookings(fetchedBookings);
 
-        // Get today's date in YYYY-MM-DD format
         const today = new Date().toISOString().split('T')[0];
-
-        // Filter bookings to include only those happening today
         const todaysBookings = fetchedBookings.filter(booking => booking.DATE === today);
-
-        // Collect event names into an array for today's events
         const namesArray = todaysBookings.map(booking => booking.EVENT_NAME);
         setEventNames(namesArray);
 
-        // Fetch venues based on bookings
         const venuePromises = fetchedBookings.map(booking => fetchVenue(booking.VENUE_ID));
         const fetchedVenues = await Promise.all(venuePromises);
         setVenues(fetchedVenues);
 
-        // Fetch buildings based on venues
         const buildingPromises = fetchedVenues.map(venue => fetchBuilding(venue?.BUILDING_ID));
         const fetchedBuildings = await Promise.all(buildingPromises);
         setBuildings(fetchedBuildings);
 
-        console.log('User Bookings', fetchedBookings);
-        console.log('Booking Venues', fetchedVenues);
-        console.log('Venue Buildings', fetchedBuildings);
-
-        setLoading(false); // Data has finished loading
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
         setError(`Failed to load data: ${error.message}`);
-        setLoading(false); // Set loading to false even if there is an error
+        setLoading(false);
       }
     };
 
@@ -86,21 +72,26 @@ function StudentHomePage() {
   }
 
   if (loading) {
-    return <div>Connecting...</div>; // Display 'Connecting...' while loading
+    return <div>Connecting...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>; // Display error message if there's an issue
+    return <div>{error}</div>;
   }
+
+  const handleCardClick = (booking, venue, building) => {
+    console.log('Navigating to event details with:', { booking, venue, building });
+    navigate(`/event-details/${booking.EVENT_NAME}`, { state: { booking, venue, building } });
+  };
 
   return (
     <>
       {isPopupOpen && (
-        <NotificationPopup arrayOfNames={eventNames} onClose={handleClosePopup} />
+        <Popup arrayOfNames={eventNames} onClose={handleClosePopup} />
       )}
-      <section className='home-body'>
+      <div className='home-body'>
         <Header />
-        <section className='content'>
+        <section className='home-content'>
           {bookings.length > 0 ? (
             bookings.map((booking, index) => {
               const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
@@ -114,6 +105,7 @@ function StudentHomePage() {
                   time={`${booking.START_TIME} - ${booking.END_TIME}`}
                   venue={building?.BUILDING_NAME || 'Unknown Building'}
                   room={venue?.VENUE_NAME || 'Unknown Room'}
+                  onClick={() => handleCardClick(booking, venue, building)} // Pass onClick handler
                 />
               );
             })
@@ -122,7 +114,7 @@ function StudentHomePage() {
           )}
         </section>
         <Footer onReportIssueClick={handleOnReportIssueClick}/>
-      </section>
+      </div>
     </>
   );
 }

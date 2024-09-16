@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
-import './IssuesReportedPage.css';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
 import { fetchIssues, fetchVenues, updateAvailability } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 
@@ -86,6 +85,9 @@ function IssuesReportedPage() {
                     issues.map(issue => (
                         <IssueListCard
                             key={issue.ISSUE_ID}
+                            title={issue.TITLE}
+                            reportedBy={issue.REPORTED_BY}
+                            date={formatDate(issue.REPORT_DATE)}
                             venueName={getVenueName(issue.VENUE_ID)}  // Pass the venue name
                             isBlocked={blockedVenues.has(issue.VENUE_ID)}  // Determine if venue is blocked
                             onClick={() => openPopup(issue)}
@@ -99,7 +101,7 @@ function IssuesReportedPage() {
 
             {isPopupOpen && selectedIssue && (
                 <Popup
-                    issueID={selectedIssue.ISSUE_ID}
+                    title={selectedIssue.TITLE}
                     user={selectedIssue.REPORTED_BY}
                     reportDate={formatDate(selectedIssue.REPORT_DATE)}
                     resolvedDate={selectedIssue.DATE_RESOLVED ? formatDate(selectedIssue.DATE_RESOLVED) : 'Not Resolved'}

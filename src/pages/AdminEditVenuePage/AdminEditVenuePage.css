@@ -1,0 +1,210 @@
+.edit-venue-layout {
+  display: flex;
+  flex-direction: column;
+  background-color: #001f3f;
+  color: white;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+}
+.edit-venue-icons {
+  color: white;
+  height: 30px;
+  width: 30px;
+}
+
+.edit-venue-heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 15vh;
+  gap: 10px;
+}
+.edit-venue-layout h1 {
+  cursor: pointer;
+  font-size: 1.6em; /* Font size */
+  font-family: Arial, sans-serif;
+}
+.edit-venue-container {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  width: 100vw;
+  height: 100vh;
+  border-top-left-radius: 80px;
+  border-top-right-radius: 80px;
+  padding-top: 5vh;
+}
+.edit-venue-container form{
+    display: flex;
+    flex-direction: column;
+    width:80%;
+}
+
+.edit-venue-articles{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0.25%;
+    margin-left: 5%;
+}
+
+.edit-venue-container form  article h2{
+padding: 0;
+width:40%;
+font-size: 1em;
+}
+.edit-venue-container form  article input{
+    outline: 2px solid lightgray;
+    padding:0.5%;
+    border:none;
+    width:40%;
+    font-size: 0.8em;
+    }
+    .edit-venue-container form  article p{
+        font-size: 0.85em;
+        }
+.switch-wrapper {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+.edit-venue-switch-container {
+  display: flex;
+  align-items: center;
+}
+
+.edit-venue-switch-label {
+  font-size: 12px;
+  padding: 2px;
+  color: #fff;
+  margin-right: 8px;
+}
+
+.edit-venue-checkboxes{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 7%;
+}
+
+.edit-venue-checkbox-label {
+    display: flex;
+    align-items: center; /* Aligns checkbox and text vertically */
+    cursor: pointer;
+    margin-bottom: 10px; /* Adds spacing between checkboxes */
+  }
+  
+  /* Checkbox custom styles */
+  .edit-venue-checkbox-input {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+  }
+  
+  /* Custom checkbox design */
+  .edit-venue-checkbox-custom {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #f1f1f1;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px; /* Spacing between checkbox and text */
+    transition: background-color 0.3s;
+  }
+  
+  /* Checkbox checked state */
+  .edit-venue-checkbox-input:checked + .edit-venue-checkbox-custom {
+    background-color: #d4a843;
+    border-color: #bc953b;
+  }
+  
+  /* Checkbox checkmark */
+  .edit-venue-checkbox-input:checked + .edit-venue-checkbox-custom::after {
+    opacity: 0;
+  }
+  
+  /* Text next to the checkbox */
+  .edit-venue-checkbox-text {
+    font-family: Arial, sans-serif;
+    font-size: 0.9em;
+    color: #000000;
+  }
+
+.edit-venue-button-layout {
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
+}
+.edit-venue-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-self: center;
+  gap: 10px;
+  background-color: #191970;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 55%;
+}
+
+.edit-venue-button:hover {
+  background-color: #141c5c;
+}
+
+.edit-venue-Popups {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-venue-Popups h2 {
+  padding: 0;
+}
+
+.edit-venue-Popups article {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25%;
+}
+
+.edit-venue-Popups button {
+  background-color: #001f3f; /* Deep Navy */
+  color: white;
+  padding: 10px 20px;
+  width: 50%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-venue-Popups button:hover {
+  background-color: #0047ab; /* Royal Azure, change on hover */
+}
+
+.edit-venue-Popups button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
+}
