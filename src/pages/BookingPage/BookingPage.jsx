@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import headingIcon from '../../assets/icons/chevron-left.svg';
 import Calendar from "react-calendar";
 import { createBooking, checkForOverlap } from '../../services/BookingPage/BookingPage.service';
+import { formatDateToISO } from '../../utils/dateUtils';
 import Popup from '../../components/Popup/Popup';
 import "react-calendar/dist/Calendar.css";
 import "./Calendar.css";
@@ -97,12 +98,13 @@ const BookingPage = () => {
       VENUE_ID: selectedVenue.VENUE_ID,
       USER_ID: userID,
       EVENT_NAME: eventName,
-      DATE: bookingDate.toISOString().split('T')[0],
+      DATE: formatDateToISO(bookingDate),//bookingDate.toISOString().split('T')[0],
       START_TIME: selectedTimeSlot.start,
       END_TIME: selectedTimeSlot.end,
-      DATE_CREATED: new Date().toISOString().split('T')[0],
+      DATE_CREATED: formatDateToISO(new Date()),
       BOOKING_STATUS: "Confirmed"
     };
+  
   
     mutation.mutate(bookingData);
   };
