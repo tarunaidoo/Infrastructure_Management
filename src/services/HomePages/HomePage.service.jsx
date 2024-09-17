@@ -97,4 +97,50 @@ async function deleteBooking(booking_id)
   }
 }
 
-export { fetchBooking, fetchVenue, fetchBuilding, deleteBooking };
+const fetchEventsBookings = async (userID) => {
+  try{
+      const endpoint = "/data-api/rest/EVENTS/"
+      const response = await fetch(endpoint);
+      const data = await response.json();
+
+      if (data){
+        console.log("Unfiltered Event Bookings:", data.value[1].USER_ID === userID, data.value[1].USER_ID, userID); 
+      }
+      // Filter the data based on the provided BUILDING_LOCATION
+      const filteredData = data.value.filter(row => row.USER_ID === userID);
+
+      console.log("Filtered Event Bookings: ", filteredData);
+
+      return filteredData; // Return the filtered data
+  }
+  catch (error) {
+      console.error('Error fetching data:', error);
+      return []; // Return an empty array or handle the error as needed
+  }
+}
+
+
+const fetchTutoringBookings = async (userID) => {
+  try{
+      const endpoint = "/data-api/rest/TUTORING/"
+      const response = await fetch(endpoint);
+      const data = await response.json();
+
+      if (data){
+        console.log("Unfiltered Tutoring Bookings:", data.value[1].USER_ID === userID, data.value[1].USER_ID, userID); 
+      }
+      // Filter the data based on the provided BUILDING_LOCATION
+      const filteredData = data.value.filter(row => row.USER_ID === userID);
+
+      console.log("Filtered Tutoring Bookings: ", filteredData);
+
+      return filteredData; // Return the filtered data
+  }
+  catch (error) {
+      console.error('Error fetching data:', error);
+      return []; // Return an empty array or handle the error as needed
+  }
+}
+
+
+export { fetchBooking, fetchVenue, fetchBuilding, deleteBooking, fetchEventsBookings, fetchTutoringBookings };
