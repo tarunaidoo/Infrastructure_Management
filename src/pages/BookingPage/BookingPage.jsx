@@ -48,7 +48,7 @@ const BookingPage = () => {
   });
 
   const handleSubmit = async () => {
-    if (!selectedVenue || !selectedTimeSlot) {
+    if (!selectedVenue || !selectedTimeSlot || !eventName) {
       setPopupState("Invalid Details");
       setDisplayPopup(true);
       return;
