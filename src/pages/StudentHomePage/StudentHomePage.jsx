@@ -4,7 +4,7 @@ import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
 import Popup from '../../components/NotificationPopup/NotificationPopup';
 import './StudentHomePage.css';
-import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePages/HomePage.service";
+import { fetchBooking, fetchVenue, fetchBuilding, fetchEventsBookings, fetchTutoringBookings } from "../../services/HomePages/HomePage.service";
 import { useNavigate } from 'react-router-dom';
 
 function StudentHomePage() {
@@ -12,6 +12,8 @@ function StudentHomePage() {
 
   // State for bookings, venues, buildings, and loading/error handling
   const [bookings, setBookings] = useState([]);
+  const [eventBookings, setEventBookings] = useState([]);
+  const [tutoringBookings, setTutoringBookings] = useState([]);
   const [venues, setVenues] = useState([]);
   const [buildings, setBuildings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +39,12 @@ function StudentHomePage() {
       try {
         const fetchedBookings = await fetchBooking(userID);
         setBookings(fetchedBookings);
+
+        const fetchedEventBookings = await fetchEventsBookings(userID);
+        setEventBookings(fetchedEventBookings);
+
+        const fetchedTutoringBookings = await fetchTutoringBookings(userID);
+        setTutoringBookings(fetchedTutoringBookings);
 
         const today = new Date().toISOString().split('T')[0];
         const todaysBookings = fetchedBookings.filter(booking => booking.DATE === today);
@@ -88,6 +96,8 @@ function StudentHomePage() {
     navigate(`/event-details/${booking.EVENT_NAME}`, { state: { booking, venue, building } });
   };
 
+  console.log(bookings);
+
   return (
     <>
       {isPopupOpen && (
@@ -96,19 +106,19 @@ function StudentHomePage() {
       <div className='home-body'>
         <Header />
         <section className='home-content'>
-          {bookings.length > 0 ? (
-            bookings.map((booking, index) => {
+          {bookings.length > 0  || eventBookings.length > 0 ? (
+            [...bookings, ...eventBookings, ...tutoringBookings].map((booking, index) => {
               const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
               const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
 
               return (
                 <Card
                   key={index}
-                  event={booking.EVENT_NAME}
+                  event={booking.EVENT_NAME || booking.TITLE}
                   date={booking.DATE}
                   time={`${booking.START_TIME} - ${booking.END_TIME}`}
-                  venue={building?.BUILDING_NAME || 'Unknown Building'}
-                  room={venue?.VENUE_NAME || 'Unknown Room'}
+                  venue={booking.BUILDING_NAME || building?.BUILDING_NAME || 'Unknown Building'} // [!!] Hack was done, should be done better
+                  room={booking.VENUE_NAME || venue?.VENUE_NAME || 'Unknown Room'} // [!!] Hack was done, should be done better
                   onClick={() => handleCardClick(booking, venue, building)} // Pass onClick handler
                 />
               );

@@ -127,6 +127,24 @@
           "role": "anonymous"
         }
       ]
+    },
+    "EVENTS": {
+      "source": "dbo.EVENTS",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
+    },
+    "TUTORING": {
+      "source": "dbo.TUTORING",
+      "permissions": [
+        {
+          "actions": ["*"],
+          "role": "anonymous"
+        }
+      ]
     }
   }
 }
