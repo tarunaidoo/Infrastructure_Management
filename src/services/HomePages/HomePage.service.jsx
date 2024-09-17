@@ -103,13 +103,8 @@ const fetchEventsBookings = async (userID) => {
       const response = await fetch(endpoint);
       const data = await response.json();
 
-      if (data){
-        console.log("Unfiltered Event Bookings:", data.value[1].USER_ID === userID, data.value[1].USER_ID, userID); 
-      }
-      // Filter the data based on the provided BUILDING_LOCATION
+      // Filter the data based on the provided USER_ID
       const filteredData = data.value.filter(row => row.USER_ID === userID);
-
-      console.log("Filtered Event Bookings: ", filteredData);
 
       return filteredData; // Return the filtered data
   }
@@ -126,13 +121,8 @@ const fetchTutoringBookings = async (userID) => {
       const response = await fetch(endpoint);
       const data = await response.json();
 
-      if (data){
-        console.log("Unfiltered Tutoring Bookings:", data.value[1].USER_ID === userID, data.value[1].USER_ID, userID); 
-      }
-      // Filter the data based on the provided BUILDING_LOCATION
+      // Filter the data based on the provided USER_ID
       const filteredData = data.value.filter(row => row.USER_ID === userID);
-
-      console.log("Filtered Tutoring Bookings: ", filteredData);
 
       return filteredData; // Return the filtered data
   }
