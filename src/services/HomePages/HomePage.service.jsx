@@ -83,7 +83,7 @@ async function fetchBooking(user_id) {
 // Deletes Booking based of booking ID
 async function deleteBooking(booking_id) 
 {
-  const endpoint = `/data-api/rest/BOOKING/`
+  const endpoint = `/data-api/rest/BOOKING`
   const response = await fetch(`${endpoint}/BOOKING_ID/${booking_id}`, {
     method: "DELETE"
   });
