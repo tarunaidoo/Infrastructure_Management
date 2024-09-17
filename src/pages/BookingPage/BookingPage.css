@@ -6,7 +6,7 @@
   background-color: white;
   color: black;
   width: 100vw;
-  height: 90vh;
+  height: auto;
   border-top-left-radius: 80px ;
   border-top-right-radius: 80px ;
   }
@@ -93,9 +93,9 @@
 /* Calendar Placeholder */
 .calendar-placeholder {
     width: 85%;
-    height: 45%;
+    height: auto;
     background-color: white;
-   
+    margin-top: 10%;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -107,7 +107,7 @@
   
   /* Booking Form Fields */
   .booking-form {
-    margin-top: 2rem;
+    margin-top: 10%;
     display: flex;
     flex-direction: column;
     width: 100%;
