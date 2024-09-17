@@ -13,29 +13,34 @@ const BuildingSelectionPage = () => {
     // Variables
     const navigate = useNavigate();
     const location = useLocation();
-    const campus = location.state || {};
+    const previousPageDetails = location.state || {};
 
     // Fetch buildings and their tags
     const { data: buildings, error: buildingsError, isLoading: buildingsLoading } = useQuery(
-        ["BuildingsData", campus.CAMPUS_NAME], async () => {
-            const buildings = await getBuildingsFromCampus(campus.CAMPUS_NAME);
+        ["BuildingsData", previousPageDetails.CAMPUS_NAME], async () => {
+            const buildings = await getBuildingsFromCampus(previousPageDetails.CAMPUS_NAME);
             return getBuildingTagNamesForBuildings(buildings);
         }
     );
 
     // Function & Logic
     const handleHeaderBackIconClick = () => {
-        navigate("/campus-selection");
+        const backPageDetails = {
+            SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
+            USER_ID: previousPageDetails.USER_ID,
+            DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE
+        }
+        navigate("/campus-selection", {state: backPageDetails});
     }
     
     const handleBuildingCardClick = ( building ) => {
-        const selectedBuildingDetails = {
-            ...campus,
+        const nextPageDetails = {
+            ...previousPageDetails,
             BUILDING_ID: building.BUILDING_ID,
             BUILDING_NAME: building.BUILDING_NAME,
         };
 
-        navigate("/room-selection", { state : selectedBuildingDetails});
+        navigate("/room-selection", { state : nextPageDetails});
     }
 
     // HTML code

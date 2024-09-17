@@ -9,7 +9,7 @@ import Footer from '../../components/NavigationBar/AdminHomeFooter';
 import './AdminHomePage.css';
 import AdminIcon from '../../assets/icons/admin-home-icon.svg';
 function AdminHomePage(){
-
+    const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
 
     const eventsCardClick = () =>{
@@ -25,7 +25,12 @@ function AdminHomePage(){
     };
 
     const handleEditVenueClick = () =>{
-        navigate('/edit-venue');
+        const venueSelectionDetails = {
+            SOURCE_PAGE: "/admin-home",
+            USER_ID: userID,
+            DESTINATION_PAGE: "/edit-venue"
+        }
+        navigate("/campus-selection", { state: venueSelectionDetails });
     };
 
     return(

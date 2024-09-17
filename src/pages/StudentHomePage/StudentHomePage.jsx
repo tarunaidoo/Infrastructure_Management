@@ -8,7 +8,9 @@ import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePage
 import { useNavigate } from 'react-router-dom';
 
 function StudentHomePage() {
-  const userID = localStorage.getItem('userEmail');
+  const userID = localStorage.getItem('userEmail'); // get userID
+
+  // State for bookings, venues, buildings, and loading/error handling
   const [bookings, setBookings] = useState([]);
   const [venues, setVenues] = useState([]);
   const [buildings, setBuildings] = useState([]);
@@ -60,6 +62,19 @@ function StudentHomePage() {
     fetchData();
   }, [userID]);
 
+  const handleOnReportIssueClick = () => {
+    const venueSelectionDetails = {
+        SOURCE_PAGE: "/student-home",
+        USER_ID: userID,
+        DESTINATION_PAGE: "/report-issue"
+    }
+    navigate("/campus-selection", { state: venueSelectionDetails });
+  }
+
+  const handleOnBookVenueClick = () => {
+    navigate("/booking");
+  }
+
   if (loading) {
     return <div>Connecting...</div>;
   }
@@ -102,7 +117,7 @@ function StudentHomePage() {
             <div>No bookings found.</div>
           )}
         </section>
-        <Footer />
+        <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick}/>
       </div>
     </>
   );

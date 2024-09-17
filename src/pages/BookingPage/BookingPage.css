@@ -6,7 +6,7 @@
   background-color: white;
   color: black;
   width: 100vw;
-  height: 90vh;
+  height: auto;
   border-top-left-radius: 80px ;
   border-top-right-radius: 80px ;
   }
@@ -93,9 +93,9 @@
 /* Calendar Placeholder */
 .calendar-placeholder {
     width: 85%;
-    height: 45%;
+    height: auto;
     background-color: white;
-   
+    margin-top: 10%;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -107,7 +107,7 @@
   
   /* Booking Form Fields */
   .booking-form {
-    margin-top: 2rem;
+    margin-top: 10%;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -116,20 +116,19 @@
     
   }
   
-  .input-field {
+  .booking-form .input-field {
     height: 50px;
-    width: 90%;
-    font-size: 16px;
+    width: 80%;
+    /* font-size: 16px; */
     border-radius: 10px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    background-color: #e0e0e0;
     text-align: center;
   }
   
   .predefined-field {
     height: 50px;
-    width: 90%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,6 +141,7 @@
   /* Book Event Button */
   .book-button {
     height: 50px;
+    width: 80%;
     background-color: #d4af37;
     color: white;
     font-size: 18px;
@@ -155,3 +155,35 @@
   .book-button:hover {
     background-color: #c2952b;
   }
+
+.confirm-booking-button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20%;
+}
+
+.booking-popup-button {
+  background-color: #001F3F; /* Deep Navy */
+    color: white;
+    padding: 10px 20px;
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.booking-popup-button:hover {
+  background-color: #0047AB; /* Royal Azure, change on hover */
+}
+
+.booking-popup-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
+}

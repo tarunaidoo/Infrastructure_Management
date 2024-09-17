@@ -1,5 +1,5 @@
 import React from "react";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import CampusCard from "../../components/CampusCard/CampusCard";
@@ -10,16 +10,18 @@ import "./CampusSelectionPage.css";
 const CampusSelectionPage = () => {
     // Variables
     const navigate = useNavigate();
+    const location = useLocation();
+    const previousPageDetails = location.state || {};
     const campusNames = ["East Campus", "West Campus"];
 
     // Function & Logic
     const handleHeaderBackIconClick = () => {
-        navigate("/booking");
+        navigate(previousPageDetails.SOURCE_PAGE);
     }
 
     const handleCampusCardClick = ( campusName ) => {
-        const campusDetails = {CAMPUS_NAME: campusName}
-        navigate("/building-selection", {state : campusDetails});
+        const currentPageDetails = {...previousPageDetails, CAMPUS_NAME: campusName};
+        navigate("/building-selection", {state : currentPageDetails});
     }
 
     // HTML code
