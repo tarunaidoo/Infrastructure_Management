@@ -24,7 +24,7 @@ const BookingPage = () => {
   const location = useLocation();
   const selectedVenue = location.state || {};
   
-  const [eventReason, setEventReason] = useState('');
+  const [eventName, setEventName] = useState('');
   const [bookingDate, setBookingDate] = useState(new Date());
   const [activeStartDate, setActiveStartDate] = useState(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
@@ -96,6 +96,7 @@ const BookingPage = () => {
     const bookingData = {
       VENUE_ID: selectedVenue.VENUE_ID,
       USER_ID: userID,
+      EVENT_NAME: eventName,
       DATE: bookingDate.toISOString().split('T')[0],
       START_TIME: selectedTimeSlot.start,
       END_TIME: selectedTimeSlot.end,
@@ -110,6 +111,10 @@ const BookingPage = () => {
     setPopupState("");
     setDisplayPopup(false);
   };
+
+  const handleHeaderBackIconClick = () => {
+    navigate("/student-home");
+  }
 
   const handleBookingSuccessfulClick = () => {
     setDisplayPopup(false);
@@ -151,7 +156,7 @@ const BookingPage = () => {
     <>
       <main className='booking-layout'>
         <article className='booking-heading'>
-          <img src={headingIcon} alt='back-arrow' className='booking-icons' />
+          <img onClick={handleHeaderBackIconClick} src={headingIcon} alt='back-arrow' className='booking-icons' />
           <h1>Book Event</h1>
         </article>
 
@@ -178,8 +183,8 @@ const BookingPage = () => {
             <input
               type="text"
               placeholder="Enter event name"
-              value={eventReason}
-              onChange={(e) => setEventReason(e.target.value)}
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
               className="input-field"
             />
             <div onClick={handleOnVenueSelectionClick} className="predefined-field">
