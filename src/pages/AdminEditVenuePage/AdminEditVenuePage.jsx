@@ -22,7 +22,7 @@ const AdminEditVenuePage = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [popupType, setPopupType] = useState('');
     const [message, setMessage] = useState("");
-    const [ setValidInfo] = useState(true);
+    // const [validInfo, setValidInfo] = useState(true);
     const [loading, setLoading] = useState(false); // New state for loading
 
     const [initialValues, setInitialValues] = useState({
@@ -114,7 +114,7 @@ const AdminEditVenuePage = () => {
         e.preventDefault();
         
         // Reset error state before validation
-        setValidInfo(true);
+        // setValidInfo(true);
     
         // Validate the form inputs
         if (!venueName) {
@@ -188,7 +188,7 @@ const AdminEditVenuePage = () => {
             // Show success popup
             setPopupType('success');
             setShowPopup(true);
-            window.location.reload();
+            navigate("/admin-home");
 
         } catch (error) {
             console.error("Error updating venue:", error);
@@ -275,7 +275,7 @@ const AdminEditVenuePage = () => {
                     ))}
                 </article>
                 <article className="edit-venue-button-layout" data-testid="update-venue-button-layout">
-                    <button className="edit-venue-button" type="submit" data-testid="update-venue-button">Update Venue</button>
+                    <button onClick={handleFormSubmit} className="edit-venue-button" type="submit" data-testid="update-venue-button">Update Venue</button>
                 </article>
             </form>
         </section>
