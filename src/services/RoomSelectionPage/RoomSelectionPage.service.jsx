@@ -6,7 +6,7 @@ const getVenuesFromBuildingID = async (buildingID) => {
         const data = await response.json();
 
         // Filter the data based on the provided BUILDING_ID
-        const filteredData = data.value.filter(row => row.BUILDING_ID === buildingID);
+        const filteredData = data.value.filter(row => (row.BUILDING_ID === buildingID && row.VENUE_STATUS === "Available"));
 
         return filteredData; // Return the filtered data
     }
