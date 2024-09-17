@@ -10,17 +10,17 @@
 .home-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Ensure content starts from the top */
   align-items: center;
   overflow-y: auto; /* Enables scrolling for this section */
   padding: 2vh 2vw; /* Scales padding with viewport size */
-  position: fixed;
+  position: absolute; /* Change to absolute for more natural flow */
   top: 17vh; /* Positioned below the header using viewport height */
   bottom: 10vh; /* Positioned above the footer using viewport height */
   left: 0;
   right: 0;
-  margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
+  scroll-margin-top: 0; /* Ensure content starts from the top when scrollable */
   margin-bottom: 3vh; /* Adds space between content and footer using viewport height */
 }
