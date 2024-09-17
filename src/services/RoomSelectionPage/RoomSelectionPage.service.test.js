@@ -12,12 +12,12 @@ describe("Room Selection Page Services", () => {
         // Mock data that the fetch API will return
         const mockBuildingsData = {
             value: [
-                {VENUE_ID: 1, BUILDING_ID: 1, VENUE_NAME:"MSL004"},
-                {VENUE_ID: 2, BUILDING_ID: 1, VENUE_NAME:"MSL005"},
-                {VENUE_ID: 3, BUILDING_ID: 1, VENUE_NAME:"MSL006"},
-                {VENUE_ID: 4, BUILDING_ID: 2, VENUE_NAME:"WSS113"},
-                {VENUE_ID: 5, BUILDING_ID: 2, VENUE_NAME:"WSS111"},
-                {VENUE_ID: 6, BUILDING_ID: 2, VENUE_NAME:"WSS112"},
+                {VENUE_ID: 1, BUILDING_ID: 1, VENUE_NAME:"MSL004", VENUE_STATUS: "Available"},
+                {VENUE_ID: 2, BUILDING_ID: 1, VENUE_NAME:"MSL005", VENUE_STATUS: "Available"},
+                {VENUE_ID: 3, BUILDING_ID: 1, VENUE_NAME:"MSL006", VENUE_STATUS: "Available"},
+                {VENUE_ID: 4, BUILDING_ID: 2, VENUE_NAME:"WSS113", VENUE_STATUS: "Available"},
+                {VENUE_ID: 5, BUILDING_ID: 2, VENUE_NAME:"WSS111", VENUE_STATUS: "Available"},
+                {VENUE_ID: 6, BUILDING_ID: 2, VENUE_NAME:"WSS112", VENUE_STATUS: "Available"}
             ],
         };
 
@@ -32,9 +32,9 @@ describe("Room Selection Page Services", () => {
 
         // Check if the function returns only the buildings from "West Campus"
         expect(result).toEqual([
-            {VENUE_ID: 4, BUILDING_ID: 2, VENUE_NAME:"WSS113"},
-            {VENUE_ID: 5, BUILDING_ID: 2, VENUE_NAME:"WSS111"},
-            {VENUE_ID: 6, BUILDING_ID: 2, VENUE_NAME:"WSS112"}
+            {VENUE_ID: 4, BUILDING_ID: 2, VENUE_NAME:"WSS113", VENUE_STATUS: "Available"},
+            {VENUE_ID: 5, BUILDING_ID: 2, VENUE_NAME:"WSS111", VENUE_STATUS: "Available"},
+            {VENUE_ID: 6, BUILDING_ID: 2, VENUE_NAME:"WSS112", VENUE_STATUS: "Available"}
         ]);
 
         // Ensure the fetch was called with the correct endpoint
