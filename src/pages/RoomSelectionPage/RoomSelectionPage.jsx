@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import Popup from "../../components/Popup/Popup";
-import { getRoleFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureNamesFromVenues } from "../../services/RoomSelectionPage/RoomSelectionPage.service";
+import { getUserDetailsFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureNamesFromVenues } from "../../services/RoomSelectionPage/RoomSelectionPage.service";
 
 import "./RoomSelectionPage.css";
 
@@ -22,12 +22,21 @@ const RoomSelectionPage = () => {
     const [displayPopup, setDisplayPopup] = useState(false);
 
     // Function & Logic
+    const { data : userDetails, error: userDetailsError, isLoading: userDetailsLoading } = useQuery(
+        ["userDetailsData"], () => {
+            return getUserDetailsFromUserID(previousPageDetails.USER_ID);
+        }
+    );
+
     const { data : venue, error: venueError, isLoading: venueLoading } = useQuery(
-        ["roomData", previousPageDetails.BUILDING_ID], async () => {
-            const userRole = await getRoleFromUserID(previousPageDetails.USER_ID);
-            const venues = await getVenuesFromBuildingIDAndUserID(previousPageDetails.BUILDING_ID, userRole);
+        ["roomData", previousPageDetails.BUILDING_ID, userDetails], async () => {
+            const venues = await getVenuesFromBuildingIDAndUserID(previousPageDetails.BUILDING_ID, userDetails.USER_ROLE);
             return getVenueFeatureNamesFromVenues(venues);
-    });
+        },
+        {
+            enabled: !!userDetails,
+        }
+    );
 
     const handleHeaderBackIconClick = () => {
         const backPageDetails = {
@@ -58,12 +67,23 @@ const RoomSelectionPage = () => {
         navigate(previousPageDetails.DESTINATION_PAGE, {state : nextPageDetails});
     }
     // HTML code
-    if (venueLoading) {
+    if (venueLoading || userDetailsLoading) {
         return (
             <>
-                <Header title={"Choose a Room"}/>
+                <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
                 <main className="centered-container">
                     <div>Fetching Rooms...</div>
+                </main>
+            </>
+        );
+    }
+
+    if (userDetailsError) {
+        return (
+            <>
+                <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
+                <main className="centered-container">
+                    <div>An error occurred: {userDetailsError.message}</div>
                 </main>
             </>
         );
@@ -72,7 +92,7 @@ const RoomSelectionPage = () => {
     if (venueError) {
         return (
             <>
-                <Header title={"Choose a Room"}/>
+                <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
                 <main className="centered-container">
                     <div>An error occurred: {venueError.message}</div>
                 </main>
