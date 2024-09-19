@@ -12,252 +12,250 @@ import './BookingPage.css';
 
 // Predefined time slots
 const timeSlots = [
-  { start: "08:00:00", end: "09:45:00" },
-  { start: "10:00:00", end: "11:45:00" },
-  { start: "12:00:00", end: "13:45:00" },
-  { start: "14:00:00", end: "15:45:00" },
-  { start: "16:00:00", end: "17:45:00" }
+    { start: "08:00:00", end: "09:45:00" },
+    { start: "10:00:00", end: "11:45:00" },
+    { start: "12:00:00", end: "13:45:00" },
+    { start: "14:00:00", end: "15:45:00" },
+    { start: "16:00:00", end: "17:45:00" }
 ];
 
 const BookingPage = () => {
-  const userID = localStorage.getItem('userEmail'); // get userID
-  const navigate = useNavigate();
-  const location = useLocation();
-  const selectedVenue = location.state || {};
-  
-  const [eventName, setEventName] = useState('');
-  const [bookingDate, setBookingDate] = useState(new Date());
-  const [activeStartDate, setActiveStartDate] = useState(new Date());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
-  const [popupState, setPopupState] = useState("");
-  const [displayPopup, setDisplayPopup] = useState(false);
-  const [loading, setLoading] = useState(false);
+    const userID = localStorage.getItem('userEmail'); // get userID
+    const navigate = useNavigate();
+    const location = useLocation();
+    const selectedVenue = location.state || {};
 
-  const mutation = useMutation((newBooking) => createBooking(newBooking), {
-    onSuccess: () => {
-      setPopupState("Booking Successful");
-      setDisplayPopup(true);
-    },
-    onError: () => {
-      setPopupState("Booking Failed");
-      setDisplayPopup(true);
-    },
-    onSettled: () => {
-      setLoading(false); // Hide loading state after mutation is done
-    }
-  });
+    const [eventName, setEventName] = useState('');
+    const [bookingDate, setBookingDate] = useState(new Date());
+    const [activeStartDate, setActiveStartDate] = useState(new Date());
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+    const [popupState, setPopupState] = useState("");
+    const [displayPopup, setDisplayPopup] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!selectedVenue || !selectedTimeSlot || !eventName) {
-      setPopupState("Invalid Details");
-      setDisplayPopup(true);
-      return;
-    }
-  
-    const newStartTime = selectedTimeSlot.start;
-    const newEndTime = selectedTimeSlot.end;
-  
-    // Normalize booking date to midnight to avoid timezone issues
-    const normalizedDate = new Date(bookingDate);
-    normalizedDate.setHours(0, 0, 0, 0);
-  
-    setLoading(true); // Show loading state while fetching bookings
-  
-    try {
-      const overlapExists = await checkForOverlap(
-        selectedVenue.VENUE_ID,
-        normalizedDate.toISOString().split('T')[0], // Use only the date part
-        newStartTime,
-        newEndTime
-      );
-      console.log(overlapExists);
-      if (overlapExists) {
-        setPopupState("Time Slot Overlap");
-        setDisplayPopup(true);
-        return;
-      }
-  
-      setPopupState("Confirm Booking");
-      setDisplayPopup(true);
-    } catch (error) {
-      console.error("Error during booking process:", error);
-      setPopupState("Error");
-      setDisplayPopup(true);
-    } finally {
-      setLoading(false); // Hide loading state after checking for overlap
-    }
-  };
-  
+    const mutation = useMutation((newBooking) => createBooking(newBooking), {
+        onSuccess: () => {
+            setPopupState("Booking Successful");
+            setDisplayPopup(true);
+        },
+        onError: () => {
+            setPopupState("Booking Failed");
+            setDisplayPopup(true);
+        },
+        onSettled: () => {
+            setLoading(false); // Hide loading state after mutation is done
+        }
+    });
 
-  const handleConfirmBookingClick = () => {
-    setPopupState("");
-    setDisplayPopup(false);
-  
-    // Proceed with booking if no overlap
-    const bookingData = {
-      VENUE_ID: selectedVenue.VENUE_ID,
-      USER_ID: userID,
-      EVENT_NAME: eventName,
-      DATE: formatDateToISO(bookingDate),//bookingDate.toISOString().split('T')[0],
-      START_TIME: selectedTimeSlot.start,
-      END_TIME: selectedTimeSlot.end,
-      DATE_CREATED: formatDateToISO(new Date()),
-      BOOKING_STATUS: "Confirmed"
+    const handleSubmit = async () => {
+        if (!selectedVenue || !selectedTimeSlot || !eventName) {
+            setPopupState("Invalid Details");
+            setDisplayPopup(true);
+            return;
+        }
+
+        // Normalize booking date to midnight to avoid timezone issues
+        const normalizedDate = new Date(bookingDate);
+        normalizedDate.setHours(0, 0, 0, 0);
+
+        setLoading(true); // Show loading state while fetching bookings
+
+        try {
+            const overlapExists = await checkForOverlap(
+                selectedVenue.VENUE_ID,
+                formatDateToISO(normalizedDate),
+                selectedTimeSlot.start,
+                selectedTimeSlot.end
+            );
+            console.log(overlapExists);
+            if (overlapExists) {
+                setPopupState("Time Slot Overlap");
+                setDisplayPopup(true);
+                return;
+            }
+            else {
+                setPopupState("Confirm Booking");
+                setDisplayPopup(true);
+            }
+        } catch (error) {
+            console.error("Error during booking process:", error);
+            setPopupState("Error");
+            setDisplayPopup(true);
+        } finally {
+            setLoading(false); // Hide loading state after checking for overlap
+        }
     };
-  
-  
-    mutation.mutate(bookingData);
-  };
 
-  const handleBackToVenueBookingClick = () => {
-    setPopupState("");
-    setDisplayPopup(false);
-  };
 
-  const handleHeaderBackIconClick = () => {
-    navigate("/student-home");
-  }
+    const handleConfirmBookingClick = () => {
+        setPopupState("");
+        setDisplayPopup(false);
 
-  const handleBookingSuccessfulClick = () => {
-    setDisplayPopup(false);
-    navigate("/student-home");
-  };
+        // Proceed with booking if no overlap
+        const bookingData = {
+            VENUE_ID: selectedVenue.VENUE_ID,
+            USER_ID: userID,
+            EVENT_NAME: eventName,
+            DATE: formatDateToISO(bookingDate),//bookingDate.toISOString().split('T')[0],
+            START_TIME: selectedTimeSlot.start,
+            END_TIME: selectedTimeSlot.end,
+            DATE_CREATED: formatDateToISO(new Date()),
+            BOOKING_STATUS: "Confirmed"
+        };
 
-  const handleOnVenueSelectionClick = () => {
-    const venueSelectionDetails = {
-      SOURCE_PAGE: "/booking",
-      DESTINATION_PAGE: "/booking"
+
+        mutation.mutate(bookingData);
     };
-    navigate("/campus-selection", { state: venueSelectionDetails });
-  };
 
-  const handleTimeSlotChange = (e) => {
-    const index = e.target.value;
-    if (index !== "") {
-      setSelectedTimeSlot(timeSlots[index]);
+    const handleBackToVenueBookingClick = () => {
+        setPopupState("");
+        setDisplayPopup(false);
+    };
+
+    const handleHeaderBackIconClick = () => {
+        navigate("/student-home");
     }
-  };
 
-  const tileDisabled = ({ date, view }) => {
-    if (view === 'month') {
-      const displayedMonth = activeStartDate.getMonth();
-      return date.getMonth() !== displayedMonth;
-    }
-    return false;
-  };
+    const handleBookingSuccessfulClick = () => {
+        setDisplayPopup(false);
+        navigate("/student-home");
+    };
 
-  const tileContent = ({ date, view }) => {
-    if (view === 'month') {
-      const displayedMonth = activeStartDate.getMonth();
-      return date.getMonth() !== displayedMonth ? <p></p> : null;
-    }
-    return null;
-  }; 
+    const handleOnVenueSelectionClick = () => {
+        const venueSelectionDetails = {
+            SOURCE_PAGE: "/booking",
+            DESTINATION_PAGE: "/booking"
+        };
+        navigate("/campus-selection", { state: venueSelectionDetails });
+    };
 
-  return (
-    <>
-      <main className='booking-layout'>
-        <article onClick={handleHeaderBackIconClick} className='booking-heading'>
-          <img  src={headingIcon} alt='back-arrow' className='booking-icons' />
-          <h1>Book Event</h1>
-        </article>
+    const handleTimeSlotChange = (e) => {
+        const index = e.target.value;
+        if (index !== "") {
+            setSelectedTimeSlot(timeSlots[index]);
+        }
+    };
 
-        <section className='booking-container'>
-          <article className="calendar-placeholder">
-          <Calendar
-            onChange={(date) => {
-              // Normalize selected date to midnight
-              const normalizedDate = new Date(date);
-              normalizedDate.setHours(0, 0, 0, 0);
-              setBookingDate(normalizedDate);
-            }}
-            value={bookingDate}
-            onActiveStartDateChange={({ activeStartDate }) => setActiveStartDate(activeStartDate)}
-            tileDisabled={tileDisabled}
-            tileContent={tileContent}
-            showNeighboringMonth={false}
-            prev2Label={null}
-            next2Label={null}
-          />
-          </article>
+    const tileDisabled = ({ date, view }) => {
+        if (view === 'month') {
+            const displayedMonth = activeStartDate.getMonth();
+            return date.getMonth() !== displayedMonth;
+        }
+        return false;
+    };
 
-          <section className="booking-form">
-            <input
-              type="text"
-              placeholder="Enter event name"
-              value={eventName}
-              onChange={(e) => setEventName(e.target.value)}
-              className="input-field"
-            />
-            <article onClick={handleOnVenueSelectionClick} className="input-field">
-              {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Select a venue"}
-            </article>
-            <article className="input-field">
-              {selectedVenue.VENUE_NAME}
-            </article>
+    const tileContent = ({ date, view }) => {
+        if (view === 'month') {
+            const displayedMonth = activeStartDate.getMonth();
+            return date.getMonth() !== displayedMonth ? <p></p> : null;
+        }
+        return null;
+    };
 
-            <section className="predefined-field">
-              <select value={selectedTimeSlot ? timeSlots.indexOf(selectedTimeSlot) : ''} onChange={handleTimeSlotChange}>
-                <option value="">Time Slot</option>
-                {timeSlots.map((slot, index) => (
-                  <option key={index} value={index}>
-                    {`${slot.start} - ${slot.end}`}
-                  </option>
-                ))}
-              </select>
-            </section>
+    return (
+        <>
+            <main className='booking-layout'>
+                <article onClick={handleHeaderBackIconClick} className='booking-heading'>
+                    <img src={headingIcon} alt='back-arrow' className='booking-icons' />
+                    <h1>Book Event</h1>
+                </article>
 
-            <button className="book-button" onClick={handleSubmit} disabled={loading}>
-              {loading ? "Checking availability..." : "Book event"}
-            </button>
-          </section>
-        </section>
-      </main>
+                <section className='booking-container'>
+                    <article className="calendar-placeholder">
+                        <Calendar
+                            onChange={(date) => {
+                                // Normalize selected date to midnight
+                                const normalizedDate = new Date(date);
+                                normalizedDate.setHours(0, 0, 0, 0);
+                                setBookingDate(normalizedDate);
+                            }}
+                            value={bookingDate}
+                            onActiveStartDateChange={({ activeStartDate }) => setActiveStartDate(activeStartDate)}
+                            tileDisabled={tileDisabled}
+                            tileContent={tileContent}
+                            showNeighboringMonth={false}
+                            prev2Label={null}
+                            next2Label={null}
+                        />
+                    </article>
 
-      {popupState === "Invalid Details" &&
-        <Popup trigger={displayPopup}>
-          <h2>Invalid Details</h2>
-          <p>Please fill in all fields</p>
-          <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
-        </Popup>
-      }
+                    <section className="booking-form">
+                        <input
+                            type="text"
+                            placeholder="Enter event name"
+                            value={eventName}
+                            onChange={(e) => setEventName(e.target.value)}
+                            className="input-field"
+                        />
+                        <article onClick={handleOnVenueSelectionClick} className="input-field">
+                            {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Select a venue"}
+                        </article>
+                        <article className="input-field">
+                            {selectedVenue.VENUE_NAME}
+                        </article>
 
-      {popupState === "Confirm Booking" &&
-        <Popup trigger={displayPopup}>
-          <h2>Confirmation</h2>
-          <p>Do you want to place a booking for this event?</p>
-          <article className='confirm-booking-button-container'>
-            <button onClick={handleConfirmBookingClick} className='booking-popup-button'>Yes</button>
-            <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>No</button>
-          </article>
-        </Popup>
-      }
+                        <section className="predefined-field">
+                            <select value={selectedTimeSlot ? timeSlots.indexOf(selectedTimeSlot) : ''} onChange={handleTimeSlotChange}>
+                                <option value="">Time Slot</option>
+                                {timeSlots.map((slot, index) => (
+                                    <option key={index} value={index}>
+                                        {`${slot.start} - ${slot.end}`}
+                                    </option>
+                                ))}
+                            </select>
+                        </section>
 
-      {popupState === "Booking Successful" &&
-        <Popup trigger={displayPopup}>
-          <h2>Confirmation</h2>
-          <p>Your event has been booked!</p>
-          <button onClick={handleBookingSuccessfulClick} className='booking-popup-button'>Close</button>
-        </Popup>
-      }
+                        <button className="book-button" onClick={handleSubmit} disabled={loading}>
+                            {loading ? "Checking availability..." : "Book event"}
+                        </button>
+                    </section>
+                </section>
+            </main>
 
-      {popupState === "Booking Failed" &&
-        <Popup trigger={displayPopup}>
-          <h2>Booking Error</h2>
-          <p>Failed to book your event!</p>
-          <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
-        </Popup>
-      }
+            {popupState === "Invalid Details" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Invalid Details</h2>
+                    <p>Please fill in all fields</p>
+                    <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
+                </Popup>
+            }
 
-      {popupState === "Time Slot Overlap" &&
-        <Popup trigger={displayPopup}>
-          <h2>Time Slot Overlap</h2>
-          <p>The selected time slot overlaps with an existing booking.</p>
-          <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
-        </Popup>
-      }
-    </>
-  );
+            {popupState === "Confirm Booking" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Confirmation</h2>
+                    <p>Do you want to place a booking for this event?</p>
+                    <article className='confirm-booking-button-container'>
+                        <button onClick={handleConfirmBookingClick} className='booking-popup-button'>Yes</button>
+                        <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>No</button>
+                    </article>
+                </Popup>
+            }
+
+            {popupState === "Booking Successful" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Confirmation</h2>
+                    <p>Your event has been booked!</p>
+                    <button onClick={handleBookingSuccessfulClick} className='booking-popup-button'>Close</button>
+                </Popup>
+            }
+
+            {popupState === "Booking Failed" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Booking Error</h2>
+                    <p>Failed to book your event!</p>
+                    <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
+                </Popup>
+            }
+
+            {popupState === "Time Slot Overlap" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Time Slot Overlap</h2>
+                    <p>The selected time slot overlaps with an existing booking.</p>
+                    <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
+                </Popup>
+            }
+        </>
+    );
 };
 
 export default BookingPage;
