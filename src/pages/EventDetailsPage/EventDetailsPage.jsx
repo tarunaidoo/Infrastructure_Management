@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '../../components/EventDetailsHeader/EventDetailsHeader';
 import Card from '../../components/EventDetailsCard/EventDetailsCard';
+import xIcon from '../../assets/icons/xmark.svg'
 import './EventDetailsPage.css';
 import { deleteBooking } from '../../services/HomePages/HomePage.service';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +22,7 @@ function EventDetailsPage() {
 
   return (
     <>
-      <div className='event-body'>
+      <main className='event-body'>
         <Header />
         <section className='event-content'>
           <Card 
@@ -31,9 +32,11 @@ function EventDetailsPage() {
             venue={building?.BUILDING_NAME || 'Unknown Building'} 
             room={venue?.VENUE_NAME || 'Unknown Room'} 
           />
-          <button className='event-button' onClick={handleDeleteClick}>X Cancel Booking</button>
+          <button className='cancel-event-button' onClick={handleDeleteClick}>
+          <img src={xIcon} alt='xIcon' />
+            Cancel Booking</button>
         </section>
-      </div>
+      </main>
     </>
   );
 }

@@ -28,11 +28,7 @@
 }
   
 .MenuBar img {
-    filter: invert(1) brightness(5) sepia(1) saturate(5); /*makes svg off-white if black*/
     width: 3.25em; /* Uses em units for scalable image size */
     height: 3.25em;
 }
   
-.MenuBar .main {
-    filter: invert(2) brightness(1) sepia(5) saturate(4); /*makes svg white if black*/
-}

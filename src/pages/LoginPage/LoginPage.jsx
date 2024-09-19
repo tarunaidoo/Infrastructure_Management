@@ -39,14 +39,16 @@ function LoginPage() {
     }, [isAuthenticated, user?.email, user?.given_name, user?.family_name, navigate]);
 
     return (
-        <main className="centered-container">
+        <main className='login-background'>
+            <section className="centered-container">
             <section className="content-section">
-                <div className="logo-container">
+                <article className="logo-container">
                     <img src={Logo} alt="WitsVenue Logo" className="logo" />
-                </div>
+                </article>
                 <p className="WellcomeText">Welcome!</p>
                 {!isAuthenticated && <LoginButton />}
                 <p className='promt'>Can't sign in? <a href='https://www.wits.ac.za/about-wits/contact-us/'>Contact IT</a></p>
+            </section>
             </section>
         </main>
     );

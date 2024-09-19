@@ -190,7 +190,7 @@ const AdminAddVenuePage = () => {
     return (
         <>
             <Header title="Add a Venue"/>
-            <div className="adding-form">
+            <main className="adding-form">
                 <h2 className="heading-tags">Building:</h2>
                 <input
                   type="text"
@@ -244,29 +244,32 @@ const AdminAddVenuePage = () => {
                    onChange={handleChange}
                 />
                 <h2 className="heading-tags">Room Features:</h2>
-                <div className="checkbox-list">
+                <section className="add-venue-checkboxes">
                     {['Computers',
                     'Desks', 
                     'Chairs', 
                     'Projector', 
                     'Chalk Board',
                     'White Board'].map(feature => (
-                        <label key={feature}>
+                        <label className="add-venue-checkbox-label" key={feature}>
+                          
                             <input
                                 type="checkbox"
+                                className="add-venue-checkbox-input"
                                 value={feature}
                                 checked={formFields.roomFeatures.includes(feature)}
                                 onChange={handleCheckBoxChange}
                             />
+                             <span className="add-venue-checkbox-custom"></span>
                             {feature}
                         </label>
                     ))}
-                </div>
-            </div>
-            <button 
+                </section>
+                <button 
                 className="add-venue-button" 
                 onClick={handleSubmit}>Add venue
             </button>
+            </main>
 
             {/* AddPopup for confirmation */}
             {showConfirmationPopup && 

@@ -49,7 +49,7 @@ const BuildingSelectionPage = () => {
             <>
                 <Header title={"Choose a Building"}/>
                 <main className="centered-container">
-                    <div>Fetching Buildings...</div>
+                    <section>Fetching Buildings...</section>
                 </main>
             </>
         );
@@ -60,7 +60,7 @@ const BuildingSelectionPage = () => {
             <>
                 <Header title={"Choose a Building"}/>
                 <main className="centered-container">
-                    <div>An error occurred: {buildingsError.message}</div>
+                    <section>An error occurred: {buildingsError.message}</section>
                 </main>
             </>
         );

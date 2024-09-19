@@ -13,8 +13,8 @@ function ReportedIssuePopup({
     onClose 
 }) {
     return (
-        <div className="popup-overlay" data-testid="popIssues-1">
-            <div className="popup-content">
+        <main className="popup-overlay" data-testid="popIssues-1">
+            <section className="popup-content">
                 <h2 data-testid="issueID">{title}</h2>
                 <p data-testid="reportedBy"><strong>Reported By:</strong> {user}</p>
                 <p data-testid="reportDate"><strong>Report Date:</strong> {reportDate}</p>
@@ -22,10 +22,12 @@ function ReportedIssuePopup({
                 <p data-testid="venueName"><strong>Venue:</strong> {venueName}</p>
                 <p data-testid="description"><strong>Description:</strong> {description}</p>
                 <p data-testid="status"><strong>Status:</strong> {status}</p>
+                <article className='issues-popup-buttons'>
                 <button onClick={onResolve} data-testid="resolveButton"  className="resolved-button">Resolve</button>
                 <button onClick={onClose} data-testid="closeButton">Close</button>
-            </div>
-        </div>
+                </article>
+            </section>
+        </main>
     );
 }
 

@@ -6,8 +6,8 @@ export const fetchAllBookings = async () => {
             throw new Error("Failed to fetch bookings");
         }
         const bookings = await response.json();
-        console.log('Type of bookings:', typeof bookings);
-        console.log("Fetched bookings:", bookings);
+        // console.log('Type of bookings:', typeof bookings);
+        // console.log("Fetched bookings:", bookings);
         return bookings;
     } catch (error) {
         console.error("Error fetching all bookings:", error);
@@ -23,8 +23,8 @@ export const fetchAllVenues = async () => {
             throw new Error("Failed to fetch venues");
         }
         const venues = await response.json();
-        console.log('Type of venues:', typeof venues);
-        console.log("Fetched venues:", venues);
+        // console.log('Type of venues:', typeof venues);
+        // console.log("Fetched venues:", venues);
         return venues;
     } catch (error) {
         console.error("Error fetching all venues:", error);
@@ -41,8 +41,8 @@ export const fetchAllUsers = async () => {
             throw new Error("Failed to fetch users");
         }
         const users = await response.json();
-        console.log('Type of allUsers:', typeof users);
-        console.log("Fetched users:", users);
+        // console.log('Type of allUsers:', typeof users);
+        // console.log("Fetched users:", users);
         return users;
     } catch (error) {
         console.error("Error fetching all users:", error);

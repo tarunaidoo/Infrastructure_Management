@@ -7,141 +7,232 @@
   color: black;
   width: 100vw;
   height: auto;
-  border-top-left-radius: 80px ;
-  border-top-right-radius: 80px ;
-  }
-/* Dropdown itself */
-.predefined-field select {
-  width: 250px;              /* Control the width of the dropdown */
-  height: 50px;              /* Size of the dropdown before clicked */
-  font-size: 16px;           /* Adjust text size */
-  padding: 10px;             /* Add padding for spacing */
-  text-align: center;        /* Center text inside the dropdown */
-  border-radius: 5px;        /* Rounded corners */
-  border: 2px solid #ccc;    /* Border style */
-  background-color: #e0e0e0;    /* Background color */
-  cursor: pointer;
-  
+  border-top-left-radius: 80px;
+  border-top-right-radius: 80px;
 }
 
-/* Control the dropdown list size */
-.predefined-field select:focus {
-  max-height: 100px;         /* Maximum height of the dropdown list */
-  overflow-y: auto;          /* Enable scrolling if list exceeds height */
-}
-
-/* For older browsers or additional control */
-.predefined-field select option {
-  height: 40px;              /* Control the height of each option */
-  font-size: 12px;           /* Adjust the font size */
-  padding: 5px 10px;         /* Add padding to each option */
-}
-
-/* Hide the scroll bar for more aesthetic look */
-.predefined-field select::-webkit-scrollbar {
-  width: 8px;                /* Custom width of the scrollbar */
-}
-
-.predefined-field select::-webkit-scrollbar-thumb {
-  background-color: #ccc;    /* Color of the scrollbar */
-  border-radius: 10px;       /* Rounded scrollbar for a better look */
-}
-
-
-.booking-layout{
+/* Booking Layout */
+.booking-layout {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #001F3F;  /* Button color */
-  color: white;  /* Button text color */
+  background-color: #001F3F; /* Button color */
+  color: white; /* Button text color */
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-  
 }
 
-.booking-heading{
+.booking-heading {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   height: 10vh;
   gap: 10px;
-
 }
-.booking-icons{
+
+.booking-icons {
   color: white;
   height: 30px;
   width: 30px;
 }
 
-.booking-layout h1{
+.booking-layout h1 {
   cursor: pointer;
-  font-size: 1.8em;  /* Font size */
+  font-size: 1.8em; /* Font size */
   font-family: Arial, sans-serif;
 }
 
-.booking-layout h2{
+.booking-layout h2 {
   font-family: Arial, sans-serif;
-  font-size: 20px;  /* Font size */
+  font-size: 20px; /* Font size */
 }
-.booking-layout h3{
+
+.booking-layout h3 {
   font-family: Arial, sans-serif;
-  font-size: 20px;  /* Font size */
+  font-size: 20px; /* Font size */
   margin: 0;
 }
 
 /* Calendar Placeholder */
 .calendar-placeholder {
-    width: 85%;
-    height: auto;
-    background-color: white;
-    margin-top: 10%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-self: center;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  
-  /* Booking Form Fields */
-  .booking-form {
-    margin-top: 10%;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 15px;
-    align-items: center;
-    
-  }
-  
-  .booking-form .input-field {
-    height: 50px;
-    width: 80%;
-    /* font-size: 16px; */
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    text-align: center;
-  }
-  
+  width: 85%;
+  height: auto;
+  background-color: white;
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-self: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Booking Form Fields */
+.booking-form {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.booking-form .input-field {
+  display: flex;
+  height: 50px;
+  width: 60vw;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-field input:focus {
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+/* Book Event Button */
+.book-button {
+  height: 50px;
+  width: 26%;
+  background-color: #d4af37;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 2%;
+}
+
+.book-button:active {
+  transform: scale(1.05); /* Scale up slightly when tapped */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+}
+
+.book-button:hover {
+  background-color: #c2952b;
+  transform: scale(1.05); /* Scale up slightly when tapped */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+}
+
+/* Confirm Booking Button Container */
+.confirm-booking-button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20%;
+}
+
+/* Booking Popup Button */
+.booking-popup-button {
+  background-color: #001F3F; /* Deep Navy */
+  color: white;
+  padding: 10px 20px;
+  width: 50vw;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.booking-popup-button:hover {
+  background-color: #0047AB; /* Royal Azure, change on hover */
+}
+
+.booking-popup-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
+}
+
+/* Predefined Field */
+.predefined-field {
+  height: 50px;
+  width: 26vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+/* Dropdown itself */
+.predefined-field select { /* Control the width of the dropdown */
+  width: 26vw;
+  height: 50px; /* Size of the dropdown before clicked */
+  font-size: 16px; /* Adjust text size */
+  padding: 10px; /* Add padding for spacing */
+  text-align: center; /* Center text inside the dropdown */
+  border-radius: 5px; /* Rounded corners */
+  border: 2px solid #ccc; /* Border style */
+  background-color: #e0e0e0; /* Background color */
+  cursor: pointer;
+}
+
+/* Control the dropdown list size */
+.predefined-field select:focus {
+  max-height: 100px; /* Maximum height of the dropdown list */
+  overflow-y: auto; /* Enable scrolling if list exceeds height */
+  border: none;
+  outline: none;
+}
+
+/* For older browsers or additional control */
+.predefined-field select option {
+  height: 40px; /* Control the height of each option */
+  font-size: 12px; /* Adjust the font size */
+  padding: 5px 10px; /* Add padding to each option */
+}
+
+/* Hide the scroll bar for more aesthetic look */
+.predefined-field select::-webkit-scrollbar {
+  width: 8px; /* Custom width of the scrollbar */
+}
+
+.predefined-field select::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Color of the scrollbar */
+  border-radius: 10px; /* Rounded scrollbar for a better look */
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
   .predefined-field {
+    position: relative;
     height: 50px;
-    width: 80%;
+    width: 60vw;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #e0e0e0;
     border-radius: 10px;
     font-size: 16px;
-
   }
-  
-  /* Book Event Button */
+  .predefined-field select { /* Control the width of the dropdown */
+    width: 100vw;
+    height: 50px; /* Size of the dropdown before clicked */
+    font-size: 16px; /* Adjust text size */
+    padding: 10px; /* Add padding for spacing */
+    text-align: center; /* Center text inside the dropdown */
+    border-radius: 5px; /* Rounded corners */
+    border: 2px solid #ccc; /* Border style */
+    background-color: #e0e0e0; /* Background color */
+    cursor: pointer;
+  }
   .book-button {
     height: 50px;
-    width: 80%;
+    width: 60%;
     background-color: #d4af37;
     color: white;
     font-size: 18px;
@@ -152,38 +243,4 @@
     margin-top: 20px;
   }
   
-  .book-button:hover {
-    background-color: #c2952b;
-  }
-
-.confirm-booking-button-container {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20%;
-}
-
-.booking-popup-button {
-  background-color: #001F3F; /* Deep Navy */
-    color: white;
-    padding: 10px 20px;
-    width: 50%;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.booking-popup-button:hover {
-  background-color: #0047AB; /* Royal Azure, change on hover */
-}
-
-.booking-popup-button:focus {
-  outline: none; /* Remove default outline */
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
 }

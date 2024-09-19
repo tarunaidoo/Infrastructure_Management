@@ -149,7 +149,7 @@ const BookingPage = () => {
   const tileContent = ({ date, view }) => {
     if (view === 'month') {
       const displayedMonth = activeStartDate.getMonth();
-      return date.getMonth() !== displayedMonth ? <div></div> : null;
+      return date.getMonth() !== displayedMonth ? <p></p> : null;
     }
     return null;
   }; 
@@ -157,13 +157,13 @@ const BookingPage = () => {
   return (
     <>
       <main className='booking-layout'>
-        <article className='booking-heading'>
-          <img onClick={handleHeaderBackIconClick} src={headingIcon} alt='back-arrow' className='booking-icons' />
+        <article onClick={handleHeaderBackIconClick} className='booking-heading'>
+          <img  src={headingIcon} alt='back-arrow' className='booking-icons' />
           <h1>Book Event</h1>
         </article>
 
         <section className='booking-container'>
-          <div className="calendar-placeholder">
+          <article className="calendar-placeholder">
           <Calendar
             onChange={(date) => {
               // Normalize selected date to midnight
@@ -179,9 +179,9 @@ const BookingPage = () => {
             prev2Label={null}
             next2Label={null}
           />
-          </div>
+          </article>
 
-          <div className="booking-form">
+          <section className="booking-form">
             <input
               type="text"
               placeholder="Enter event name"
@@ -189,14 +189,14 @@ const BookingPage = () => {
               onChange={(e) => setEventName(e.target.value)}
               className="input-field"
             />
-            <div onClick={handleOnVenueSelectionClick} className="predefined-field">
-              {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Choose a venue"}
-            </div>
-            <div className="predefined-field">
+            <article onClick={handleOnVenueSelectionClick} className="input-field">
+              {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Select a venue"}
+            </article>
+            <article className="input-field">
               {selectedVenue.VENUE_NAME}
-            </div>
+            </article>
 
-            <div className="predefined-field">
+            <section className="predefined-field">
               <select value={selectedTimeSlot ? timeSlots.indexOf(selectedTimeSlot) : ''} onChange={handleTimeSlotChange}>
                 <option value="">Time Slot</option>
                 {timeSlots.map((slot, index) => (
@@ -205,12 +205,12 @@ const BookingPage = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </section>
 
             <button className="book-button" onClick={handleSubmit} disabled={loading}>
               {loading ? "Checking availability..." : "Book event"}
             </button>
-          </div>
+          </section>
         </section>
       </main>
 

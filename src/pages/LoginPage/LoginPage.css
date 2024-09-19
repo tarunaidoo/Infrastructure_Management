@@ -6,19 +6,21 @@
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-}
 
+.login-background{
+    background-color: #001F3F;
+}
 .centered-container {
     display: flex;
     justify-content: center; /* Centers the container horizontally */
     align-items: center; /* Centers the container vertically */
+    height: 100vh;
     
 }
 
 .content-section {
-    width: 100vw; /* Takes up 80% of the viewport width */
+    height:95vh;
+    width: 90vw; /* Takes up 80% of the viewport width */
     max-width: 500px; /* Optional: Set a max width to prevent the section from being too wide */
     background-color: #fff; /* Background color for the section */
     padding: 20px;
