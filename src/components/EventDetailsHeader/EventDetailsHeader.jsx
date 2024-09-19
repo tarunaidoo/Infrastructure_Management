@@ -11,14 +11,10 @@ function Header() {
   };
 
   return (
-    <header className="Event-Header">
-      <section className="Event-Header-Block">
-        <button className='Event-Back' onClick={handleBackClick}>
-          <img src={left} alt='Event-Icon' className='Event-Back-img' />
-        </button>
-        <h1>Event Details</h1>
-      </section>
-    </header>
+    <article className="Event-Header">
+          <img onClick={handleBackClick} src={left} alt='Event-Icon' className='Event-Back-img' />
+        <h1 onClick={handleBackClick}>Event Details</h1>
+    </article>
   );
 }
 

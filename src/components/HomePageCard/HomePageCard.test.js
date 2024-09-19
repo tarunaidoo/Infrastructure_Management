@@ -1,22 +1,34 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import Card from './HomePageCard'; // Adjust the import path if necessary
 import '@testing-library/jest-dom';
-import Card from './HomePageCard';
 
-test('should render Card component with correct event details', () => {
-  // Arrange: Pass the props for the Card component
-  render(<Card event="Tech Conference" date="2024-09-10" time="10:00 AM" venue="Tech Hub" room="305" />);
-  
-  // Act: Select the Card component using getByTestId (You need to add a test id)
-  const cardElement = screen.getByTestId('Card-1');
+test('renders Card component with event details and icon', () => {
+  // Mock data
+  const mockEvent = 'Sample Event';
+  const mockDate = '2024-09-20';
+  const mockTime = '10:00 AM';
+  const mockVenue = 'Sample Venue';
+  const mockRoom = 'Room 101';
 
-  // Assert: Verify that the Card component is in the document
-  expect(cardElement).toBeInTheDocument();
+  // Render the Card component
+  render(
+    <Card
+      event={mockEvent}
+      date={mockDate}
+      time={mockTime}
+      venue={mockVenue}
+      room={mockRoom}
+    />
+  );
 
-  // Additional assertions to check content
-  expect(screen.getByText('Tech Conference')).toBeInTheDocument();
-  expect(screen.getByText('Date: 2024-09-10')).toBeInTheDocument();
-  expect(screen.getByText('Time: 10:00 AM')).toBeInTheDocument();
-  expect(screen.getByText('Venue: Tech Hub')).toBeInTheDocument();
-  expect(screen.getByText('Room: 305')).toBeInTheDocument();
+  // Check if the event, date, and venue text content are rendered
+  expect(screen.getByText(mockEvent)).toBeInTheDocument();
+  expect(screen.getByText(mockDate)).toBeInTheDocument();
+  expect(screen.getByText(mockTime)).toBeInTheDocument();
+  expect(screen.getByText(mockVenue)).toBeInTheDocument();
+  expect(screen.getByText(mockRoom)).toBeInTheDocument();
+
+  // Check if the bookmark icon is rendered
+  expect(screen.getByAltText('bookmark-icon')).toBeInTheDocument();
 });

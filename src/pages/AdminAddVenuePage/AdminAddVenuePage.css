@@ -16,7 +16,34 @@ h2 {
     padding-left: 20px; /* Adjusted for smaller screens */
     margin: 7px;
 }
+.adding-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+    width: 100%;
+    gap: 7.5px;
+    padding: 20px; /* Padding for inner spacing */
+}
 
+.input-field {
+    height: 50px;
+    width: 100%; /* Ensure full-width on small screens */
+    max-width: 400px; /* Optional: adjust based on design preferences */
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #e0e0e0;
+    color: black;
+    text-align: center;
+    margin-bottom: 15px; /* Add margin to space out inputs */
+    outline: none;
+}
+.input-field::placeholder{
+    color: gray;
+}
 .add-venue-button {
     padding: 0;
     margin-left: 20px;
@@ -34,29 +61,14 @@ h2 {
     align-self: center;
 }
 
-.input-field {
-    height: 50px;
-    width: 100%; /* Ensure full-width on small screens */
-    max-width: 400px; /* Optional: adjust based on design preferences */
-    font-size: 16px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    background-color: #e0e0e0;
-    text-align: center;
-    margin-bottom: 15px; /* Add margin to space out inputs */
-}
-
-.adding-form {
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 800px; /* Constrain width for larger screens */
-    gap: 7.5px;
-    align-items: center;
-    padding: 20px; /* Padding for inner spacing */
-}
+.add-venue-button:active {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }
+  .add-venue-button:hover {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }
 
 /* Dropdown styles */
 .select-container {
@@ -76,6 +88,7 @@ select.input-field {
     border-radius: 10px;
     width: 100%; /* Full width within container */
     box-sizing: border-box; /* Ensure padding and border are included in width */
+    color: black;
 }
 
 /* Dropdown arrow */
@@ -104,6 +117,7 @@ select.input-field {
     box-sizing: border-box; /* Ensure padding and border are included in width */
     margin-bottom: 15px; /* Add margin to space out inputs */
     min-height: 50px; /* Ensure enough height for multiple selections */
+    color: black;
 }
 
 /* Dropdown arrow */
@@ -120,12 +134,48 @@ select.input-field {
 #building-location, #building-tag{
     width: 100%;
 }
-/* Checklist styles */
-.checkbox-list {
+
+.add-venue-checkboxes{
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
-.checkbox-list label {
-    margin-bottom: 8px;
-}
+.add-venue-checkbox-label {
+    display: flex;
+    align-items: center; /* Aligns checkbox and text vertically */
+    cursor: pointer;
+    margin-bottom: 10px; /* Adds spacing between checkboxes */
+  }
+  
+  /* Checkbox custom styles */
+  .add-venue-checkbox-input {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+  }
+  
+  /* Custom checkbox design */
+  .add-venue-checkbox-custom {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #f1f1f1;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px; /* Spacing between checkbox and text */
+    transition: background-color 0.3s;
+  }
+  
+  /* Checkbox checked state */
+  .add-venue-checkbox-input:checked + .add-venue-checkbox-custom {
+    background-color: #d4a843;
+    border-color: #bc953b;
+  }
+  
+  /* Checkbox checkmark */
+  .add-venue-checkbox-input:checked + .add-venue-checkbox-custom::after {
+    opacity: 0;
+  }
+  

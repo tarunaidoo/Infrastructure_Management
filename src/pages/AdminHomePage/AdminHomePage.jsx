@@ -37,10 +37,10 @@ function AdminHomePage(){
         <>
             <NavigationHeader title = "Home" className="admin-header" />
             <img src={AdminIcon} alt='admin icon' className='adminIcon'/> 
-            <div className="admin-home-container">
+            <main className="admin-home-container">
             <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
             <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
-            </div>
+            </main>
             <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick}/>
         </>
         

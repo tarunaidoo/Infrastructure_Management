@@ -211,7 +211,7 @@ const AdminEditVenuePage = () => {
                 className='edit-venue-icons' 
                 data-testid="back-arrow-icon" 
             />
-            <h1 data-testid="edit-venue-heading-text">Edit a Venue</h1>
+            <h1 onClick={handleHeaderBackIconClick} data-testid="edit-venue-heading-text">Edit a Venue</h1>
         </article>
         <section className="edit-venue-container" data-testid="edit-venue-container">
             <form onSubmit={handleFormSubmit} data-testid="edit-venue-form">

@@ -22,16 +22,16 @@ const Popup = ({ type, onConfirm, onCancel, onClose }) => {
     }
 
     return (
-        <div className="popup-overlay">
-            <div className="popup">
-                <div className="popup-heading">{heading}</div>
-                <div className="popup-message">{message}</div>
-                <div className="popup-buttons">
+        <main className="popup-overlay">
+            <section className="popup">
+                <label className="popup-heading">{heading}</label>
+                <label className="popup-message">{message}</label>
+                <label className="popup-buttons">
                     {confirmButton}
                     {cancelButton}
-                </div>
-            </div>
-        </div>
+                </label>
+            </section>
+        </main>
     );
 };
 

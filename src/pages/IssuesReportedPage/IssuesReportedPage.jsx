@@ -80,7 +80,7 @@ function IssuesReportedPage() {
         <>
             <NavigationHeader title="Reports" />
 
-            <div className="issues-list">
+            <main className="issues-list">
                 {issues.length > 0 ? (
                     issues.map(issue => (
                         <IssueListCard
@@ -97,7 +97,7 @@ function IssuesReportedPage() {
                 ) : (
                     <p>No issues found.</p>
                 )}
-            </div>
+            </main>
 
             {isPopupOpen && selectedIssue && (
                 <Popup
