@@ -1,9 +1,7 @@
 .Event-Card {
     background-color: white;
     color: black;
-    margin-top: 1.5vh; /* Uses viewport height units for consistent spacing */
     padding: 1.5rem; /* Uses rem units for scalable padding */
-    border-radius: 0.8rem; /* Uses rem units for scalable border radius */
-    width: 90%; /* Uses percentage for responsive card width */
+    width: 80%; /* Uses percentage for responsive card width */
     max-width: 300px; /* Sets a maximum width to prevent the card from getting too large */
 }

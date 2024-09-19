@@ -11,18 +11,16 @@
     flex-direction: row;
     justify-content: space-around; /* Evenly spaces out container items */
     align-items: center; /* Centers the container vertically */
-
     width: 90%;
-
     background-color: var(--color-main); /* Background colour */
-
     border-radius: 15px; /* Rounds the corners */
     gap: 10px; /* Adds a gab between items */
     padding: 0px 15px; /* Adds padding */
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .room-card-container .room-name-text {
-    color: var(--color-neutral); /* Text colour */
+    color: white; /* Text colour */
     flex-grow: 2; /* Item takes up twice as much space as other items */
     font-size: 1.2em; /* Font Size */
     font-weight: bold; /* Font Weight*/
@@ -31,3 +29,12 @@
 .room-card-container .door-in-icon {
     width: 8%;
 }
+.room-card-container:active {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }
+  .room-card-container:hover {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }
+

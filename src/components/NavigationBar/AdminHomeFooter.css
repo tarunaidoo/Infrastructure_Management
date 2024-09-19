@@ -11,13 +11,12 @@ body {
 }
 
 /*The Navigation bar at the bottom*/
-.MenuBar {
+.admin-menuBar {
     background-color: var(--color-main);
-    color: var(--color-neutral);
     text-align: center;
-    padding-bottom: 3vh; /* Scales padding with viewport height */
+    padding-bottom: 1vh; /* Scales padding with viewport height */
     position: fixed;
-    bottom: 2vh; /* Moves the footer up by a scalable amount from the bottom */
+    bottom: 5vh; /* Moves the footer up by a scalable amount from the bottom */
     width: 90%; /* Sets the footer width to 90% */
     left: 50%; /* Centers the footer horizontally */
     transform: translateX(-50%); /* Adjusts the centering based on reduced width */
@@ -30,23 +29,17 @@ body {
     align-items: center;
   }
   
-  .image-button {
+  .admin-image-button {
     background: none;
     border: none;
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-top: 7%;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 1.2vh;
     cursor: pointer;
   }
+
+  .admin-menuBar img {
+    width: 3.25em; /* Uses em units for scalable image size */
+    height: 3.25em;
+}
   
-  .MenuBar img {
-    filter: invert(1) brightness(3) sepia(1) saturate(5); /*makes svg off-white if black*/
-    width: 3.15em; /* Uses em units for scalable image size */
-    height: 3.15em;
-  }
-  
-  .MenuBar .main {
-    width: 3.15em; /* Uses em units for scalable image size */
-    height: 3.15em;
-    filter: invert(1) brightness(3) sepia(1) saturate(5); /*makes svg white if black*/
-  }

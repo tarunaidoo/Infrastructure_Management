@@ -27,15 +27,33 @@ body {
     margin-top: 14pv;
 }
 .events-card{
+    display: flex;
+    flex-direction: row;
     border: 1px solid var(--color-main);
     background-color: var(--color-main);
     border-radius: 10px;
     box-shadow: 5px 5px 5px var(--color-neutral);
-    padding: 25px;
+    padding: 15px;
     margin: 10px;
     text-align: center;
-    color: var(--color-neutral);
+    color: white;
     width: 75%; /* Take 90% of the screen width on small screens */
     max-width: 400px; /* On larger screens, card will not exceed 400px width */
     height: auto;
 }
+
+.events-card h2{
+    font-size: 1.2em;
+    padding: 0;
+    margin-left: 5%;
+}
+.events-card img{
+    width: 30px;
+}
+.events-card:hover {
+    transform: scale(1.05); /* Optional: Adds a hover effect */
+}
+.events-card:active {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }

@@ -4,10 +4,10 @@ import chevronIcon from '../../assets/icons/chevron-left.svg'
 
 const Header = ({ title, onClick }) => {
   return (
-    <div className="navheader" data-testid="NavigationHeader-1">
+    <main className="navheader" data-testid="NavigationHeader-1">
       <img onClick={onClick} src={chevronIcon} alt="Back" className="chevron-icon" />
-      <h1 className="header-title">{title}</h1>
-    </div>
+      <h1 onClick={onClick} className="header-title">{title}</h1>
+    </main>
   );
 };
 

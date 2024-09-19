@@ -12,6 +12,10 @@
 }
 
 .popup-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: white;
     border-radius: 10px;
     padding: 20px;
@@ -47,4 +51,11 @@
 .resolved-button{
     /* width: 130px; */
     gap: 3px;
+}
+.issues-popup-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20%;
 }

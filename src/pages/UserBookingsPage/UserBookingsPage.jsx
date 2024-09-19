@@ -28,9 +28,9 @@ function StudentBookingPage() {
                 const allVenues = allVenuesResponse.value || [];      // Access the array using 'value'
 
                 // Log fetched data to debug
-                console.log('Fetched bookings:', allBookings);
-                console.log('Fetched users:', allUsers);
-                console.log('Fetched venues:', allVenues);
+                // console.log('Fetched bookings:', allBookings);
+                // console.log('Fetched users:', allUsers);
+                // console.log('Fetched venues:', allVenues);
 
                 // Check if the fetched data is in the expected format
                 if (!Array.isArray(allBookings)) {
@@ -61,7 +61,7 @@ function StudentBookingPage() {
                     : `Booking for ${booking.USER_ID.split('@')[0]}`,  // Handle null EVENT_NAME
                 }));
 
-                console.log('Processed student bookings with venues:', bookingsWithVenues);
+                //console.log('Processed student bookings with venues:', bookingsWithVenues);
 
                 setBookings(bookingsWithVenues);
                 setLoading(false);
@@ -96,7 +96,7 @@ function StudentBookingPage() {
     return (
         <>
             <Header title={"All Bookings"} />
-            <div className="bookings-list">
+            <main className="bookings-list">
                 {bookings.length > 0 ? (
                     bookings.map(booking => {
                         // Extract the part of the email before the "@" symbol
@@ -118,9 +118,9 @@ function StudentBookingPage() {
                         );
                     })
                 ) : (
-                    <div>No bookings found.</div>
+                    <label>No bookings found.</label>
                 )}
-            </div>
+            </main>
 
             {isPopupOpen && selectedBooking && (
                 <Popup

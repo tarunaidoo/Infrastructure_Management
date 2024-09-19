@@ -6,9 +6,6 @@
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-}
 
 .admin-header {
     display: flex;
@@ -25,12 +22,13 @@ body {
 }
 
 .admin-home-container {
+    font-family: Arial, Helvetica, sans-serif;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* Align content to the top */
-    min-height: 100vh; /* Full viewport height */
+    height: 100vh; /* Full viewport height */
     padding: 2px; /* Add padding if necessary */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }

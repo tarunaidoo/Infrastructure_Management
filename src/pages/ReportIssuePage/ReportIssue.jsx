@@ -124,46 +124,51 @@ function ReportIssue() {
 
   return (
     <main className='report-issue-layout' data-testid="report-issue-layout">
-    <article className='report-issue-heading' data-testid="report-issue-heading">
+    <article  className='report-issue-heading' data-testid="report-issue-heading">
       <img
-        onClick={handleHeaderBackIconClick}
+      onClick={handleHeaderBackIconClick}
         src={headingIcon}
         alt='back-arrow'
         className='report-icons'
         data-testid="back-arrow-icon"
       />
-      <h1 data-testid="report-issue-heading-text">Report an Issue</h1>
+      <h1 onClick={handleHeaderBackIconClick} data-testid="report-issue-heading-text">Report an Issue</h1>
     </article>
   
     <section className='report-issue-container' data-testid="report-issue-container">
       <form onSubmit={handleFormSubmit} data-testid="report-issue-form">
         <p data-testid="report-issue-date">Date: {formattedDate}</p>
         <p data-testid="report-issue-venue-label">Venue:</p>
+
         <article data-testid="report-issue-venue-details">
           <p data-testid="building-name">{selectedVenue.BUILDING_NAME}</p>
           <p data-testid="venue-name">{selectedVenue.VENUE_NAME}</p>
         </article>
+
         <label className='issue-title-container' data-testid="issue-title-container">
           Issue Title:
           <input
             type="text"
+            maxLength="50"
             value={issueTitle}
             onChange={(e) => setIssueTitle(e.target.value)}
             placeholder="Enter issue title here..."
             data-testid="issue-title-input"
           />
         </label>
+
         <label className='issue-description-container' data-testid="issue-description-container">
           Issue Description:
           <textarea
             value={issueDescription}
             onChange={handleDescriptionChange}
-            maxLength="250"
+            maxLength="300"
             placeholder="Describe the issue here..."
             style={{ resize: 'none' }} // Disable resizing
             data-testid="issue-description-input"
           />
         </label>
+
         <button type="submit" data-testid="report-issue-button">
           <img src={warningIcon} alt='warning-icon ' data-testid="warning-icon" />
           Report Issue

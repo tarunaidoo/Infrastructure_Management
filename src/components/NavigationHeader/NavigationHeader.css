@@ -20,7 +20,7 @@ body {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
-  gap: 5%;
+  gap: 2%;
 }
 
 .chevron-icon {

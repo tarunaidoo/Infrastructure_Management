@@ -1,9 +1,40 @@
-.Card {
-    background-color: #00203f;
-    color: white;
-    margin-top: 1.5vh; /* Uses viewport height units for consistent spacing */
-    padding: 1.5rem; /* Uses rem units for scalable padding */
-    border-radius: 0.8rem; /* Uses rem units for scalable border radius */
+.card{
+    background-color: white;
+    color: black;
+    border-radius: 15px; /* Uses rem units for scalable border radius */
     width: 90%; /* Uses percentage for responsive card width */
     max-width: 300px; /* Sets a maximum width to prevent the card from getting too large */
+    border: 4px solid #001F3F;
+    margin:2%;
+    box-shadow: 2px 5px 7px rgba(0, 0, 0, 0.2);
 }
+.card-header{
+    margin: 0;
+    background-color:#001F3F ;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.card-header b{
+    margin-left: 5%;
+    padding: 0;
+
+}
+.card-header img{
+    width: 35px;
+}
+.card-content{
+    margin-left: 5%;
+}
+
+.card:hover {
+    transform: scale(1.05); /* Optional: Adds a hover effect */
+}
+.card:active {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }

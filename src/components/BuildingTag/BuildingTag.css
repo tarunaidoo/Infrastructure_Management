@@ -17,7 +17,7 @@
 
 .building-tag-container .tag-name-text {
     margin: 5px;
-    font-size: 70%;
-    color: var(--color-neutral);
+    font-size: 75%;
+    color: white;
     font-weight: bold;
 }

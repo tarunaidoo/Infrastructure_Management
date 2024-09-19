@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/HomePageHeader/StudentHomeHeader';
 import Card from '../../components/HomePageCard/HomePageCard';
 import Footer from '../../components/NavigationBar/StudentHomeFooter';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import Popup from '../../components/NotificationPopup/NotificationPopup';
 import './StudentHomePage.css';
 import { fetchBooking, fetchVenue, fetchBuilding, fetchEventsBookings, fetchTutoringBookings } from "../../services/HomePages/HomePage.service";
@@ -84,11 +85,11 @@ function StudentHomePage() {
   }
 
   if (loading) {
-    return <div>Connecting...</div>;
+    return <LoadingComponent/>
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <main>{error}</main>;
   }
 
   const handleCardClick = (booking, venue, building) => {
@@ -103,7 +104,7 @@ function StudentHomePage() {
       {isPopupOpen && (
         <Popup arrayOfNames={eventNames} onClose={handleClosePopup} />
       )}
-      <div className='home-body'>
+      <main className='home-body'>
         <Header />
         <section className='home-content'>
           {bookings.length > 0  || eventBookings.length > 0 ? (
@@ -124,11 +125,11 @@ function StudentHomePage() {
               );
             })
           ) : (
-            <div>No bookings found.</div>
+            <label>No bookings found.</label>
           )}
         </section>
         <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick}/>
-      </div>
+      </main>
     </>
   );
 }

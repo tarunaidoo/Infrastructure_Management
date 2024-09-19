@@ -163,10 +163,16 @@ font-size: 1em;
   width: 55%;
 }
 
+
+.edit-venue-button:active {
+  transform: scale(1.05); /* Scale up slightly when tapped */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+}
 .edit-venue-button:hover {
   background-color: #141c5c;
+  transform: scale(1.05); /* Scale up slightly when tapped */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
 }
-
 .edit-venue-Popups {
   display: flex;
   flex-direction: column;
