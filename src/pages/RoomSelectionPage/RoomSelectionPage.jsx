@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import Popup from "../../components/Popup/Popup";
-import { getVenuesFromBuildingID, getVenueFeatureNamesFromVenues } from "../../services/RoomSelectionPage/RoomSelectionPage.service";
+import { getRoleFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureNamesFromVenues } from "../../services/RoomSelectionPage/RoomSelectionPage.service";
 
 import "./RoomSelectionPage.css";
 
@@ -22,9 +22,10 @@ const RoomSelectionPage = () => {
     const [displayPopup, setDisplayPopup] = useState(false);
 
     // Function & Logic
-    const { data : venue, error: venueError, isLoading: venueLoading} = useQuery(
+    const { data : venue, error: venueError, isLoading: venueLoading } = useQuery(
         ["roomData", previousPageDetails.BUILDING_ID], async () => {
-            const venues = await getVenuesFromBuildingID(previousPageDetails.BUILDING_ID);
+            const userRole = await getRoleFromUserID(previousPageDetails.USER_ID);
+            const venues = await getVenuesFromBuildingIDAndUserID(previousPageDetails.BUILDING_ID, userRole);
             return getVenueFeatureNamesFromVenues(venues);
     });
 
@@ -56,7 +57,6 @@ const RoomSelectionPage = () => {
 
         navigate(previousPageDetails.DESTINATION_PAGE, {state : nextPageDetails});
     }
-
     // HTML code
     if (venueLoading) {
         return (
@@ -86,7 +86,8 @@ const RoomSelectionPage = () => {
             <main className="centered-container">
                 <section className="room-selection-content-section">
                     {venue ? 
-                    venue.map((venue) => (
+                    venue.sort((a, b) => (a.VENUE_NAME < b.VENUE_NAME ? -1 : 1))
+                    .map((venue) => (
                         <RoomCard key={venue.VENUE_ID} roomName={venue.VENUE_NAME} onClick={() => handleRoomCardClick(venue)}> 
                             {previousPageDetails.DESTINATION_PAGE === "/booking" ?
                                 <img className="circle-question-icon" src={circleQuestionIcon} 
