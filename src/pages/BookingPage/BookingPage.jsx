@@ -126,6 +126,7 @@ const BookingPage = () => {
   const handleOnVenueSelectionClick = () => {
     const venueSelectionDetails = {
       SOURCE_PAGE: "/booking",
+      USER_ID: userID,
       DESTINATION_PAGE: "/booking"
     };
     navigate("/campus-selection", { state: venueSelectionDetails });
