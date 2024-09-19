@@ -10,6 +10,8 @@
 }
 .card-header{
     margin: 0;
+    padding: 0%;
+    border: 3px solid #001F3F;
     background-color:#001F3F ;
     color: white;
     border-top-left-radius: 10px;

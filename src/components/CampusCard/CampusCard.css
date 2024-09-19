@@ -8,6 +8,10 @@
 
 
 .campus-card-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:2%;
     width: 90%;
     background-color: var(--color-main);
     border-radius: 15px;
@@ -19,6 +23,11 @@
     color: white;
     font-size: medium;
     font-weight: bold;
+}
+.campus-card-container img{
+    width:20px;
+    height:20px;
+    margin-left: 1%;
 }
 .campus-card-container:active {
     transform: scale(1.05); /* Scale up slightly when tapped */

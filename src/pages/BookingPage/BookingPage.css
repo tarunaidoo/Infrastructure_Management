@@ -108,6 +108,7 @@
   border-radius: 10px;
   cursor: pointer;
   margin-top: 20px;
+  margin-bottom: 2%;
 }
 
 .book-button:active {
