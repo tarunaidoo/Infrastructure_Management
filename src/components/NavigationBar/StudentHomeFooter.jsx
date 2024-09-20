@@ -5,7 +5,7 @@ import horn from '../../assets/icons/bullhorn.svg';
 import user from '../../assets/icons/user-filled.svg';
 import './HomePageFooter.css';
 
-function StudentFooter({ onBookVenueClick, onReportIssueClick }) {
+function StudentFooter({ onBookVenueClick, onReportIssueClick, onProfileClick }) {
   return (
     <footer className="MenuBar">
       {/* Each image is wrapped in a button element */}
@@ -18,7 +18,7 @@ function StudentFooter({ onBookVenueClick, onReportIssueClick }) {
       <button onClick={onReportIssueClick} className="image-button">
         <img src={horn} alt="Horn" />
       </button>
-      <button className="image-button">
+      <button onClick={onProfileClick} className="image-button">
         <img src={user} alt="User" />
       </button>
     </footer>
