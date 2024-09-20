@@ -71,7 +71,7 @@ const RoomSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-                <main className="centered-container">
+                <main className="room-selection-centered-container">
                     <div>Fetching Rooms...</div>
                 </main>
             </>
@@ -82,7 +82,7 @@ const RoomSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-                <main className="centered-container">
+                <main className="room-selection-centered-container">
                     <div>An error occurred: {userDetailsError.message}</div>
                 </main>
             </>
@@ -93,7 +93,7 @@ const RoomSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-                <main className="centered-container">
+                <main className="room-selection-centered-container">
                     <div>An error occurred: {venueError.message}</div>
                 </main>
             </>
@@ -103,7 +103,7 @@ const RoomSelectionPage = () => {
     return (
         <>
             <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-            <main className="centered-container">
+            <main className="room-selection-centered-container">
                 <section className="room-selection-content-section">
                     {venue ? 
                     venue.sort((a, b) => (a.VENUE_NAME < b.VENUE_NAME ? -1 : 1))
