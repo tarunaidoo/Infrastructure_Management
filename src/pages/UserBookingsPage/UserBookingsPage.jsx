@@ -6,6 +6,7 @@ import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
 function UserBookingPage() {
+    const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
 
     const [bookings, setBookings] = useState([]);
@@ -42,11 +43,6 @@ function UserBookingPage() {
                 const allUsers = allUsersResponse.value || [];        // Access the array using 'value'
                 const allVenues = allVenuesResponse.value || [];      // Access the array using 'value'
 
-                // Log fetched data to debug
-                // console.log('Fetched bookings:', allBookings);
-                // console.log('Fetched users:', allUsers);
-                // console.log('Fetched venues:', allVenues);
-
                 // Check if the fetched data is in the expected format
                 if (!Array.isArray(allBookings)) {
                     throw new TypeError('Expected allBookings to be an array.');
@@ -58,17 +54,17 @@ function UserBookingPage() {
                     throw new TypeError('Expected allVenues to be an array.');
                 }
 
-                // Filter users to get only students
-                const studentIds = allUsers.filter(user => user.USER_ROLE === 'Student').map(user => user.USER_ID);
+                // // Filter users to get only students
+                // const studentIds = allUsers.filter(user => user.USER_ROLE === 'Student').map(user => user.USER_ID);
 
-                // Filter bookings to get only those with student user IDs
-                const studentBookings = allBookings.filter(booking => studentIds.includes(booking.USER_ID));
+                // // Filter bookings to get only those with student user IDs
+                // const studentBookings = allBookings.filter(booking => studentIds.includes(booking.USER_ID));
 
                 // Map venue data to bookings
                 const venueMap = new Map(allVenues.map(venue => [venue.VENUE_ID, venue.VENUE_NAME]));
 
                 // Add venueName to each booking
-                const bookingsWithVenues = studentBookings.map(booking => ({
+                const bookingsWithVenues = allBookings.map(booking => ({
                     ...booking,
                     venueName: venueMap.get(booking.VENUE_ID) || 'Unknown Venue',  // Handle missing venues
                     eventName: booking.EVENT_NAME
@@ -112,7 +108,24 @@ function UserBookingPage() {
 
     const handleHeaderBackIconClick = () => {
         navigate("/admin-home");
-    }
+    };
+
+    const handleAddVenueClick = () => {
+        navigate('/admin-add-venue');
+    };
+
+    const handleEditVenueClick = () =>{
+        const venueSelectionDetails = {
+            SOURCE_PAGE: "/admin-home",
+            USER_ID: userID,
+            DESTINATION_PAGE: "/edit-venue"
+        }
+        navigate("/campus-selection", { state: venueSelectionDetails });
+    };
+
+    const handleProfileClick = () =>{
+        navigate('/profile');
+    };
 
     return (
         <>
@@ -142,7 +155,7 @@ function UserBookingPage() {
                     <label>No bookings found.</label>
                 )}
             </main>
-            <Footer/>
+            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
             {isPopupOpen && selectedBooking && (
                 <Popup
                     title={`Booking ID: ${selectedBooking.BOOKING_ID}`}

@@ -9,7 +9,7 @@ function Footer({onHomeClick, onAddVenueClick, onEditVenueClick, onProfileClick}
   return (
     <footer className="admin-menuBar" data-testid="Footer-1">
       {/* Each image is wrapped in a button element */}
-      <button className="admin-image-button" data-testid="home-btn" onCLick={onHomeClick}>
+      <button className="admin-image-button" data-testid="home-btn" onClick={onHomeClick}>
         <img src={Home} alt="Home" className="main" data-testid="home-img" />
       </button>
       <button className="admin-image-button" data-testid="square-btn" onClick={onAddVenueClick}>

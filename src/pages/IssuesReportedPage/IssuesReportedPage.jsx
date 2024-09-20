@@ -6,6 +6,8 @@ import { fetchIssues, fetchVenues, updateAvailability, resolveIssues} from '../.
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
 function IssuesReportedPage() {
+    const userID = localStorage.getItem('userEmail'); // get userID
+
     const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState(null);
@@ -96,14 +98,14 @@ function IssuesReportedPage() {
         navigate('/admin-add-venue');
     };
 
-    // const handleEditVenueClick = () =>{
-    //     const venueSelectionDetails = {
-    //         SOURCE_PAGE: "/admin-home",
-    //         USER_ID: userID,
-    //         DESTINATION_PAGE: "/edit-venue"
-    //     }
-    //     navigate("/campus-selection", { state: venueSelectionDetails });
-    // };
+    const handleEditVenueClick = () =>{
+        const venueSelectionDetails = {
+            SOURCE_PAGE: "/admin-home",
+            USER_ID: userID,
+            DESTINATION_PAGE: "/edit-venue"
+        }
+        navigate("/campus-selection", { state: venueSelectionDetails });
+    };
 
     const handleProfileClick = () =>{
         navigate('/profile');
@@ -130,7 +132,7 @@ function IssuesReportedPage() {
                 )}
             </main>
 
-            <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onProfileClick={handleProfileClick} />
+            <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
 
 
             {isPopupOpen && selectedIssue && (
