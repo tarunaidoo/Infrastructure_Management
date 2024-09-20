@@ -12,7 +12,40 @@
     padding: 20px;
 }
 
-.admin-report-footer{
-    margin-bottom: 0;
-    padding-bottom: 0;
+.issue-filters {
+    display: flex;
+    justify-content: space-around; /* Space buttons evenly across the container */
+    padding: 10px 0; /* Add vertical padding */
+}
+
+.issues-filter-btn {
+    background-color: white; /* Button background color */
+    background-color: var(--color-accent);
+    color: white; /* Text color matching the main color */
+    border: none; /* Remove default button border */
+    border-radius: 20px; /* Rounded edges */
+    padding: 20px 20px; /* Button padding */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth background color transition */
+    max-width: 600px;
+    font-size: large;
+}
+
+.issues-filter-btn:hover {
+    background-color: var(--color-highlight); /* Change color on hover */
+    color: white; /* Change text color on hover */
+    transform: scale(1.20);
+}
+
+/* Responsive styles */
+@media (max-width: 800px) {
+    .issue-filters {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+        align-items: center; /* Center align buttons */
+    }
+    
+    .issues-filter-btn {
+        margin: 5px 0; /* Add margin between buttons */
+        width: 80%; /* Make buttons wider on mobile */
+    }
 }

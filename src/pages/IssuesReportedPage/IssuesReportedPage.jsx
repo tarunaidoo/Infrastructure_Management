@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
-import { fetchIssues, fetchVenues, updateAvailability, resolveIssues} from '../../services/IssuesReportedPage/IssuesReportedPage.service';
+import { fetchIssues, fetchVenues, resolveIssues} from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
+import './IssuesReportedPage.css';
 function IssuesReportedPage() {
     const userID = localStorage.getItem('userEmail'); // get userID
 
@@ -13,6 +14,7 @@ function IssuesReportedPage() {
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [issues, setIssues] = useState([]);
     const [venues, setVenues] = useState([]);
+    const [filter, setFilter] = useState('all'); // State for filter type
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,46 +50,30 @@ function IssuesReportedPage() {
     };
 
     //resolved issue
-    // const handleResolveIssue = async (issueID) => {
-    // console.log("Resolving issue with ID:", issueID);
-    // try {
-    //     await resolveIssues(issueID, 'RESOLVED');
-        
-    //     setIssues(prevIssues => 
-    //         prevIssues.map(issue =>
-    //             issue.ISSUE_ID === issueID
-    //             ? { ...issue, ISSUE_STATUS: 'RESOLVED', DATE_RESOLVED: new Date().toISOString() }
-    //             : issue
-    //         )
-    //     );
-
-    //     closePopup();
-    // } catch (error) {
-    //     console.error('Failed to resolve issue', error);
-    // }
-    // };
-
     const handleResolveIssue = async (issueID) => {
-        console.log("Resolving issue with ID:", issueID);
         try {
-            const response = await resolveIssues(issueID, 'RESOLVED');
-            console.log('Resolve response:', response); // Test log
-    
-            setIssues(prevIssues => 
-                prevIssues.map(issue =>
+            await resolveIssues(issueID, 'RESOLVED');
+            setIssues(prevIssues => {
+                const updatedIssues = prevIssues.map(issue =>
                     issue.ISSUE_ID === issueID
-                    ? { ...issue, ISSUE_STATUS: 'RESOLVED', DATE_RESOLVED: new Date().toISOString() }
-                    : issue
-                )
-            );
-    
+                        ? { ...issue, ISSUE_STATUS: 'RESOLVED', DATE_RESOLVED: new Date().toISOString() }
+                        : issue
+                );
+
+                // Sort issues: keep unresolved at the top
+                return updatedIssues.sort((a, b) => {
+                    if (a.ISSUE_STATUS === 'RESOLVED' && b.ISSUE_STATUS !== 'RESOLVED') return 1;
+                    if (a.ISSUE_STATUS !== 'RESOLVED' && b.ISSUE_STATUS === 'RESOLVED') return -1;
+                    return 0;
+                });
+            });
+
             closePopup();
         } catch (error) {
             console.error('Failed to resolve issue', error);
         }
     };
-    
-    
+
     const handleHeaderBackIconClick = () => {
         navigate("/admin-home");
     };
@@ -111,13 +97,27 @@ function IssuesReportedPage() {
         navigate('/profile');
     };
 
+    const filteredIssues = () => {
+        if (filter === 'resolved') {
+            return issues.filter(issue => issue.ISSUE_STATUS === 'RESOLVED');
+        }
+        if (filter === 'unresolved') {
+            return issues.filter(issue => issue.ISSUE_STATUS !== 'RESOLVED');
+        }
+        return issues; // 'all' or any other value
+    };
+
     return (
         <>
             <NavigationHeader title="Reports" onClick={handleHeaderBackIconClick} />
-
+            <div className="issue-filters">
+                <button className="issues-filter-btn" onClick={() => setFilter('all')}>All Issues</button>
+                <button className="issues-filter-btn" onClick={() => setFilter('resolved')}>Resolved Issues</button>
+                <button className="issues-filter-btn" onClick={() => setFilter('unresolved')}>Unresolved Issues</button>
+            </div>
             <main className="issues-list">
-                {issues.length > 0 ? (
-                    issues.map(issue => (
+                {filteredIssues().length > 0 ? (
+                    filteredIssues().map(issue => (
                         <IssueListCard
                             key={issue.ISSUE_ID}
                             title={issue.TITLE}
