@@ -22,6 +22,8 @@ function StudentHomePage() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [eventNames, setEventNames] = useState([]);
   const navigate = useNavigate();
+  const [eventVenues, setEventVenues] = useState([]);
+
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
@@ -40,26 +42,33 @@ function StudentHomePage() {
       try {
         const fetchedBookings = await fetchBooking(userID);
         setBookings(fetchedBookings);
-
+  
         const fetchedEventBookings = await fetchEventsBookings(userID);
         setEventBookings(fetchedEventBookings);
-
+  
         const fetchedTutoringBookings = await fetchTutoringBookings(userID);
         setTutoringBookings(fetchedTutoringBookings);
-
+  
         const today = new Date().toISOString().split('T')[0];
         const todaysBookings = fetchedBookings.filter(booking => booking.DATE === today);
         const namesArray = todaysBookings.map(booking => booking.EVENT_NAME);
         setEventNames(namesArray);
-
+  
         const venuePromises = fetchedBookings.map(booking => fetchVenue(booking.VENUE_ID));
         const fetchedVenues = await Promise.all(venuePromises);
         setVenues(fetchedVenues);
-
+  
+        // Set corresponding venues for today's bookings
+        const venuesArray = todaysBookings.map(booking => {
+          const venue = fetchedVenues.find(v => v.VENUE_ID === booking.VENUE_ID);
+          return venue ? venue.VENUE_NAME : 'Unknown Venue';
+        });
+        setEventVenues(venuesArray);
+  
         const buildingPromises = fetchedVenues.map(venue => fetchBuilding(venue?.BUILDING_ID));
         const fetchedBuildings = await Promise.all(buildingPromises);
         setBuildings(fetchedBuildings);
-
+  
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -67,7 +76,7 @@ function StudentHomePage() {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [userID]);
 
@@ -82,6 +91,10 @@ function StudentHomePage() {
 
   const handleOnBookVenueClick = () => {
     navigate("/booking");
+  }
+
+  const handleProfileClick=() =>{
+    navigate("/profile");
   }
 
   if (loading) {
@@ -110,7 +123,7 @@ function StudentHomePage() {
   return (
     <>
       {isPopupOpen && (
-        <Popup arrayOfNames={eventNames} onClose={handleClosePopup} />
+        <Popup arrayOfNames={eventNames} onClose={handleClosePopup} arrayOfCorrespondingvenues={eventVenues}/>
       )}
       <main className='home-body'>
         <Header />
@@ -136,7 +149,7 @@ function StudentHomePage() {
             <label>No bookings found.</label>
           )}
         </section>
-        <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick}/>
+        <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick} onProfileClick={handleProfileClick}/>
       </main>
     </>
   );
