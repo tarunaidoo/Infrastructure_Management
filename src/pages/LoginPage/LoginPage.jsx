@@ -21,11 +21,13 @@ function LoginPage() {
                         createUser(user.email,user.given_name,user.family_name);
                     }
                     if(data[0].USER_ROLE==="Admin"){
+                        localStorage.setItem('user',JSON.stringify(user));
                         navigate('/admin-home'); //navigate to the admin home 
                     }
                     else{
                         localStorage.setItem('showPopupOnStudentHome', 'true');
-                        localStorage.setItem('userEmail', user.email);//
+                        localStorage.setItem('userEmail', user.email);
+                        localStorage.setItem('user',JSON.stringify(user));//
                         navigate('/student-home'); // Navigate to the student home
                     }
                     
@@ -36,7 +38,7 @@ function LoginPage() {
         };
 
         fetchDataAndNavigate();
-    }, [isAuthenticated, user?.email, user?.given_name, user?.family_name, navigate]);
+    }, [isAuthenticated, user?.email, user?.given_name, user?.family_name, navigate,user]);
 
     return (
         <main className='login-background'>
