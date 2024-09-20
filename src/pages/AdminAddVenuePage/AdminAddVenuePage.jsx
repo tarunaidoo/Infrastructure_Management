@@ -169,7 +169,8 @@ const AdminAddVenuePage = () => {
     };
 
     const handleHeaderBackIconClick = () => {
-      navigate("/admin-home");
+      // navigate("/admin-home");
+      navigate(-1);
   }
 
     return (

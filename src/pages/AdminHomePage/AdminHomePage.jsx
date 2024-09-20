@@ -30,6 +30,10 @@ function AdminHomePage(){
         navigate("/campus-selection", { state: venueSelectionDetails });
     };
 
+    const handleProfileClick = () =>{
+        navigate('/profile');
+    };
+
     return(
         <>
             <header className="adminheader">
@@ -42,7 +46,7 @@ function AdminHomePage(){
             <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
             <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
             </main>
-            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick}/>
+            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
         </>
         
         

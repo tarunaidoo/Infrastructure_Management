@@ -88,7 +88,26 @@ function IssuesReportedPage() {
     
     const handleHeaderBackIconClick = () => {
         navigate("/admin-home");
-    }
+    };
+    const handleHomeClick = () => {
+        navigate("/admin-home");
+    };
+    const handleAddVenueClick = () => {
+        navigate('/admin-add-venue');
+    };
+
+    // const handleEditVenueClick = () =>{
+    //     const venueSelectionDetails = {
+    //         SOURCE_PAGE: "/admin-home",
+    //         USER_ID: userID,
+    //         DESTINATION_PAGE: "/edit-venue"
+    //     }
+    //     navigate("/campus-selection", { state: venueSelectionDetails });
+    // };
+
+    const handleProfileClick = () =>{
+        navigate('/profile');
+    };
 
     return (
         <>
@@ -111,7 +130,8 @@ function IssuesReportedPage() {
                 )}
             </main>
 
-            <Footer is="admin-report-footer"/>
+            <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onProfileClick={handleProfileClick} />
+
 
             {isPopupOpen && selectedIssue && (
                 <Popup
