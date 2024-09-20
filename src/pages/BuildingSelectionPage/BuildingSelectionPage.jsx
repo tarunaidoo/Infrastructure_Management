@@ -50,7 +50,7 @@ const BuildingSelectionPage = () => {
             <>
                 <Header title={"Choose a Building"}/>
                 <main className="centered-container">
-                    <LoadingComponent colour="#D4A843" size="15" isLoading={buildingsLoading}/>
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={buildingsLoading}/>
                 </main>
             </>
         );

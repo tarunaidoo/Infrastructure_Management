@@ -73,7 +73,7 @@ const RoomSelectionPage = () => {
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
                 <main className="centered-container">
-                    <LoadingComponent colour="#D4A843" size="15" isLoading={venueLoading || userDetailsLoading}/>
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={venueLoading || userDetailsLoading}/>
                 </main>
             </>
         );

@@ -21,6 +21,7 @@ function LoginPage() {
                         createUser(user.email,user.given_name,user.family_name);
                     }
                     if(data[0].USER_ROLE==="Admin"){
+                        localStorage.setItem('userEmail', user.email);
                         localStorage.setItem('user',JSON.stringify(user));
                         navigate('/admin-home'); //navigate to the admin home 
                     }
