@@ -3,7 +3,11 @@ import Header from '../../components/NavigationHeader/NavigationHeader';
 import BookedEventsCard from '../../components/BookedEventsCards/BookedEventsCards';
 import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Import the Popup component
 import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
+import { useNavigate } from 'react-router-dom';
+
 function StudentBookingPage() {
+    const navigate = useNavigate();
+
     const [bookings, setBookings] = useState([]);
     //const [venues, setVenues] = useState([]);
     //const [users, setUsers] = useState([]);
@@ -93,9 +97,13 @@ function StudentBookingPage() {
         return <div>{error}</div>;
     }
 
+    const handleHeaderBackIconClick = () => {
+        navigate("/admin-home");
+    }
+
     return (
         <>
-            <Header title={"All Bookings"} />
+            <Header title={"All Bookings"} onClick={handleHeaderBackIconClick} />
             <main className="bookings-list">
                 {bookings.length > 0 ? (
                     bookings.map(booking => {

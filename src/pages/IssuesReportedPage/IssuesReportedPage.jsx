@@ -3,8 +3,9 @@ import NavigationHeader from '../../components/NavigationHeader/NavigationHeader
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
 import { fetchIssues, fetchVenues, updateAvailability } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
-
+import { useNavigate } from 'react-router-dom';
 function IssuesReportedPage() {
+    const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [issues, setIssues] = useState([]);
@@ -76,9 +77,13 @@ function IssuesReportedPage() {
         }
     };
 
+    const handleHeaderBackIconClick = () => {
+        navigate("/admin-home");
+    }
+
     return (
         <>
-            <NavigationHeader title="Reports" />
+            <NavigationHeader title="Reports" onClick={handleHeaderBackIconClick} />
 
             <main className="issues-list">
                 {issues.length > 0 ? (

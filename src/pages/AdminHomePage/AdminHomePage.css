@@ -23,23 +23,29 @@
 }
   
 .adminheaderBlock {
-    display: flex;
-    align-items: center; /* Vertically centers items within the flex container */
-    justify-content: center; /* Horizontally centers items */
-    margin-bottom: 0; /* Adjust as needed */
+    height: 12vh;
+  width: 100%; /* Explicitly set width to the full viewport width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-main); /* The dark blue color */
+  color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+  gap: 2%;
 }
 
 .adminIcon{
-    width: 2.75em; /* Uses em units for scalable image size */
-    height: 4em;
-    padding-left: 0;
-    padding-right: 7%;
-    padding-bottom: 3%;
+        width: 1.8em;
+        height: 1.8em;
 }
   
 .admin-heading {
-    font-size: 2rem; /* Uses rem units for scalable font size */
-}
+    font-size: 1.8em;
+    font-weight: 600;
+    line-height: 1.2;
+  }
 
 .admin-home-container {
     font-family: Arial, Helvetica, sans-serif;

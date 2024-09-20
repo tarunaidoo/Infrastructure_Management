@@ -6,9 +6,10 @@ import AddPopup from '../../components/AddVenuePopup/AddVenuePopup';
 import ConfirmPopup from '../../components/VenueConfirmedPopup/VenueConfirmedPopup';
 import InvalidPopup from '../../components/InvalidVenuePopup/InvalidVenuePopup';
 import { fetchBuilding, createBuilding, fetchVenue, createVenue, fetchTag, updateTag, fetchFeature, addVenueFeature } from "../../services/AdminAddVenuePage/AdminAddVenuePage.service";
-
+import { useNavigate } from 'react-router-dom';
 
 const AdminAddVenuePage = () => {
+  const navigate = useNavigate();
     // State for input fields
     const [formFields, setFormFields] = useState({
         building: '',
@@ -154,26 +155,6 @@ const AdminAddVenuePage = () => {
           console.error("Error updating building tag", error);
         }
       };
-    
-
-    /*useEffect(() => { //testing the createVenue with dummy data - it works
-        const testCreateVenue = async () => {
-          try {
-            const dummyBuildingID = 1; // Replace with a valid building ID from your DB
-            const dummyVenueName = "Test Venue";
-            const dummyVenueCapacity = 100;
-    
-            const result = await createVenue(dummyBuildingID, dummyVenueName, dummyVenueCapacity);
-            console.log('Venue creation result:', result);
-          } catch (error) {
-            console.error('Error creating venue:', error);
-          }
-        };
-    
-        testCreateVenue();
-      }, []);*/
-
-
 
     // Handle cancellation action (user clicks No on AddPopup)
     const handleCancel = () => {
@@ -187,9 +168,13 @@ const AdminAddVenuePage = () => {
         setShowExistingVenuePopup(false);
     };
 
+    const handleHeaderBackIconClick = () => {
+      navigate("/admin-home");
+  }
+
     return (
         <>
-            <Header title="Add a Venue"/>
+            <Header title="Add a Venue" onClick={handleHeaderBackIconClick}/>
             <main className="adding-form">
                 <h2 className="heading-tags">Building:</h2>
                 <input
