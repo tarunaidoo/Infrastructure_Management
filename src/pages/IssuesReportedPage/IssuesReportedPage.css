@@ -1,0 +1,18 @@
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+.issues-list{
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.admin-report-footer{
+    margin-bottom: 0;
+    padding-bottom: 0;
+}

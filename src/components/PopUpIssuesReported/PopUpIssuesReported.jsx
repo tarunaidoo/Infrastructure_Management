@@ -23,8 +23,13 @@ function ReportedIssuePopup({
                 <p data-testid="description"><strong>Description:</strong> {description}</p>
                 <p data-testid="status"><strong>Status:</strong> {status}</p>
                 <article className='issues-popup-buttons'>
-                <button onClick={onResolve} data-testid="resolveButton"  className="resolved-button">Resolve</button>
-                <button onClick={onClose} data-testid="closeButton">Close</button>
+                {/* Only show the Resolve button if the issue is not resolved */}
+                {status !== 'RESOLVED' && (
+                        <button onClick={onResolve} data-testid="resolveButton" className="resolved-button">
+                            Resolve
+                        </button>
+                    )}
+                    <button onClick={onClose} data-testid="closeButton">Close</button>
                 </article>
             </section>
         </main>

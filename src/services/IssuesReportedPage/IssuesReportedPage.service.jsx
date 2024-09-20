@@ -59,7 +59,6 @@ const updateAvailability = async (venueID, newStatus) => {
             VENUE_NAME: venueToUpdate.VENUE_NAME,
             VENUE_CAPACITY: venueToUpdate.VENUE_CAPACITY,
             VENUE_STATUS: newStatus,
-            // Add other required fields from venueToUpdate if needed
         };
 
         // Send the update through PUT without VENUE_ID in the body
@@ -86,3 +85,48 @@ const updateAvailability = async (venueID, newStatus) => {
 };
 
 export { updateAvailability };
+
+//resolve issues
+const resolveIssues = async (issueID, newStatus) => {
+    try {
+        const issues = await fetchIssues();
+        const issueToUpdate = issues.find(i => i.ISSUE_ID === issueID);
+
+        if(!issueToUpdate){
+            throw new Error(`Issue with ID ${issueID} not found!`);
+        }
+
+        const updateIssue = {
+            TITLE: issueToUpdate.TITLE,
+            VENUE_ID: issueToUpdate.VENUE_ID,
+            REPORTED_BY: issueToUpdate.REPORTED_BY,
+            REPORT_DATE: issueToUpdate.REPORT_DATE,
+            DESCRIPTION: issueToUpdate.DESCRIPTION,
+            DATE_RESOLVED: new Date().toISOString(),
+            ISSUES_STATUS: newStatus,
+        };
+
+        const endpoint = `/data-api/rest/MAINTENANCE_ISSUE/ISSUE_ID`;
+        const response = await fetch(`${endpoint}/${issueID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateIssue),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Update Error:', errorData);
+            throw new Error(`Failed to update status for issue: ${issueID}. Status: ${response.status}, Error: ${JSON.stringify(errorData)}`);
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.error('Failed to resolve issue:', error);
+        throw error;
+    }
+};
+export {resolveIssues}
+

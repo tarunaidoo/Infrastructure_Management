@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
-import { fetchIssues, fetchVenues, updateAvailability } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
+import { fetchIssues, fetchVenues, updateAvailability, resolveIssues} from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../components/NavigationBar/AdminHomeFooter';
 function IssuesReportedPage() {
     const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [issues, setIssues] = useState([]);
     const [venues, setVenues] = useState([]);
-    const [blockedVenues, setBlockedVenues] = useState(new Set()); // Track blocked venues
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,10 +18,6 @@ function IssuesReportedPage() {
             const venuesData = await fetchVenues();
             setIssues(issuesData);
             setVenues(venuesData);
-
-            // Initialize blocked venues set
-            const blocked = new Set(venuesData.filter(v => v.AVAILABILITY === 'Unavailable').map(v => v.VENUE_ID));
-            setBlockedVenues(blocked);
         };
 
         fetchData();
@@ -49,34 +45,47 @@ function IssuesReportedPage() {
         return venue ? venue.VENUE_NAME : 'Unknown Venue';
     };
 
-    // Toggle room availability and update state
-    const handleBlockRoom = async (venueID) => {
+    //resolved issue
+    // const handleResolveIssue = async (issueID) => {
+    // console.log("Resolving issue with ID:", issueID);
+    // try {
+    //     await resolveIssues(issueID, 'RESOLVED');
+        
+    //     setIssues(prevIssues => 
+    //         prevIssues.map(issue =>
+    //             issue.ISSUE_ID === issueID
+    //             ? { ...issue, ISSUE_STATUS: 'RESOLVED', DATE_RESOLVED: new Date().toISOString() }
+    //             : issue
+    //         )
+    //     );
+
+    //     closePopup();
+    // } catch (error) {
+    //     console.error('Failed to resolve issue', error);
+    // }
+    // };
+
+    const handleResolveIssue = async (issueID) => {
+        console.log("Resolving issue with ID:", issueID);
         try {
-            // Determine current status by checking if the venue is blocked
-            const isBlocked = blockedVenues.has(venueID);
-            const newStatus = isBlocked ? 'Available' : 'Unavailable';
-
-            //fetch name of venueID
-            //const venueName = getVenueName(venueID);
-
-            // Update venue status in the database
-            await updateAvailability(venueID, newStatus);
-
-            // Update local state
-            setBlockedVenues(prev => {
-                const newBlockedVenues = new Set(prev);
-                if (newStatus === 'Unavailable') {
-                    newBlockedVenues.add(venueID);
-                } else {
-                    newBlockedVenues.delete(venueID);
-                }
-                return newBlockedVenues;
-            });
+            const response = await resolveIssues(issueID, 'RESOLVED');
+            console.log('Resolve response:', response); // Test log
+    
+            setIssues(prevIssues => 
+                prevIssues.map(issue =>
+                    issue.ISSUE_ID === issueID
+                    ? { ...issue, ISSUE_STATUS: 'RESOLVED', DATE_RESOLVED: new Date().toISOString() }
+                    : issue
+                )
+            );
+    
+            closePopup();
         } catch (error) {
-            console.error('Failed to update venue availability', error);
+            console.error('Failed to resolve issue', error);
         }
     };
-
+    
+    
     const handleHeaderBackIconClick = () => {
         navigate("/admin-home");
     }
@@ -94,15 +103,15 @@ function IssuesReportedPage() {
                             reportedBy={issue.REPORTED_BY}
                             date={formatDate(issue.REPORT_DATE)}
                             venueName={getVenueName(issue.VENUE_ID)}  // Pass the venue name
-                            isBlocked={blockedVenues.has(issue.VENUE_ID)}  // Determine if venue is blocked
                             onClick={() => openPopup(issue)}
-                            onBlockRoom={() => handleBlockRoom(issue.VENUE_ID)} // Pass venue ID to handler
                         />
                     ))
                 ) : (
                     <p>No issues found.</p>
                 )}
             </main>
+
+            <Footer is="admin-report-footer"/>
 
             {isPopupOpen && selectedIssue && (
                 <Popup
@@ -113,6 +122,7 @@ function IssuesReportedPage() {
                     venueName={getVenueName(selectedIssue.VENUE_ID)}
                     description={selectedIssue.DESCRIPTION}
                     status={selectedIssue.ISSUE_STATUS}
+                    onResolve={()=>handleResolveIssue(selectedIssue.ISSUE_ID)}
                     onClose={closePopup}
                 />
             )}

@@ -4,7 +4,7 @@ import BookedEventsCard from '../../components/BookedEventsCards/BookedEventsCar
 import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Import the Popup component
 import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
 import { useNavigate } from 'react-router-dom';
-
+import Footer from '../../components/NavigationBar/AdminHomeFooter';
 function StudentBookingPage() {
     const navigate = useNavigate();
 
@@ -15,6 +15,17 @@ function StudentBookingPage() {
     const [error, setError] = useState(null);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    //get bookings from today and for future
+    const filterBookingsByDate = (bookingDate) =>{
+        const today = new Date();
+        const bookingDateObj = new Date(bookingDate);
+        return bookingDateObj >= today.setHours(0,0,0,0);//keep bookings for today and future datesa
+    };
+    //sort bookings by date to display closest first
+    const sortBookingsByDate = (a,b) =>{
+        return new Date(a.DATE) - new Date(b.DATE);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,7 +74,9 @@ function StudentBookingPage() {
                     eventName: booking.EVENT_NAME
                     ? booking.EVENT_NAME
                     : `Booking for ${booking.USER_ID.split('@')[0]}`,  // Handle null EVENT_NAME
-                }));
+                }))
+                .filter(booking => filterBookingsByDate(booking.DATE))
+                .sort(sortBookingsByDate);
 
                 //console.log('Processed student bookings with venues:', bookingsWithVenues);
 
@@ -115,7 +128,7 @@ function StudentBookingPage() {
                                 key={booking.BOOKING_ID}
                                 eventName={booking.eventName}
                                 eventDetails={{
-                                    title: `Booking for: ${username}`,
+                                    title: `${booking.EVENT_NAME}`,
                                     studentName: username,
                                     date: booking.DATE,
                                     time: `${booking.START_TIME} - ${booking.END_TIME}`,
@@ -129,7 +142,7 @@ function StudentBookingPage() {
                     <label>No bookings found.</label>
                 )}
             </main>
-
+            <Footer/>
             {isPopupOpen && selectedBooking && (
                 <Popup
                     title={`Booking ID: ${selectedBooking.BOOKING_ID}`}
