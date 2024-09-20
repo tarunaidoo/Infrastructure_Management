@@ -5,7 +5,7 @@ import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Im
 import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
-function StudentBookingPage() {
+function UserBookingPage() {
     const navigate = useNavigate();
 
     const [bookings, setBookings] = useState([]);
@@ -158,4 +158,4 @@ function StudentBookingPage() {
     );
 }
 
-export default StudentBookingPage;
+export default UserBookingPage;
