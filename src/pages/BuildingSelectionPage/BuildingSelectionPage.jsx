@@ -72,7 +72,8 @@ const BuildingSelectionPage = () => {
         <main className="centered-container">
           <section className="building-selection-content-section">
             { buildings ?
-                buildings.map((building) => (
+                buildings.sort((a, b) => (a.BUILDING_NAME < b.BUILDING_NAME ? -1 : 1))
+                .map((building) => (
                     <BuildingCard key={building.BUILDING_ID} 
                     buildingName={building.BUILDING_NAME} 
                     buildingTags={building.TAGS}

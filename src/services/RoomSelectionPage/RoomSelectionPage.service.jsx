@@ -1,14 +1,34 @@
 
-const getVenuesFromBuildingID = async (buildingID) => {
+const getUserDetailsFromUserID = async (userID) => {
+    try {
+        const endpoint = "/data-api/rest/USERS";
+        const response = await fetch(endpoint);
+        const data = await response.json();
+
+        // Filter the data based on the provided USER_ID
+        const filteredData = data.value.filter(row => row.USER_ID === userID);
+        return filteredData ? filteredData[0] : null;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error);
+        return []; // Return an empty array or handle the error as needed
+    }
+}
+
+
+const getVenuesFromBuildingIDAndUserID = async (buildingID, userID) => {
     try {
         const endpoint = "data-api/rest/VENUE/"
         const response = await fetch(endpoint);
         const data = await response.json();
 
-        // Filter the data based on the provided BUILDING_ID
-        const filteredData = data.value.filter(row => (row.BUILDING_ID === buildingID && row.VENUE_STATUS === "Available"));
-
-        return filteredData; // Return the filtered data
+        // Filter the data based on the provided BUILDING_ID and VENUE_STATUS
+        if (userID === "Student"){
+            const filteredData = data.value.filter(row => (row.BUILDING_ID === buildingID && row.VENUE_STATUS === "Available"));
+            return filteredData
+        }
+        const filteredData = data.value.filter(row => row.BUILDING_ID === buildingID);
+        return filteredData
     }
     catch (error) {
         console.error('Error fetching data:', error);
@@ -56,4 +76,4 @@ const getVenueFeatureNamesFromVenues = async (venues) => {
 }
 
 
-export {getVenuesFromBuildingID, getVenueFeatureIDFromVenueID, getVenueFeatureNamesFromVenues};
+export {getUserDetailsFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureIDFromVenueID, getVenueFeatureNamesFromVenues};
