@@ -6,24 +6,44 @@
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
-
-.admin-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: var(--color-main);
+.adminheader {
+    background-color: #001f3d;
     color: white;
-    position: fixed; /* Fix the header to the top */
-    width: 100%; /* Ensure header spans the full width */
-    top: 0; /* Align header to the top */
-    z-index: 1000; /* Ensure header is above other content */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 15vh; /* Scales header height with viewport height */
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Keeps content towards the bottom */
+}
+  
+.adminheaderBlock {
+    display: flex;
+    align-items: center; /* Vertically centers items within the flex container */
+    justify-content: center; /* Horizontally centers items */
+    margin-bottom: 0; /* Adjust as needed */
+}
+
+.adminIcon{
+    width: 2.75em; /* Uses em units for scalable image size */
+    height: 4em;
+    padding-left: 0;
+    padding-right: 7%;
+    padding-bottom: 3%;
+}
+  
+.admin-heading {
+    font-size: 2rem; /* Uses rem units for scalable font size */
 }
 
 .admin-home-container {
     font-family: Arial, Helvetica, sans-serif;
-    margin-top: 10px;
+    margin-top: 20vh;
     display: flex;
     flex-direction: column;
     align-items: center;
