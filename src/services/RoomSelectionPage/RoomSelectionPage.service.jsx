@@ -1,17 +1,20 @@
 
-const getRoleFromUserID = async (userID) => {
+const getUserDetailsFromUserID = async (userID) => {
     try {
         const endpoint = "/data-api/rest/USERS";
         const response = await fetch(endpoint);
         const data = await response.json();
+
+        // Filter the data based on the provided USER_ID
         const filteredData = data.value.filter(row => row.USER_ID === userID);
-        return filteredData[0].USER_ROLE;
+        return filteredData ? filteredData[0] : null;
     }
     catch (error) {
         console.error('Error fetching data:', error);
-        return "";
+        return []; // Return an empty array or handle the error as needed
     }
 }
+
 
 const getVenuesFromBuildingIDAndUserID = async (buildingID, userID) => {
     try {
@@ -73,4 +76,4 @@ const getVenueFeatureNamesFromVenues = async (venues) => {
 }
 
 
-export {getRoleFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureIDFromVenueID, getVenueFeatureNamesFromVenues};
+export {getUserDetailsFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureIDFromVenueID, getVenueFeatureNamesFromVenues};

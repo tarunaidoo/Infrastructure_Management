@@ -1,4 +1,4 @@
-import { getRoleFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureIDFromVenueID } from "./RoomSelectionPage.service";
+import { getUserDetailsFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureIDFromVenueID } from "./RoomSelectionPage.service";
 
 // Mock the fetch API
 global.fetch = jest.fn();
@@ -8,7 +8,7 @@ describe("Room Selection Page Services", () => {
         jest.resetAllMocks();
     });
 
-    it("should return admin role from user ID", async () => {
+    it("should return user details from user ID", async () => {
         const mockUserData = {
             value: [
                 {USER_ID: 1, USER_ROLE: "Student"},
@@ -21,32 +21,10 @@ describe("Room Selection Page Services", () => {
         });
 
         const userID = 2;
-        const result = await getRoleFromUserID(userID);
+        const userDetails = await getUserDetailsFromUserID(userID);
 
         // Check if the function returns only the admin role from admin user ID
-        expect(result).toEqual("Admin");
-
-        // Ensure the fetch was called with the correct endpoint
-        expect(fetch).toHaveBeenCalledWith("/data-api/rest/USERS");
-    })
-
-    it("should return student role from user ID", async () => {
-        const mockUserData = {
-            value: [
-                {USER_ID: 1, USER_ROLE: "Student"},
-                {USER_ID: 2, USER_ROLE: "Admin"}
-            ],
-        };
-
-        fetch.mockResolvedValueOnce({
-            json: jest.fn().mockResolvedValueOnce(mockUserData),
-        });
-
-        const userID = 1;
-        const result = await getRoleFromUserID(userID);
-
-        // Check if the function returns only the student role from student user ID
-        expect(result).toEqual("Student");
+        expect(userDetails).toEqual({USER_ID: 2, USER_ROLE: "Admin"});
 
         // Ensure the fetch was called with the correct endpoint
         expect(fetch).toHaveBeenCalledWith("/data-api/rest/USERS");
