@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center; /* Centers the container horizontally */
     align-items: center; /* Centers the container vertically */
-    height: 88vh;
+    height: 100vh;
 }
 
 .content-section {
