@@ -5,17 +5,19 @@ import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Im
 import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
+import './UserBookingsPage.css';
 function UserBookingPage() {
     const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
 
     const [bookings, setBookings] = useState([]);
-    //const [venues, setVenues] = useState([]);
+    const [venues, setVenues] = useState([]);
     //const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedVenue, setSelectedVenue] = useState('');
 
     //get bookings from today and for future
     const filterBookingsByDate = (bookingDate) =>{
@@ -54,12 +56,6 @@ function UserBookingPage() {
                     throw new TypeError('Expected allVenues to be an array.');
                 }
 
-                // // Filter users to get only students
-                // const studentIds = allUsers.filter(user => user.USER_ROLE === 'Student').map(user => user.USER_ID);
-
-                // // Filter bookings to get only those with student user IDs
-                // const studentBookings = allBookings.filter(booking => studentIds.includes(booking.USER_ID));
-
                 // Map venue data to bookings
                 const venueMap = new Map(allVenues.map(venue => [venue.VENUE_ID, venue.VENUE_NAME]));
 
@@ -77,6 +73,7 @@ function UserBookingPage() {
                 //console.log('Processed student bookings with venues:', bookingsWithVenues);
 
                 setBookings(bookingsWithVenues);
+                setVenues(allVenues);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -98,6 +95,22 @@ function UserBookingPage() {
         setSelectedBooking(null);
     };
 
+    const handleVenueChange = (venueID) =>{
+        setSelectedVenue(venueID ? Number(venueID): '');
+    };
+
+    const filteredBookings = bookings.filter(booking => {
+        const matches = selectedVenue ? String(booking.VENUE_ID) === String(selectedVenue) : true;
+        console.log(`Booking ID: ${booking.BOOKING_ID}, Venue ID: ${booking.VENUE_ID}, Matches: ${matches}`);
+        return matches;
+    });
+    console.log('Filtered Bookings:', filteredBookings);
+    console.log('All Bookings:', bookings);
+    bookings.forEach(booking => {
+        console.log(`Booking ID: ${booking.BOOKING_ID}, Venue ID: ${booking.VENUE_ID}`);
+    });
+    console.log('Selected Venue:', selectedVenue);
+       
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -130,15 +143,26 @@ function UserBookingPage() {
     return (
         <>
             <Header title={"All Bookings"} onClick={handleHeaderBackIconClick} />
+            <div className="venue-filter">
+                <select onChange={(e) => handleVenueChange(e.target.value)} value={selectedVenue}>
+                    <option value="">All Venues</option>
+                    {venues.map(venue => (
+                        <option key={venue.VENUE_ID} value={venue.VENUE_ID}>
+                            {venue.VENUE_NAME}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <main className="bookings-list">
-                {bookings.length > 0 ? (
-                    bookings.map(booking => {
+                {filteredBookings.length > 0 ? (
+                    filteredBookings.map(booking => {
                         // Extract the part of the email before the "@" symbol
                         const username = booking.USER_ID.split('@')[0];
                         
                         return (
                             <BookedEventsCard
                                 key={booking.BOOKING_ID}
+                                className="booked-event-card"
                                 eventName={booking.eventName}
                                 eventDetails={{
                                     title: `${booking.EVENT_NAME}`,

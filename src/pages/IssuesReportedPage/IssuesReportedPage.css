@@ -6,7 +6,7 @@
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
-.issues-list{
+.issues-list {
     flex-grow: 1;
     overflow-y: auto;
     padding: 20px;
@@ -19,7 +19,6 @@
 }
 
 .issues-filter-btn {
-    background-color: white; /* Button background color */
     background-color: var(--color-accent);
     color: white; /* Text color matching the main color */
     border: none; /* Remove default button border */
@@ -28,7 +27,7 @@
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s; /* Smooth background color transition */
     max-width: 600px;
-    font-size: large;
+    font-size: large; /* Default font size */
 }
 
 .issues-filter-btn:hover {
@@ -43,9 +42,21 @@
         flex-direction: column; /* Stack buttons vertically on smaller screens */
         align-items: center; /* Center align buttons */
     }
-    
+
     .issues-filter-btn {
         margin: 5px 0; /* Add margin between buttons */
         width: 80%; /* Make buttons wider on mobile */
+        padding: 15px; /* Adjust padding for smaller screens */
+        font-size: 18px; /* Set a specific size for better visibility */
+    }
+}
+
+@media (max-width: 600px) {
+    .issues-list {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .issues-filter-btn {
+        font-size: 16px; /* Adjust font size for mobile screens */
     }
 }
