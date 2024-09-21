@@ -4,6 +4,7 @@ import {useNavigate, useLocation } from 'react-router-dom';
 
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import BuildingCard from "../../components/BuildingCard/BuildingCard";
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { getBuildingsFromCampus, getBuildingTagNamesForBuildings } from "../../services/BuildingSelectionPage/BuildingSelectionPage.service";
 
 import "./BuildingSelectionPage.css";
@@ -49,7 +50,7 @@ const BuildingSelectionPage = () => {
             <>
                 <Header title={"Choose a Building"}/>
                 <main className="building-selection-centered-container">
-                    <section>Fetching Buildings...</section>
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={buildingsLoading}/>
                 </main>
             </>
         );

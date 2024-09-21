@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import Popup from "../../components/Popup/Popup";
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { getUserDetailsFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureNamesFromVenues } from "../../services/RoomSelectionPage/RoomSelectionPage.service";
 
 import "./RoomSelectionPage.css";
@@ -72,7 +73,7 @@ const RoomSelectionPage = () => {
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
                 <main className="room-selection-centered-container">
-                    <div>Fetching Rooms...</div>
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={venueLoading || userDetailsLoading}/>
                 </main>
             </>
         );

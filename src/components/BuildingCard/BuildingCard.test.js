@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 
 import BuildingCard from "./BuildingCard";
 

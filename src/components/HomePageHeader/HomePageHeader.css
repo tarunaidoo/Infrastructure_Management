@@ -7,7 +7,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    height: 15vh; /* Scales header height with viewport height */
+    height: 12vh; /* Scales header height with viewport height */
     z-index: 1000;
     display: flex;
     justify-content: center;
