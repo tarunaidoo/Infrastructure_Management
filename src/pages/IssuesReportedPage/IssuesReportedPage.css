@@ -5,6 +5,72 @@
     --color-accent: #D4A843;       /* Soft Gold */
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
+:root {
+    --color-main: #001F3F;         /* Deep Navy */
+    --color-secondary: #191970;    /* Midnight Blue */
+    --color-highlight: #0047AB;    /* Royal Azure */
+    --color-accent: #D4A843;       /* Soft Gold */
+    --color-neutral: #D3D3D3;      /* Light Silver */
+}
+
+.venue-filter {
+    margin: 20px 0; /* Add margin around the dropdown */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center the dropdown */
+}
+
+.venue-filter select {
+    padding: 15px; /* Increase padding for better spacing */
+    border: 2px solid var(--color-main); /* Use your main color for border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: var(--color-neutral); /* Background color */
+    color: black; /* Set text color to black */
+    font-size: 18px; /* Increase font size */
+    cursor: pointer; /* Change cursor on hover */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+    width: 200px; /* Set a fixed width (adjust as needed) */
+}
+
+.venue-filter select:hover {
+    border-color: var(--color-highlight); /* Highlight on hover */
+}
+
+.venue-filter select:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: var(--color-accent); /* Change border color on focus */
+}
+
+.bookings-list {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+    justify-content: center; /* Center the items on smaller screens */
+    gap: 20px; /* Add space between the cards */
+}
+
+.booked-event-card {
+    flex: 0 1 calc(33.333% - 20px); /* Each card takes 1/3 of the row minus the gap */
+    max-width: calc(33.333% - 20px); /* Ensure cards do not exceed this width */
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+/* Optional: Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .booked-event-card {
+        flex: 0 1 100%; /* Stack cards on smaller screens */
+        max-width: 100%;
+    }
+}
+
+.bookings-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
+    gap: 20px; /* Add space between the cards */
+}
+
+/* Ensure cards fit properly */
+.booked-event-card {
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
 
 .issues-list {
     flex-grow: 1;

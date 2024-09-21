@@ -15,6 +15,7 @@ function IssuesReportedPage() {
     const [issues, setIssues] = useState([]);
     const [venues, setVenues] = useState([]);
     const [filter, setFilter] = useState('all'); // State for filter type
+    const [selectedVenue, setSelectedVenue] = useState(''); // State for selected venue
 
     useEffect(() => {
         const fetchData = async () => {
@@ -96,25 +97,58 @@ function IssuesReportedPage() {
     const handleProfileClick = () =>{
         navigate('/profile');
     };
-
+    //filter issues based on selected venue and filter type
     const filteredIssues = () => {
+        let filtered = issues;
+
+        // If a venue is selected, filter issues based on that venue
+        if (selectedVenue) {
+            //console.log('Filtering for venue:', selectedVenue, 'Type:', typeof selectedVenue);
+            filtered = filtered.filter(issue => {
+                const venueId = issue.VENUE_ID; // This is a number
+                //console.log('Comparing issue venue:', venueId, 'Type:', typeof venueId);
+                return venueId === Number(selectedVenue); // Convert selectedVenue to a number for comparison
+            });
+        }
         if (filter === 'resolved') {
-            return issues.filter(issue => issue.ISSUE_STATUS === 'RESOLVED');
+            return filtered.filter(issue => issue.ISSUE_STATUS === 'RESOLVED');
         }
         if (filter === 'unresolved') {
-            return issues.filter(issue => issue.ISSUE_STATUS !== 'RESOLVED');
+            return filtered.filter(issue => issue.ISSUE_STATUS !== 'RESOLVED');
         }
-        return issues; // 'all' or any other value
+        return filtered; // 'all' or any other value
     };
 
     return (
         <>
             <NavigationHeader title="Reports" onClick={handleHeaderBackIconClick} />
-            <div className="issue-filters">
-                <button className="issues-filter-btn" onClick={() => setFilter('all')}>All Issues</button>
-                <button className="issues-filter-btn" onClick={() => setFilter('resolved')}>Resolved Issues</button>
-                <button className="issues-filter-btn" onClick={() => setFilter('unresolved')}>Unresolved Issues</button>
+            {/* Venue Dropdown */}
+            <div className="venue-filter">
+                <select 
+                    id="venue-select" 
+                    value={selectedVenue} 
+                    onChange={(e) => setSelectedVenue(e.target.value)}
+                >
+                    <option value="">All Venues</option>
+                    {venues.map(venue => (
+                        <option key={venue.VENUE_ID} value={venue.VENUE_ID}>
+                            {venue.VENUE_NAME}
+                        </option>
+                    ))}
+                </select>
             </div>
+            {/* Filter type all, resolved, unresolved Dropdown */}
+            <div className="venue-filter">
+                <select 
+                    value={filter} 
+                    onChange={(e) => setFilter(e.target.value)}
+                >
+                    <option value="all">All Issues</option>
+                    <option value="resolved">Resolved Issues</option>
+                    <option value="unresolved">Unresolved Issues</option>
+                </select>
+            </div>
+            
             <main className="issues-list">
                 {filteredIssues().length > 0 ? (
                     filteredIssues().map(issue => (
