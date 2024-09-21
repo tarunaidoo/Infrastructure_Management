@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Header from '../../components/NavigationHeader/NavigationHeader';
 import BookedEventsCard from '../../components/BookedEventsCards/BookedEventsCards';
 import Popup from '../../components/PopUpEventsBooked/PopUpEventsBooked';  // Import the Popup component
-import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
-import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import { fetchAllBookings, fetchAllUsers, fetchAllVenues } from '../../services/UserBookingsPage/UserBookingPage.service';
+
 import './UserBookingsPage.css';
+
+
 function UserBookingPage() {
     const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
@@ -110,14 +115,6 @@ function UserBookingPage() {
         console.log(`Booking ID: ${booking.BOOKING_ID}, Venue ID: ${booking.VENUE_ID}`);
     });
     console.log('Selected Venue:', selectedVenue);
-       
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     const handleHeaderBackIconClick = () => {
         navigate("/admin-home");
@@ -139,6 +136,30 @@ function UserBookingPage() {
     const handleProfileClick = () =>{
         navigate('/profile');
     };
+       
+    if (loading) {
+        return (
+            <>
+                <Header title={"All Bookings"} onClick={handleHeaderBackIconClick} />
+                <main className="user-bookings-centered-container">
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={loading}/>
+                </main>
+                <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
+            </>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <Header title={"All Bookings"} onClick={handleHeaderBackIconClick} />
+                <main className="user-bookings-centered-container">
+                    <div>{error}</div>
+                </main>
+                <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
+            </>
+        );
+    }
 
     return (
         <>

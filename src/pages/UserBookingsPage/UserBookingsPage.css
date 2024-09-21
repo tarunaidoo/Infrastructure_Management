@@ -64,3 +64,10 @@
 .booked-event-card {
     box-sizing: border-box; /* Ensure padding is included in width */
 }
+
+.user-bookings-centered-container {
+    display: flex;
+    justify-content: center; /* Centers the container horizontally */
+    align-items: center; /* Centers the container vertically */
+    height: 88vh;
+}

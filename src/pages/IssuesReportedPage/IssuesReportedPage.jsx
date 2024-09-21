@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
+import { useNavigate } from 'react-router-dom';
+
+
+import Header from '../../components/NavigationHeader/NavigationHeader';
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
-import { fetchIssues, fetchVenues, resolveIssues} from '../../services/IssuesReportedPage/IssuesReportedPage.service';
-import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import { fetchIssues, fetchVenues, resolveIssues} from '../../services/IssuesReportedPage/IssuesReportedPage.service';
+
 import './IssuesReportedPage.css';
+
+
 function IssuesReportedPage() {
     const userID = localStorage.getItem('userEmail'); // get userID
 
@@ -15,14 +21,24 @@ function IssuesReportedPage() {
     const [issues, setIssues] = useState([]);
     const [venues, setVenues] = useState([]);
     const [filter, setFilter] = useState('all'); // State for filter type
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [selectedVenue, setSelectedVenue] = useState(''); // State for selected venue
 
     useEffect(() => {
         const fetchData = async () => {
-            const issuesData = await fetchIssues();
-            const venuesData = await fetchVenues();
-            setIssues(issuesData);
-            setVenues(venuesData);
+            try {
+                const issuesData = await fetchIssues();
+                const venuesData = await fetchVenues();
+                setIssues(issuesData);
+                setVenues(venuesData);
+                setLoading(false);
+            }
+            catch ( error ) {
+                console.error('Error fetching data:', error);
+                setError(`Failed to load data: ${error.message}`);
+                setLoading(false);
+            }
         };
 
         fetchData();
@@ -119,9 +135,33 @@ function IssuesReportedPage() {
         return filtered; // 'all' or any other value
     };
 
+    if (loading) {
+        return (
+            <>
+                <Header title="Reports" onClick={handleHeaderBackIconClick} />
+                <main className="issues-reported-centered-container">
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={loading}/>
+                </main>
+                <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
+            </>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <Header title="Reports" onClick={handleHeaderBackIconClick} />
+                <main className="issues-reported-centered-container">
+                    <div>{error}</div>
+                </main>
+                <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
+            </>
+        );
+    }
+
     return (
         <>
-            <NavigationHeader title="Reports" onClick={handleHeaderBackIconClick} />
+            <Header title="Reports" onClick={handleHeaderBackIconClick} />
             {/* Venue Dropdown */}
             <div className="venue-filter">
                 <select 
