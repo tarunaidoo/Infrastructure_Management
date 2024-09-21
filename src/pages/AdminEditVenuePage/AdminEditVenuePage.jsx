@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import arrowIcon from '../../assets/icons/chevron-left.svg';
 import { getVenue, getFeatures, getFeatureNames, updateVenue, updateVenueFeatures } from "../../services/AdminEditVenuePage/AdminEditVenuePage.service";
 import Popup from "../../components/Popup/Popup";
-
+import Footer from '../../components/NavigationBar/AdminHomeFooter';
 const AdminEditVenuePage = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -201,6 +201,17 @@ const AdminEditVenuePage = () => {
         }
     };
 
+    const handleHomeClick = () =>{
+        navigate('/admin-home');
+    };
+    const handleAddVenueClick = () => {
+        navigate('/admin-add-venue');
+    };
+
+    const handleProfileClick = () =>{
+        navigate('/profile');
+    };
+
     return (
         <main className="edit-venue-layout" data-testid="edit-venue-layout">
         <article className='edit-venue-heading' data-testid="edit-venue-heading">
@@ -344,8 +355,10 @@ const AdminEditVenuePage = () => {
         </article>
     )}
 </Popup>
+    <Footer onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onProfileClick={handleProfileClick}/>
     </main>
     );
+    
 };
 
 export default AdminEditVenuePage;

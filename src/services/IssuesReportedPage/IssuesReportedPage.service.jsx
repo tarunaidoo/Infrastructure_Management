@@ -40,49 +40,47 @@ async function fetchVenues() {
 }
 export {fetchVenues};
 
-//update availability status
-const updateAvailability = async (venueID, newStatus) => {
+//resolve issues
+async function resolveIssues(issueID, newStatus){
     try {
-        // Fetch all the venues
-        const venues = await fetchVenues();
+        const issues = await fetchIssues();
+        const issueToUpdate = issues.find(i => i.ISSUE_ID === issueID);
 
-        // Find the specific venue based on venueID
-        const venueToUpdate = venues.find(venue => venue.VENUE_ID === venueID);
-
-        if (!venueToUpdate) {
-            throw new Error(`Venue with ID ${venueID} not found`);
+        if(!issueToUpdate){
+            throw new Error(`Issue with ID ${issueID} not found!`);
         }
 
-        // Prepare the updated venue data with all required fields, excluding VENUE_ID
-        const updatedVenue = {
-            BUILDING_ID: venueToUpdate.BUILDING_ID,
-            VENUE_NAME: venueToUpdate.VENUE_NAME,
-            VENUE_CAPACITY: venueToUpdate.VENUE_CAPACITY,
-            VENUE_STATUS: newStatus,
-            // Add other required fields from venueToUpdate if needed
+        const updateIssue = {
+            TITLE: issueToUpdate.TITLE,
+            VENUE_ID: issueToUpdate.VENUE_ID,
+            REPORTED_BY: issueToUpdate.REPORTED_BY,
+            REPORT_DATE: issueToUpdate.REPORT_DATE,
+            DESCRIPTION: issueToUpdate.DESCRIPTION,
+            DATE_RESOLVED: new Date().toISOString(),
+            ISSUE_STATUS: newStatus,
         };
 
-        // Send the update through PUT without VENUE_ID in the body
-        const endpoint = '/data-api/rest/VENUE/VENUE_ID'
-        const response = await fetch(`${endpoint}/${venueID}`, {
+        const endpoint = `/data-api/rest/MAINTENANCE_ISSUE/ISSUE_ID`;
+        const response = await fetch(`${endpoint}/${issueID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updatedVenue),
+            body: JSON.stringify(updateIssue),
         });
 
         if (!response.ok) {
             const errorData = await response.json();
             console.error('Update Error:', errorData);
-            throw new Error(`Failed to update status for venue: ${venueID}. Status: ${response.status}, Error: ${JSON.stringify(errorData)}`);
+            throw new Error(`Failed to update status for issue: ${issueID}. Status: ${response.status}, Error: ${JSON.stringify(errorData)}`);
         }
 
         return await response.json();
+
     } catch (error) {
-        console.error('Failed to update venue availability:', error);
+        console.error('Failed to resolve issue:', error);
         throw error;
     }
 };
+export {resolveIssues}
 
-export { updateAvailability };
