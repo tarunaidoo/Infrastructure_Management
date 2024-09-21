@@ -28,7 +28,7 @@ const CampusSelectionPage = () => {
     return (
         <>
             <Header title={"Choose a Campus"} onClick={handleHeaderBackIconClick}/>
-            <main className="centered-container">
+            <main className="campus-selection-centered-container">
                 <section className="campus-selection-content-section">
                     {campusNames ?
                         campusNames.map((campusName) => (

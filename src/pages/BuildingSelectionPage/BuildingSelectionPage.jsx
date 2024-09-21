@@ -48,7 +48,7 @@ const BuildingSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Building"}/>
-                <main className="centered-container">
+                <main className="building-selection-centered-container">
                     <section>Fetching Buildings...</section>
                 </main>
             </>
@@ -59,7 +59,7 @@ const BuildingSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Building"}/>
-                <main className="centered-container">
+                <main className="building-selection-centered-container">
                     <section>An error occurred: {buildingsError.message}</section>
                 </main>
             </>
@@ -69,7 +69,7 @@ const BuildingSelectionPage = () => {
     return (
       <>
         <Header title={"Choose a Building"} onClick={handleHeaderBackIconClick}/>
-        <main className="centered-container">
+        <main className="building-selection-centered-container">
           <section className="building-selection-content-section">
             { buildings ?
                 buildings.sort((a, b) => (a.BUILDING_NAME < b.BUILDING_NAME ? -1 : 1))
