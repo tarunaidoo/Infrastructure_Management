@@ -206,6 +206,61 @@
   border-radius: 10px; /* Rounded scrollbar for a better look */
 }
 
+.time-slot {
+  display: flex;
+  justify-content: space-between;
+  gap: 10%;
+  width:80%;
+
+}
+
+.time-slot div {
+  flex: 1;
+  margin-right: 10px;
+ 
+}
+
+.time-slot div:last-child {
+  margin-right: 0;
+}
+
+.time-slot label {
+  display: block;
+  text-align: center;
+}
+
+.time-slot input {
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: none;
+  background-color: #e0e0e0;
+}
+
+.time-dropdown {
+  width: 80%; /* Full width */
+  text-align: center;
+  border:none; /* Light gray border */
+  font-size: 16px; /* Font size */
+  background-color: #e0e0e0; /* White background */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.time-dropdown:focus {
+  outline: none; /* Remove default focus outline */
+  background-color: #e0e0e0;
+}
+
+.time-dropdown option {
+  padding: 10px; /* Space inside each option */
+  
+}
+
+
+
+
+
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
   .predefined-field {
