@@ -6,6 +6,13 @@
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
 
+.room-selection-centered-container {
+    display: flex;
+    justify-content: center; /* Centers the container horizontally */
+    align-items: center; /* Centers the container vertically */
+    height: 88vh;
+}
+
 .room-selection-content-section {
     display: flex;
     justify-content: flex-start;
