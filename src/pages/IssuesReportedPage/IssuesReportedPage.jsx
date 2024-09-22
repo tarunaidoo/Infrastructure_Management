@@ -1,26 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
+import { useNavigate } from 'react-router-dom';
+
+
+import Header from '../../components/NavigationHeader/NavigationHeader';
 import Popup from '../../components/PopUpIssuesReported/PopUpIssuesReported';
 import IssueListCard from '../../components/AdminListIssues/AdminListIssues';
-import { fetchIssues, fetchVenues, updateAvailability } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
+import Footer from '../../components/NavigationBar/AdminHomeFooter';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import { fetchIssues, fetchVenues, resolveIssues} from '../../services/IssuesReportedPage/IssuesReportedPage.service';
+
+import './IssuesReportedPage.css';
+
 
 function IssuesReportedPage() {
+    const userID = localStorage.getItem('userEmail'); // get userID
+
+    const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [issues, setIssues] = useState([]);
     const [venues, setVenues] = useState([]);
-    const [blockedVenues, setBlockedVenues] = useState(new Set()); // Track blocked venues
+    const [filter, setFilter] = useState('all'); // State for filter type
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedVenue, setSelectedVenue] = useState(''); // State for selected venue
 
     useEffect(() => {
         const fetchData = async () => {
-            const issuesData = await fetchIssues();
-            const venuesData = await fetchVenues();
-            setIssues(issuesData);
-            setVenues(venuesData);
-
-            // Initialize blocked venues set
-            const blocked = new Set(venuesData.filter(v => v.AVAILABILITY === 'Unavailable').map(v => v.VENUE_ID));
-            setBlockedVenues(blocked);
+            try {
+                const issuesData = await fetchIssues();
+                const venuesData = await fetchVenues();
+                setIssues(issuesData);
+                setVenues(venuesData);
+                setLoading(false);
+            }
+            catch ( error ) {
+                console.error('Error fetching data:', error);
+                setError(`Failed to load data: ${error.message}`);
+                setLoading(false);
+            }
         };
 
         fetchData();
@@ -48,56 +66,148 @@ function IssuesReportedPage() {
         return venue ? venue.VENUE_NAME : 'Unknown Venue';
     };
 
-    // Toggle room availability and update state
-    const handleBlockRoom = async (venueID) => {
+    //resolved issue
+    const handleResolveIssue = async (issueID) => {
         try {
-            // Determine current status by checking if the venue is blocked
-            const isBlocked = blockedVenues.has(venueID);
-            const newStatus = isBlocked ? 'Available' : 'Unavailable';
+            await resolveIssues(issueID, 'RESOLVED');
+            setIssues(prevIssues => {
+                const updatedIssues = prevIssues.map(issue =>
+                    issue.ISSUE_ID === issueID
+                        ? { ...issue, ISSUE_STATUS: 'RESOLVED', DATE_RESOLVED: new Date().toISOString() }
+                        : issue
+                );
 
-            //fetch name of venueID
-            //const venueName = getVenueName(venueID);
-
-            // Update venue status in the database
-            await updateAvailability(venueID, newStatus);
-
-            // Update local state
-            setBlockedVenues(prev => {
-                const newBlockedVenues = new Set(prev);
-                if (newStatus === 'Unavailable') {
-                    newBlockedVenues.add(venueID);
-                } else {
-                    newBlockedVenues.delete(venueID);
-                }
-                return newBlockedVenues;
+                // Sort issues: keep unresolved at the top
+                return updatedIssues.sort((a, b) => {
+                    if (a.ISSUE_STATUS === 'RESOLVED' && b.ISSUE_STATUS !== 'RESOLVED') return 1;
+                    if (a.ISSUE_STATUS !== 'RESOLVED' && b.ISSUE_STATUS === 'RESOLVED') return -1;
+                    return 0;
+                });
             });
+
+            closePopup();
         } catch (error) {
-            console.error('Failed to update venue availability', error);
+            console.error('Failed to resolve issue', error);
         }
     };
 
+    const handleHeaderBackIconClick = () => {
+        navigate("/admin-home");
+    };
+    const handleHomeClick = () => {
+        navigate("/admin-home");
+    };
+    const handleAddVenueClick = () => {
+        navigate('/admin-add-venue');
+    };
+
+    const handleEditVenueClick = () =>{
+        const venueSelectionDetails = {
+            SOURCE_PAGE: "/admin-home",
+            USER_ID: userID,
+            DESTINATION_PAGE: "/edit-venue"
+        }
+        navigate("/campus-selection", { state: venueSelectionDetails });
+    };
+
+    const handleProfileClick = () =>{
+        navigate('/profile');
+    };
+    //filter issues based on selected venue and filter type
+    const filteredIssues = () => {
+        let filtered = issues;
+
+        // If a venue is selected, filter issues based on that venue
+        if (selectedVenue) {
+            //console.log('Filtering for venue:', selectedVenue, 'Type:', typeof selectedVenue);
+            filtered = filtered.filter(issue => {
+                const venueId = issue.VENUE_ID; // This is a number
+                //console.log('Comparing issue venue:', venueId, 'Type:', typeof venueId);
+                return venueId === Number(selectedVenue); // Convert selectedVenue to a number for comparison
+            });
+        }
+        if (filter === 'resolved') {
+            return filtered.filter(issue => issue.ISSUE_STATUS === 'RESOLVED');
+        }
+        if (filter === 'unresolved') {
+            return filtered.filter(issue => issue.ISSUE_STATUS !== 'RESOLVED');
+        }
+        return filtered; // 'all' or any other value
+    };
+
+    if (loading) {
+        return (
+            <>
+                <Header title="Reports" onClick={handleHeaderBackIconClick} />
+                <main className="issues-reported-centered-container">
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={loading}/>
+                </main>
+                <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
+            </>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <Header title="Reports" onClick={handleHeaderBackIconClick} />
+                <main className="issues-reported-centered-container">
+                    <div>{error}</div>
+                </main>
+                <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
+            </>
+        );
+    }
+
     return (
         <>
-            <NavigationHeader title="Reports" />
-
+            <Header title="Reports" onClick={handleHeaderBackIconClick} />
+            {/* Venue Dropdown */}
+            <div className="venue-filter">
+                <select 
+                    id="venue-select" 
+                    value={selectedVenue} 
+                    onChange={(e) => setSelectedVenue(e.target.value)}
+                >
+                    <option value="">All Venues</option>
+                    {venues.map(venue => (
+                        <option key={venue.VENUE_ID} value={venue.VENUE_ID}>
+                            {venue.VENUE_NAME}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            {/* Filter type all, resolved, unresolved Dropdown */}
+            <div className="venue-filter">
+                <select 
+                    value={filter} 
+                    onChange={(e) => setFilter(e.target.value)}
+                >
+                    <option value="all">All Issues</option>
+                    <option value="resolved">Resolved Issues</option>
+                    <option value="unresolved">Unresolved Issues</option>
+                </select>
+            </div>
+            
             <main className="issues-list">
-                {issues.length > 0 ? (
-                    issues.map(issue => (
+                {filteredIssues().length > 0 ? (
+                    filteredIssues().map(issue => (
                         <IssueListCard
                             key={issue.ISSUE_ID}
                             title={issue.TITLE}
                             reportedBy={issue.REPORTED_BY}
                             date={formatDate(issue.REPORT_DATE)}
                             venueName={getVenueName(issue.VENUE_ID)}  // Pass the venue name
-                            isBlocked={blockedVenues.has(issue.VENUE_ID)}  // Determine if venue is blocked
                             onClick={() => openPopup(issue)}
-                            onBlockRoom={() => handleBlockRoom(issue.VENUE_ID)} // Pass venue ID to handler
                         />
                     ))
                 ) : (
                     <p>No issues found.</p>
                 )}
             </main>
+
+            <Footer id="admin-report-footer" onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
+
 
             {isPopupOpen && selectedIssue && (
                 <Popup
@@ -108,6 +218,7 @@ function IssuesReportedPage() {
                     venueName={getVenueName(selectedIssue.VENUE_ID)}
                     description={selectedIssue.DESCRIPTION}
                     status={selectedIssue.ISSUE_STATUS}
+                    onResolve={()=>handleResolveIssue(selectedIssue.ISSUE_ID)}
                     onClose={closePopup}
                 />
             )}

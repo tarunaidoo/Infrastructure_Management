@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import Header from "../../components/NavigationHeader/NavigationHeader";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import Popup from "../../components/Popup/Popup";
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { getUserDetailsFromUserID, getVenuesFromBuildingIDAndUserID, getVenueFeatureNamesFromVenues } from "../../services/RoomSelectionPage/RoomSelectionPage.service";
 
 import "./RoomSelectionPage.css";
@@ -71,8 +72,8 @@ const RoomSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-                <main className="centered-container">
-                    <div>Fetching Rooms...</div>
+                <main className="room-selection-centered-container">
+                    <LoadingComponent colour="#D4A843" size="15px" isLoading={venueLoading || userDetailsLoading}/>
                 </main>
             </>
         );
@@ -82,7 +83,7 @@ const RoomSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-                <main className="centered-container">
+                <main className="room-selection-centered-container">
                     <div>An error occurred: {userDetailsError.message}</div>
                 </main>
             </>
@@ -93,7 +94,7 @@ const RoomSelectionPage = () => {
         return (
             <>
                 <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-                <main className="centered-container">
+                <main className="room-selection-centered-container">
                     <div>An error occurred: {venueError.message}</div>
                 </main>
             </>
@@ -103,7 +104,7 @@ const RoomSelectionPage = () => {
     return (
         <>
             <Header title={"Choose a Room"} onClick={handleHeaderBackIconClick}/>
-            <main className="centered-container">
+            <main className="room-selection-centered-container">
                 <section className="room-selection-content-section">
                     {venue ? 
                     venue.sort((a, b) => (a.VENUE_NAME < b.VENUE_NAME ? -1 : 1))

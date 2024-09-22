@@ -1,8 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import NavigationHeader from '../../components/NavigationHeader/NavigationHeader';
-// import AdminIcon from '../../assets/icons/admin-home-icon.svg'
 import AdminIssuesCard from '../../components/AdminIssuesCard/AdminIssuesCard'
 import AdminEventsCard from '../../components/AdminEventsCard/AdminEventsCard';
 import Footer from '../../components/NavigationBar/AdminHomeFooter';
@@ -33,15 +30,23 @@ function AdminHomePage(){
         navigate("/campus-selection", { state: venueSelectionDetails });
     };
 
+    const handleProfileClick = () =>{
+        navigate('/profile');
+    };
+
     return(
         <>
-            <NavigationHeader title = "Home" className="admin-header" />
-            <img src={AdminIcon} alt='admin icon' className='adminIcon'/> 
+            <header className="adminheader">
+                <section className="adminheaderBlock">
+                    <img src={AdminIcon} alt="Admin Icon" id="adminIcon"></img>
+                    <h1 id="admin-heading">Home</h1>
+                </section>
+            </header>
             <main className="admin-home-container">
             <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
             <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
             </main>
-            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick}/>
+            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
         </>
         
         

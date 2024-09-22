@@ -98,7 +98,15 @@ function StudentHomePage() {
   }
 
   if (loading) {
-    return <LoadingComponent/>
+    return (
+      <>
+      <Header />
+      <main className='centered-container'>
+        <LoadingComponent colour="#D4A843" size="15" isLoading={loading}/> 
+      </main>
+      <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick}/>
+      </>
+    );
   }
 
   if (error) {

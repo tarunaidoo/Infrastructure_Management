@@ -1,15 +1,14 @@
 import React from 'react';
-import './LoadingComponent.css';
-import loadIcon from "../../assets/icons/loader.svg"
+import { PropagateLoader } from "react-spinners";
 
-function LoadingComponent() {
-   return( <main className='home-loading-container'>
-    <section className='home-loading-content'>
-      <img src={loadIcon} alt='loadIcon'/>
-    <p>Connecting...</p>
-    </section>
-    </main>
-   );
+const LoadingComponent = ({ colour, size, isLoading }) => {
+    return (
+        <>
+            <section className='loading-component-container'>
+                <PropagateLoader color={colour} size={size} loading={isLoading}/>
+            </section>
+        </>
+    );
 }
 
 export default LoadingComponent;

@@ -17,6 +17,7 @@ const LogoutButton = () => {
     }, 100); // Small delay to allow logout to complete
 
     // Clear the session history after logout
+    localStorage.clear();
     window.history.pushState(null, null, window.location.href);
     window.history.go(1); // Prevent back button
   };
