@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
-import headingIcon from '../../assets/icons/chevron-left.svg';
+
 import Calendar from "react-calendar";
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import Popup from '../../components/Popup/Popup';
 import { createBooking, getBookings } from '../../services/BookingPage/BookingPage.service';
 import { formatDateToISO } from '../../utils/dateUtils';
 import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingValidationUtil';
 import { generateTimeOptions } from '../../utils/timeUtils';
-import Popup from '../../components/Popup/Popup';
+
 import "react-calendar/dist/Calendar.css";
 import "./Calendar.css";
 import './BookingPage.css';
+
+import headingIcon from '../../assets/icons/chevron-left.svg';
 
 
 const BookingPage = () => {
@@ -23,8 +27,6 @@ const BookingPage = () => {
     const [activeStartDate, setActiveStartDate] = useState(new Date());
     const [popupState, setPopupState] = useState("");
     const [displayPopup, setDisplayPopup] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [enabled, setEnabled] = useState(false);
     const [bookingPageInfo, setBookingPageInfo] = useState(selectedVenue.BOOKING_PAGE_INFO || {
         EVENT_NAME: "",
         BOOKING_DATE: new Date(),
@@ -40,42 +42,10 @@ const BookingPage = () => {
         onError: () => {
             setPopupState("Booking Failed");
             setDisplayPopup(true);
-        },
-        onSettled: () => {
-            setLoading(false); // Hide loading state after mutation is done
         }
     });
 
-    const { data: bookings } = useQuery("bookingsData", getBookings , {
-        enabled: enabled,
-
-        onError: () => {
-            setPopupState("Booking Failed");
-            setDisplayPopup(true);
-        },
-
-        onSuccess: () => {
-            const overlapExists = checkForTimeClash(
-                bookings, 
-                selectedVenue.VENUE_ID, 
-                formatDateToISO(bookingPageInfo.BOOKING_DATE), 
-                bookingPageInfo.START_TIME, 
-                bookingPageInfo.END_TIME
-            );
-            
-            if (overlapExists) {
-                setPopupState("Time Slot Overlap");
-                setDisplayPopup(true);
-            }
-            else {
-                setPopupState("Confirm Booking");
-                setDisplayPopup(true);
-            }
-
-            setLoading(false);
-            setEnabled(false);
-        }
-    });
+    const { data: bookings, error: bookingsError, isLoading: bookingsLoading } = useQuery("bookingsData", getBookings);
 
     const handleSubmitButtonClick = async () => {
         if (!selectedVenue || !bookingPageInfo.START_TIME || !bookingPageInfo.END_TIME || !bookingPageInfo.EVENT_NAME) {
@@ -84,8 +54,22 @@ const BookingPage = () => {
             return;
         }
 
-        setEnabled(true);
-        setLoading(true);
+        const overlapExists = checkForTimeClash(
+            bookings, 
+            selectedVenue.VENUE_ID, 
+            formatDateToISO(bookingPageInfo.BOOKING_DATE), 
+            bookingPageInfo.START_TIME, 
+            bookingPageInfo.END_TIME
+        );
+
+        if (overlapExists) {
+            setPopupState("Time Slot Overlap");
+            setDisplayPopup(true);
+        }
+        else {
+            setPopupState("Confirm Booking");
+            setDisplayPopup(true);
+        }
     };
 
     const handleConfirmBookingClick = () => {
@@ -198,6 +182,40 @@ const BookingPage = () => {
         return null;
     };
 
+    if (bookingsLoading) {
+        return (
+            <main className='booking-layout'>
+                <article onClick={handleHeaderBackIconClick} className='booking-heading'>
+                    <img src={headingIcon} alt='back-arrow' className='booking-icons' />
+                    <h1>Book Event</h1>
+                </article>
+
+                <section className='booking-container'>
+                    <main className='booking-loading-component-container'>
+                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading}/>
+                    </main>
+                </section>
+            </main>
+        );
+    }
+
+    if (bookingsError) {
+        return (
+            <main className='booking-layout'>
+                <article onClick={handleHeaderBackIconClick} className='booking-heading'>
+                    <img src={headingIcon} alt='back-arrow' className='booking-icons' />
+                    <h1>Book Event</h1>
+                </article>
+
+                <section className='booking-container'>
+                    <main className="room-selection-centered-container">
+                       <p> bookingsError </p>
+                    </main>
+                </section>
+            </main>
+        );
+    }
+
     return (
         <>
         <main className='booking-layout'>
@@ -286,8 +304,8 @@ const BookingPage = () => {
                         </section>
                     </section>
 
-                    <button className="book-button" onClick={handleSubmitButtonClick} disabled={loading}>
-                        {loading ? "Checking availability..." : "Book event"}
+                    <button className="book-button" onClick={handleSubmitButtonClick}>
+                        "Book event"
                     </button>
                 </section>
             </section>
