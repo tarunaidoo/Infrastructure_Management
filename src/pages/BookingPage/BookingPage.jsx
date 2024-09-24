@@ -129,28 +129,59 @@ const BookingPage = () => {
     };
 
     const handleStartTimeChange = (event) => {
-        setStartTime(`${event.target.value}:00`); // Append seconds
-    };
+      const selectedTime = `${event.target.value}:00`; // Append seconds
+  
+      const currentDate = new Date();
+      const selectedDate = new Date(bookingDate);
+  
+      // If booking is for today, restrict start times before the current hour
+      if (
+          selectedDate.toDateString() === currentDate.toDateString() &&
+          parseInt(event.target.value.slice(0, 2)) < currentDate.getHours()
+      ) {
+          setPopupState("Invalid Start TIme");
+          setDisplayPopup(true);
+      } else {
+          setStartTime(selectedTime);
+      }
+  };
+  
+  
+  
 
     const handleEndTimeChange = (event) => {
-        const newEndTime = `${event.target.value}:00`; // Append seconds
+    const newEndTime = `${event.target.value}:00`; // Append seconds
 
-        // Check if the new end time is before the start time
-        if (startTime && new Date(`1970-01-01T${newEndTime}`) <= new Date(`1970-01-01T${startTime}`)) {
-            setPopupState("End time must be after start time");
-            setDisplayPopup(true);
-        } else {
-            setEndTime(newEndTime);
-        }
-    };
+    // Ensure the start time is set before allowing end time input
+    if (!startTime) {
+        setPopupState("Please select a start time first");
+        setDisplayPopup(true);
+        return; // Prevent further execution until a start time is set
+    }
+
+    // Check if the new end time is before the start time
+    if (new Date(`1970-01-01T${newEndTime}`) <= new Date(`1970-01-01T${startTime}`)) {
+        setPopupState("End time must be after start time");
+        setDisplayPopup(true);
+    } else {
+        setEndTime(newEndTime);
+        setPopupState(""); // Clear any previous popup state
+        setDisplayPopup(false); // Hide popup if time is valid
+    }
+};
+
 
     const tileDisabled = ({ date, view }) => {
-        if (view === 'month') {
-            const displayedMonth = activeStartDate.getMonth();
-            return date.getMonth() !== displayedMonth;
-        }
-        return false;
+      if (view === 'month' || view === 'year' || view === 'decade') {
+          // Disable past dates
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
+
+          return date < today; // Disable dates before today
+      }
+      return false;
     };
+
 
     const tileContent = ({ date, view }) => {
         if (view === 'month') {
@@ -255,6 +286,22 @@ const BookingPage = () => {
                 <Popup trigger={displayPopup}>
                     <h2>Invalid Time</h2>
                     <p>The end time must be after the start time. Please select a valid time.</p>
+                    <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
+                </Popup>
+            }
+
+            {popupState === "Please select a start time first" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Select a start time </h2>
+                    <p> Please select a start time for your booking first.</p>
+                    <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
+                </Popup>
+            }
+
+            {popupState === "Invalid Start TIme" &&
+                <Popup trigger={displayPopup}>
+                    <h2>Invalid Start Time</h2>
+                    <p>Please select a start time later than the current hour for today!</p>
                     <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
                 </Popup>
             }
