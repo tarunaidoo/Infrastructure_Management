@@ -72,6 +72,8 @@ const BookingPage = () => {
         }
     };
 
+    console.log(bookingPageInfo);
+
     const handleConfirmBookingClick = () => {
         setPopupState("");
         setDisplayPopup(false);
@@ -120,8 +122,31 @@ const BookingPage = () => {
         const currentDate = new Date();
         const selectedDate = formatDateToISO(bookingPageInfo.BOOKING_DATE);
 
+        if (bookingPageInfo.END_TIME) {
+            if (new Date(`1970-01-01T${selectedTime}`) >= new Date(`1970-01-01T${bookingPageInfo.END_TIME}`)) {
+                
+                setBookingPageInfo({
+                    EVENT_NAME: bookingPageInfo.EVENT_NAME,
+                    BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
+                    START_TIME: "",
+                    END_TIME: ""
+                });
+
+                setPopupState("Start time must be before end time");
+                setDisplayPopup(true);
+                return;
+            }
+        }
+
         // If booking is for today, restrict start time to be one hour before the current hour
-        if ( selectedDate === formatDateToISO(currentDate) && parseInt(selectedTime.slice(0, 2)) - 1 < currentDate.getHours()) {
+        if ( selectedDate === formatDateToISO(currentDate) && parseInt(selectedTime.slice(0, 2)) < currentDate.getHours()) {
+            setBookingPageInfo({
+                EVENT_NAME: bookingPageInfo.EVENT_NAME,
+                BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
+                START_TIME: "",
+                END_TIME: ""
+            });
+
             setPopupState("Invalid Start TIme");
             setDisplayPopup(true);
         } else {
@@ -305,7 +330,7 @@ const BookingPage = () => {
                     </section>
 
                     <button className="book-button" onClick={handleSubmitButtonClick}>
-                        "Book event"
+                        Book event
                     </button>
                 </section>
             </section>
@@ -315,6 +340,14 @@ const BookingPage = () => {
             <Popup trigger={displayPopup}>
                 <h2>Invalid Details</h2>
                 <p>Please fill in all fields</p>
+                <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
+            </Popup>
+        }
+
+        {popupState === "Start time must be before end time" &&
+            <Popup trigger={displayPopup}>
+                <h2>Invalid Time</h2>
+                <p>Start time must be before end time. Please select a valid time.</p>
                 <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
             </Popup>
         }
