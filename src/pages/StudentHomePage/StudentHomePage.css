@@ -9,19 +9,30 @@
 
 .home-content {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Ensure content starts from the top */
+  flex-direction: column; /* Default for smaller screens */
+  justify-content: flex-start;
   align-items: center;
-  overflow-y: auto; /* Enables scrolling for this section */
-  padding: 2vh 2vw; /* Scales padding with viewport size */
-  position: absolute; /* Change to absolute for more natural flow */
-  top: 17vh; /* Positioned below the header using viewport height */
-  bottom: 10vh; /* Positioned above the footer using viewport height */
+  overflow-y: auto;
+  padding: 2vh 2vw;
+  position: absolute;
+  top: 17vh;
+  bottom: 10vh;
   left: 0;
   right: 0;
   width: 100%;
   box-sizing: border-box;
-  scroll-margin-top: 0; /* Ensure content starts from the top when scrollable */
-  margin-bottom: 3vh; /* Adds space between content and footer using viewport height */
+  scroll-margin-top: 0;
+  margin-bottom: 3vh;
+}
+
+/* Media query for laptop and larger screens */
+@media (min-width: 1024px) {
+  .home-content {
+    flex-direction: row; /* Change to row layout */
+    flex-wrap: wrap; /* Allow items to wrap onto the next row */
+    justify-content: center; /* Space out the items */
+    align-items: center;
+  }
+
 }
 
