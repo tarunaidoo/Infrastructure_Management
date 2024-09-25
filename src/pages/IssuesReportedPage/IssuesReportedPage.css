@@ -102,6 +102,10 @@
     transform: scale(1.20);
 }
 
+.admin-report-footer{
+    padding-bottom: 0;
+}
+
 /* Responsive styles */
 @media (max-width: 800px) {
     .issue-filters {

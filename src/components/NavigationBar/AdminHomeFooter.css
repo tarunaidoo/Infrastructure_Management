@@ -16,7 +16,7 @@ body {
     text-align: center;
     padding-bottom: 1vh; /* Scales padding with viewport height */
     position: fixed;
-    bottom: 5vh; /* Moves the footer up by a scalable amount from the bottom */
+    bottom: 10px; /* Moves the footer up by a scalable amount from the bottom */
     width: 90%; /* Sets the footer width to 90% */
     left: 50%; /* Centers the footer horizontally */
     transform: translateX(-50%); /* Adjusts the centering based on reduced width */
