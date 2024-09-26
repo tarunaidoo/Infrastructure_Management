@@ -60,7 +60,7 @@ function ReportIssue() {
   const [issueDescription, setIssueDescription] = useState(cachedIssueData.issueDescription);
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
-  const [setIsLoading] = useState(false); // New state for loading
+  const [isLoading,setIsLoading] = useState(false); // New state for loading
   // const [userData, setUserData] = useState(null); // State for user data
 
   const updateIssueData = useMutation(
@@ -231,7 +231,7 @@ function ReportIssue() {
             <button onClick={handleClosePopup} data-testid="error-popup-close-button">Close</button>
           </article>
         )}
-        {popupType === 'loading' && (
+       {popupType === 'loading' && isLoading && ( // Conditional rendering for loading state
           <article className='report-Issue-Popups' data-testid="loading-popup">
             <h2 data-testid="loading-popup-heading">Loading...</h2>
             <p data-testid="loading-popup-message">Please wait while we send your report.</p>

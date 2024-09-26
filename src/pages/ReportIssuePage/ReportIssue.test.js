@@ -3,6 +3,7 @@ import { render, screen, fireEvent  } from '@testing-library/react';
 import ReportIssue from './ReportIssue';
 import { MemoryRouter,useNavigate} from 'react-router-dom';
 import { createReportIssue } from '../../services/ReportIssuePage/ReportIssuePage.service';
+import { QueryClient, QueryClientProvider } from 'react-query';
 // Mock `useNavigate` and `useLocation` hooks from `react-router-dom`
 
 
@@ -27,17 +28,21 @@ jest.mock('react-router-dom', () => ({
   
   
   describe('ReportIssue component', () => {
+      // Create a QueryClient instance for each test
+  const queryClient = new QueryClient();
     beforeEach(() => {
       jest.clearAllMocks(); // Clear previous mocks before each test
     });
-
+    const renderWithQueryClient = (component) => {
+      return render(
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter>{component}</MemoryRouter>
+        </QueryClientProvider>
+      );
+    };
  
     it('renders the component with initial elements', () => {
-        render(
-          <MemoryRouter>
-            <ReportIssue />
-          </MemoryRouter>
-        );
+      renderWithQueryClient(<ReportIssue />);
     
         // Check if the main layout is rendered
         expect(screen.getByTestId('report-issue-layout')).toBeInTheDocument();
@@ -65,7 +70,7 @@ jest.mock('react-router-dom', () => ({
       });
 
  it('handles form submission and shows error popup if fields are empty', () => {
-  render(<ReportIssue />);
+  renderWithQueryClient(<ReportIssue />);
 
   // Trigger form submission
   fireEvent.submit(screen.getByTestId('report-issue-form'));
@@ -77,7 +82,7 @@ jest.mock('react-router-dom', () => ({
 });
 
 it('handles form submission and shows confirmation popup if fields are filled', () => {
-  render(<ReportIssue />);
+  renderWithQueryClient(<ReportIssue />);
 
   // Fill form fields
   fireEvent.change(screen.getByTestId('issue-title-input'), { target: { value: 'Test Title' } });
@@ -93,7 +98,7 @@ it('handles form submission and shows confirmation popup if fields are filled', 
 });
 
 it('submitting form with missing fields triggers error popup', () => {
-    render(<ReportIssue />);
+  renderWithQueryClient(<ReportIssue />);
     
     fireEvent.change(screen.getByTestId('issue-title-input'), { target: { value: '' } });
     fireEvent.change(screen.getByTestId('issue-description-input'), { target: { value: '' } });
@@ -106,7 +111,7 @@ it('submitting form with missing fields triggers error popup', () => {
   });
 
   it('submitting form with valid fields triggers confirmation popup', () => {
-    render(<ReportIssue />);
+    renderWithQueryClient(<ReportIssue />);
     
     fireEvent.change(screen.getByTestId('issue-title-input'), { target: { value: 'Test Issue' } });
     fireEvent.change(screen.getByTestId('issue-description-input'), { target: { value: 'Test Description' } });
@@ -118,57 +123,72 @@ it('submitting form with missing fields triggers error popup', () => {
     expect(screen.getByTestId('confirmation-popup-message')).toHaveTextContent('Do you want to report this issue?');
   });
 
-
-it('renders the request error popup when popupType is "request-error"', async () => {
+  it('renders the request error popup when popupType is "request-error"', async () => {
     // Mock createReportIssue to simulate an error
     createReportIssue.mockImplementation(() => Promise.reject(new Error('Request failed')));
-  
-    render(<ReportIssue />);
-  
+
+    renderWithQueryClient(<ReportIssue />);
+
     // Simulate filling in the form
     fireEvent.change(screen.getByTestId('issue-title-input'), { target: { value: 'Test Issue' } });
     fireEvent.change(screen.getByTestId('issue-description-input'), { target: { value: 'Test Description' } });
-  
+
     // Submit the form to trigger the popup
     fireEvent.click(screen.getByTestId('report-issue-button'));
-  
+
     // Simulate confirmation to trigger error popup
     fireEvent.click(await screen.findByTestId('confirmation-yes-button'));
-  
-    // Check if the request error popup is in the document
-    expect(await screen.findByTestId('request-error-popup')).toBeInTheDocument();
+    
+    // Check if the loading popup is displayed
+    expect(screen.getByTestId('loading-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-popup-heading')).toHaveTextContent('Loading...');
+    expect(screen.getByTestId('loading-popup-message')).toHaveTextContent('Please wait while we send your report.');
+
+    // After a brief delay, check that the loading popup is gone
+    await new Promise((resolve) => setTimeout(resolve, 0)); // or use a suitable timer if necessary
+    expect(screen.queryByTestId('loading-popup')).not.toBeInTheDocument();
+
+    // Check if the request error popup is now in the document
+    expect(screen.getByTestId('request-error-popup')).toBeInTheDocument();
     expect(screen.getByTestId('request-error-popup-heading')).toHaveTextContent('Confirmation');
     expect(screen.getByTestId('request-error-popup-message')).toHaveTextContent('Error Sending Request');
     expect(screen.getByTestId('request-error-close-button')).toBeInTheDocument();
-  });
-  it('renders the success popup when popupType is "success"', async () => {
+});
+
+  it('renders the loading popup during submission and the success popup when the issue is successfully reported', async () => {
     // Mock createReportIssue to resolve successfully
     createReportIssue.mockResolvedValue({ value: 'Success' });
   
-    render(
-      <MemoryRouter>
-        <ReportIssue />
-      </MemoryRouter>
-    );
+    renderWithQueryClient(<ReportIssue />);
   
     // Simulate filling in the form
     fireEvent.change(screen.getByTestId('issue-title-input'), { target: { value: 'Test Issue' } });
     fireEvent.change(screen.getByTestId('issue-description-input'), { target: { value: 'Test Description' } });
   
-    // Submit the form to trigger the popup
+    // Submit the form to trigger the loading popup
     fireEvent.click(screen.getByTestId('report-issue-button'));
+      // Simulate confirmation to submit the form
+    fireEvent.click(screen.getByTestId('confirmation-yes-button'));
+
+    // Check for the loading popup immediately after submission
+    expect(screen.getByTestId('loading-popup')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-popup-heading')).toHaveTextContent('Loading...');
+    expect(screen.getByTestId('loading-popup-message')).toHaveTextContent('Please wait while we send your report.');
+
+       // After a brief delay, check that the loading popup is gone
+     await new Promise((resolve) => setTimeout(resolve, 0)); // or use a suitable timer if necessary
+     expect(screen.queryByTestId('loading-popup')).not.toBeInTheDocument();
+
   
-    // Simulate confirmation to trigger success popup
-    fireEvent.click(await screen.findByTestId('confirmation-yes-button'));
-  
-    // Check if the success popup is in the document
+    // Check for the success popup after the submission resolves
     expect(await screen.findByTestId('success-popup')).toBeInTheDocument();
     expect(screen.getByTestId('success-popup-heading')).toHaveTextContent('Confirmation');
     expect(screen.getByTestId('success-popup-message')).toHaveTextContent('Your report has been sent');
     expect(screen.getByTestId('success-close-button')).toBeInTheDocument();
+  
   });
   it('shows error popup when form is submitted with empty fields', () => {
-    render(<ReportIssue />);
+    renderWithQueryClient(<ReportIssue />);
 
     fireEvent.submit(screen.getByTestId('report-issue-form'));
 
@@ -181,11 +201,11 @@ it('renders the request error popup when popupType is "request-error"', async ()
     const navigate = jest.fn();
     useNavigate.mockReturnValue(navigate);
 
-    render(<ReportIssue />);
+    renderWithQueryClient(<ReportIssue />);
 
     fireEvent.click(screen.getByTestId('back-arrow-icon'));
 
-    expect(navigate).toHaveBeenCalledWith("/room-selection", {
+    expect(navigate).toHaveBeenCalledWith("/student-home", {
       state: {
         SOURCE_PAGE: '/home',
         USER_ID: 1,
