@@ -34,6 +34,15 @@ const BookingPage = () => {
         END_TIME: ""
     });
 
+        // Additional state for recurring booking popup
+    const [showRecurringPopup, setShowRecurringPopup] = useState(true);
+    const [recurringDetails, setRecurringDetails] = useState({
+        frequency: "Daily",
+        startDate: formatDateToISO(new Date()),
+        endDate: formatDateToISO(new Date()),
+    });
+
+
     const mutation = useMutation((newBooking) => createBooking(newBooking), {
         onSuccess: () => {
             setPopupState("Booking Successful");
@@ -184,6 +193,24 @@ const BookingPage = () => {
         }
     };
 
+        // Handler to open the recurring popup
+    const handleOpenRecurringPopup = () => {
+        setShowRecurringPopup(true);
+    };
+
+    // Handler to close the recurring popup without confirming
+    const handleCloseRecurringPopup = () => {
+        setShowRecurringPopup(false);
+    };
+
+    // Handler to confirm and proceed with the recurring booking
+    const handleConfirmRecurringBooking = () => {
+        setPopupState("Confirm Booking");
+        setDisplayPopup(true);
+        setShowRecurringPopup(false);
+    };
+
+
 
     const tileDisabled = ({ date, view }) => {
       if (view === 'month' || view === 'year' || view === 'decade') {
@@ -327,12 +354,47 @@ const BookingPage = () => {
                         </section>
                     </section>
 
+                    <button className="book-button" onClick={handleOpenRecurringPopup}>
+                        Recurring Booking
+                    </button>
+
+
                     <button className="book-button" onClick={handleSubmitButtonClick}>
                         Book event
                     </button>
                 </section>
             </section>
         </main>
+            {/* Recurring Booking Popup */}
+            {showRecurringPopup &&
+            <Popup trigger={showRecurringPopup}>
+                <h2>Set Recurring Booking</h2>
+                <section className='recurring-booking-form'>
+                    <label>
+                        Repeat over:
+                        <input
+                            type="number"
+                            min="1"
+                            value={recurringDetails.weeks}
+                            onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
+                            placeholder="Enter number of weeks"
+                        /> 
+                        Weeks
+                    </label>
+
+                     {/* Sentence Display
+                    <p className='recurring-booking-summary'>
+                        Every week on X for {recurringDetails.weeks} {recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}
+                    </p> */}
+                    <section className='popup-buttons'>
+                        <button onClick={handleConfirmRecurringBooking} className='confirm-button'>Confirm</button>
+                        <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
+                    </section>
+                </section>
+            </Popup>
+        }
+
+
 
         {popupState === "Invalid Details" &&
             <Popup trigger={displayPopup}>
