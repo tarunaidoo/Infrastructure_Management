@@ -33,44 +33,11 @@
     border-color: var(--color-accent); /* Change border color on focus */
 }
 
-.bookings-list {
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
-    justify-content: center; /* Center the items on smaller screens */
-    gap: 20px; /* Add space between the cards */
-}
-
-.booked-event-card {
-    flex: 0 1 calc(33.333% - 20px); /* Each card takes 1/3 of the row minus the gap */
-    max-width: calc(33.333% - 20px); /* Ensure cards do not exceed this width */
-    box-sizing: border-box; /* Ensure padding is included in width */
-}
-
-/* Optional: Add responsiveness for smaller screens */
-@media (max-width: 768px) {
-    .booked-event-card {
-        flex: 0 1 100%; /* Stack cards on smaller screens */
-        max-width: 100%;
-    }
-}
-
-.issues-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
-    gap: 15px; /* Add space between the cards */
-}
-
-/* Ensure cards fit properly */
-.issues-event-card {
-    box-sizing: border-box; /* Ensure padding is included in width */
-}
-
 .issues-list {
     flex-grow: 1;
     overflow-y: auto;
     padding: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+    padding-bottom: 100px;
 }
 
 .issue-filters {
@@ -95,35 +62,6 @@
     background-color: var(--color-highlight); /* Change color on hover */
     color: white; /* Change text color on hover */
     transform: scale(1.20);
-}
-
-.admin-report-footer{
-    padding-bottom: 3px;
-}
-
-/* Responsive styles */
-@media (max-width: 800px) {
-    .issue-filters {
-        flex-direction: column; /* Stack buttons vertically on smaller screens */
-        align-items: center; /* Center align buttons */
-    }
-
-    .issues-filter-btn {
-        margin: 5px 0; /* Add margin between buttons */
-        width: 80%; /* Make buttons wider on mobile */
-        padding: 15px; /* Adjust padding for smaller screens */
-        font-size: 18px; /* Set a specific size for better visibility */
-    }
-}
-
-@media (max-width: 600px) {
-    .issues-list {
-        padding: 10px; /* Reduce padding for smaller screens */
-    }
-
-    .issues-filter-btn {
-        font-size: 16px; /* Adjust font size for mobile screens */
-    }
 }
 
 .issues-reported-centered-container {
