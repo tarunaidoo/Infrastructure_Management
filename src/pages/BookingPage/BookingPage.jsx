@@ -382,10 +382,10 @@ const BookingPage = () => {
                         Weeks
                     </label>
 
-                     {/* Sentence Display
+                     {/* Sentence Display */}
                     <p className='recurring-booking-summary'>
-                        Every week on X for {recurringDetails.weeks} {recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}
-                    </p> */}
+                        Every week on  for {recurringDetails.weeks} {recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}
+                    </p>
                     <section className='popup-buttons'>
                         <button onClick={handleConfirmRecurringBooking} className='confirm-button'>Confirm</button>
                         <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
