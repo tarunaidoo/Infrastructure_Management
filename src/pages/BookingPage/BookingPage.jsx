@@ -16,7 +16,6 @@ import './BookingPage.css';
 
 import headingIcon from '../../assets/icons/chevron-left.svg';
 
-
 const BookingPage = () => {
     const userID = localStorage.getItem('userEmail');
     const navigate = useNavigate();
@@ -34,14 +33,12 @@ const BookingPage = () => {
         END_TIME: ""
     });
 
-        // Additional state for recurring booking popup
-    const [showRecurringPopup, setShowRecurringPopup] = useState(true);
+    // Additional state for recurring booking popup
+    const [showRecurringPopup, setShowRecurringPopup] = useState(false);
     const [recurringDetails, setRecurringDetails] = useState({
-        frequency: "Daily",
-        startDate: formatDateToISO(new Date()),
-        endDate: formatDateToISO(new Date()),
+        frequency: "Weekly",
+        weeks: 1, // Default to 1 week
     });
-
 
     const mutation = useMutation((newBooking) => createBooking(newBooking), {
         onSuccess: () => {
@@ -74,8 +71,7 @@ const BookingPage = () => {
         if (overlapExists) {
             setPopupState("Time Slot Overlap");
             setDisplayPopup(true);
-        }
-        else {
+        } else {
             setPopupState("Confirm Booking");
             setDisplayPopup(true);
         }
@@ -120,18 +116,17 @@ const BookingPage = () => {
             DESTINATION_PAGE: "/booking",
             BOOKING_PAGE_INFO: bookingPageInfo,
         };
-        navigate("/campus-selection", { state: venueSelectionDetails});
+        navigate("/campus-selection", { state: venueSelectionDetails });
     };
 
     const handleStartTimeChange = (event) => {
         const selectedTime = `${event.target.value}:00`; // Append seconds
-    
+
         const currentDate = new Date();
         const selectedDate = formatDateToISO(bookingPageInfo.BOOKING_DATE);
 
         if (bookingPageInfo.END_TIME) {
             if (new Date(`1970-01-01T${selectedTime}`) >= new Date(`1970-01-01T${bookingPageInfo.END_TIME}`)) {
-                
                 setBookingPageInfo({
                     EVENT_NAME: bookingPageInfo.EVENT_NAME,
                     BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
@@ -146,7 +141,7 @@ const BookingPage = () => {
         }
 
         // If booking is for today, restrict start time to be one hour before the current hour
-        if ( selectedDate === formatDateToISO(currentDate) && parseInt(selectedTime.slice(0, 2)) < currentDate.getHours()) {
+        if (selectedDate === formatDateToISO(currentDate) && parseInt(selectedTime.slice(0, 2)) < currentDate.getHours()) {
             setBookingPageInfo({
                 EVENT_NAME: bookingPageInfo.EVENT_NAME,
                 BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
@@ -154,7 +149,7 @@ const BookingPage = () => {
                 END_TIME: ""
             });
 
-            setPopupState("Invalid Start TIme");
+            setPopupState("Invalid Start Time");
             setDisplayPopup(true);
         } else {
             setBookingPageInfo({
@@ -165,7 +160,7 @@ const BookingPage = () => {
             });
         }
     };
-  
+
     const handleEndTimeChange = (event) => {
         const newEndTime = `${event.target.value}:00`; // Append seconds
 
@@ -193,7 +188,7 @@ const BookingPage = () => {
         }
     };
 
-        // Handler to open the recurring popup
+    // Handler to open the recurring popup
     const handleOpenRecurringPopup = () => {
         setShowRecurringPopup(true);
     };
@@ -205,24 +200,37 @@ const BookingPage = () => {
 
     // Handler to confirm and proceed with the recurring booking
     const handleConfirmRecurringBooking = () => {
-        setPopupState("Confirm Booking");
-        setDisplayPopup(true);
+        // Implement recurring booking logic here
+        // You can create multiple bookings based on the frequency and weeks
+        for (let i = 0; i < recurringDetails.weeks; i++) {
+            const bookingData = {
+                VENUE_ID: selectedVenue.VENUE_ID,
+                USER_ID: userID,
+                EVENT_NAME: bookingPageInfo.EVENT_NAME,
+                DATE: formatDateToISO(new Date(bookingPageInfo.BOOKING_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000))), // Adding weeks
+                START_TIME: bookingPageInfo.START_TIME,
+                END_TIME: bookingPageInfo.END_TIME,
+                DATE_CREATED: formatDateToISO(new Date()),
+                BOOKING_STATUS: "Confirmed"
+            };
+
+            mutation.mutate(bookingData);
+        }
         setShowRecurringPopup(false);
+        setPopupState("Recurring Bookings Successful");
+        setDisplayPopup(true);
     };
-
-
 
     const tileDisabled = ({ date, view }) => {
-      if (view === 'month' || view === 'year' || view === 'decade') {
-          // Disable past dates
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
+        if (view === 'month' || view === 'year' || view === 'decade') {
+            // Disable past dates
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
 
-          return date < today; // Disable dates before today
-      }
-      return false;
+            return date < today; // Disable dates before today
+        }
+        return false;
     };
-
 
     const tileContent = ({ date, view }) => {
         if (view === 'month') {
@@ -242,7 +250,7 @@ const BookingPage = () => {
 
                 <section className='booking-container'>
                     <main className='booking-loading-component-container'>
-                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading}/>
+                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading} />
                     </main>
                 </section>
             </main>
@@ -384,7 +392,7 @@ const BookingPage = () => {
 
                      {/* Sentence Display */}
                     <p className='recurring-booking-summary'>
-                        Every week on  for {recurringDetails.weeks} {recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}
+                        Every week on "X" for {recurringDetails.weeks} {recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}
                     </p>
                     <section className='popup-buttons'>
                         <button onClick={handleConfirmRecurringBooking} className='confirm-button'>Confirm</button>
