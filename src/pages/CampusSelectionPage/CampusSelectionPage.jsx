@@ -16,7 +16,7 @@ const CampusSelectionPage = () => {
 
     // Function & Logic
     const handleHeaderBackIconClick = () => {
-        navigate(previousPageDetails.SOURCE_PAGE);
+        navigate(previousPageDetails.SOURCE_PAGE, {state : previousPageDetails});
     }
 
     const handleCampusCardClick = ( campusName ) => {

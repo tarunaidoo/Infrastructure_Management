@@ -10,8 +10,8 @@ const Profile = () => {
 
   const navigate=useNavigate();
   const handleback=()=>{
-    navigate("/student-home");
-    //navigate(-1); //possible fix as '-1' goes back to previous page - so useful for navigating back to whichever page user came from
+    //navigate("/student-home");
+    navigate(-1); //possible fix as '-1' goes back to previous page - so useful for navigating back to whichever page user came from
   }
 
 

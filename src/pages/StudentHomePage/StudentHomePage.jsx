@@ -40,17 +40,23 @@ function StudentHomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const date = new Date();
+        const currentTime = date.toISOString().split('T')[1].slice(0, 8); // Get current time in 'HH:MM:SS' format
+        const today = date.toISOString().split('T')[0];
+
         const fetchedBookings = await fetchBooking(userID);
-        setBookings(fetchedBookings);
+        const filteredBookings = fetchedBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
+        setBookings(filteredBookings);
   
         const fetchedEventBookings = await fetchEventsBookings(userID);
-        setEventBookings(fetchedEventBookings);
+        const filteredEventBookings = fetchedEventBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
+        setEventBookings(filteredEventBookings);
   
         const fetchedTutoringBookings = await fetchTutoringBookings(userID);
-        setTutoringBookings(fetchedTutoringBookings);
+        const filteredTutoringBookings = fetchedTutoringBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
+        setTutoringBookings(filteredTutoringBookings);
   
-        const today = new Date().toISOString().split('T')[0];
-        const todaysBookings = fetchedBookings.filter(booking => booking.DATE === today);
+        const todaysBookings = filteredBookings.filter(booking => booking.DATE === today);
         const namesArray = todaysBookings.map(booking => booking.EVENT_NAME);
         setEventNames(namesArray);
   
@@ -132,7 +138,7 @@ function StudentHomePage() {
             [...bookings, ...eventBookings, ...tutoringBookings].map((booking, index) => {
               const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
               const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
-
+              
               return (
                 <Card
                   key={index}
@@ -146,7 +152,7 @@ function StudentHomePage() {
               );
             })
           ) : (
-            <label>No bookings found.</label>
+            <label className='no-content'>No bookings found.</label>
           )}
         </section>
         <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick} onProfileClick={handleProfileClick}/>

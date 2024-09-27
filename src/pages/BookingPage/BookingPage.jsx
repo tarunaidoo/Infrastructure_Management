@@ -72,8 +72,6 @@ const BookingPage = () => {
         }
     };
 
-    console.log(bookingPageInfo);
-
     const handleConfirmBookingClick = () => {
         setPopupState("");
         setDisplayPopup(false);

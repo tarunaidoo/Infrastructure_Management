@@ -40,13 +40,7 @@ const RoomSelectionPage = () => {
     );
 
     const handleHeaderBackIconClick = () => {
-        const backPageDetails = {
-            SOURCE_PAGE: previousPageDetails.SOURCE_PAGE,
-            USER_ID: previousPageDetails.USER_ID,
-            DESTINATION_PAGE: previousPageDetails.DESTINATION_PAGE,
-            CAMPUS_NAME: previousPageDetails.CAMPUS_NAME
-        }
-        navigate("/building-selection", {state : backPageDetails});
+        navigate("/building-selection", {state : previousPageDetails});
     }
     
     const handleQuestionIconClick = (venue) => {
