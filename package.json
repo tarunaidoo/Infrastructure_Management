@@ -15,7 +15,8 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.14.1",
-    "react-switch": "^7.0.0"
+    "react-switch": "^7.0.0",
+    "swa": "^0.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
