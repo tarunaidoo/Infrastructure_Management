@@ -307,60 +307,117 @@ const BookingPage = () => {
                 </article>
 
                 <section className="booking-form">
-                    <input
-                        type="text"
-                        placeholder="Enter event name"
-                        value={bookingPageInfo.EVENT_NAME}
-                        onChange={(e) => (
-                            setBookingPageInfo({
-                            EVENT_NAME: e.target.value,
-                            BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
-                            START_TIME: bookingPageInfo.START_TIME,
-                            END_TIME: bookingPageInfo.END_TIME
-                            })
-                        )}
-                        className="input-field"
-                    />
-                    <article onClick={handleOnVenueSelectionClick} className="input-field">
-                        {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Select a venue"}
-                    </article>
-                    <article className="input-field">
-                        {selectedVenue.VENUE_NAME}
-                    </article>
+                    <section className="fields">
+                        <div className="fields-left">
+                            <section className="input-wrapper">
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={bookingPageInfo.EVENT_NAME}
+                                        id='input-event-name'
+                                        required  
+                                        onChange={(e) => (
+                                            setBookingPageInfo({
+                                                EVENT_NAME: e.target.value,
+                                                BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
+                                                START_TIME: bookingPageInfo.START_TIME,
+                                                END_TIME: bookingPageInfo.END_TIME
+                                            })
+                                        )}
+                                    />
+                                    <label 
+                                        for='input-event-name' 
+                                        class='placeholder'>
+                                        Event Name
+                                    </label>
+                                </div>
+                            </section>
 
-                    <section className="time-slot">
-                        <section className="input-field">
-                            <div>
-                                <label>Start Time</label>
-                                <select
-                                    value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
-                                    onChange={handleStartTimeChange}
-                                    className="time-dropdown"
-                                >
-                                    <option value="" disabled>- - : - -</option>
-                                    {timeOptions.map((time, index) => (
-                                        <option key={index} value={time}>{time}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </section>
+                            <section className="input-wrapper" onClick={handleOnVenueSelectionClick}>
+                                <div >
+                                    <input 
+                                        type="text" 
+                                        id="input-building-name" 
+                                        value={selectedVenue.BUILDING_NAME || ""} 
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        for="input-building-name" 
+                                        class="placeholder">
+                                        Select a venue
+                                    </label>
+                                </div>
+                            </section>
 
-                        <section className="input-field">
-                            <div>
-                                <label>End Time</label>
-                                <select
-                                    value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
-                                    onChange={handleEndTimeChange}
-                                    className="time-dropdown"
-                                >
-                                    <option value="" disabled>- - : - -</option>
-                                    {timeOptions.map((time, index) => (
-                                        <option key={index} value={time}>{time}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </section>
+                            <section className="input-wrapper">
+                                <div className="input-container">
+                                    <input 
+                                        type="text" 
+                                        id="input-venue-name" 
+                                        value={selectedVenue.VENUE_NAME || ""} 
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        for="input-venue-name" 
+                                        class="placeholder">
+                                            Room
+                                    </label>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div className="fields-right">
+                            
+                                <section className="input-wrapper">
+                                    <div >
+                                        <label 
+                                            for="input" 
+                                            class="placeholder">
+                                                From
+                                        </label>
+                                        <select
+                                            id="select"
+                                            value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
+                                            onChange={handleStartTimeChange}
+                                            
+                                            required
+                                        >
+                                            <option value="" disabled>- - : - -</option>
+                                            {timeOptions.map((time, index) => (
+                                                <option key={index} value={time}>{time}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </section>
+
+                                <section className="input-wrapper">
+                                    
+                                    <div >
+                                        <label 
+                                            for="input" 
+                                            class="placeholder">
+                                                To
+                                        </label>
+                                        <select
+                                            id="input"
+                                            value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
+                                            onChange={handleEndTimeChange}
+                                            required
+                                        >
+                                            <option value="" disabled>- - : - -</option>
+                                            {timeOptions.map((time, index) => (
+                                                <option key={index} value={time}>{time}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                
+                            </section>
+                        </div>
+
                     </section>
+
 
                     <button className="book-button" onClick={handleOpenRecurringPopup}>
                         Recurring Booking
