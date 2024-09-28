@@ -11,6 +11,18 @@ body{
     font-size: 1.1em;
     padding: 3vh; /* Optional: Adjust padding to match margin */
     position: relative; /* Ensure the container is positioned correctly */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.logout-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile_container a {
@@ -18,4 +30,8 @@ body{
     display: block; /* Make the <a> element a block-level element */
     margin: 20px auto; /* Center the <a> horizontally with margin */
     text-align: center; /* Ensure text inside <a> is centered */
+}
+
+.profile_container img{
+    border-radius: 60%;
 }
