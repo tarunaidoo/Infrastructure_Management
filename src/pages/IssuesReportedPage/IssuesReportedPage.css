@@ -34,39 +34,43 @@
 }
 
 .issues-list {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-    padding-bottom: 100px;
+    display: grid; /* Use grid layout for issues cards */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Increased minimum width for responsiveness */
+    gap: 20px; /* Add space between the cards */
+    padding-bottom: 100px; /* Padding at the bottom */
 }
 
-.issue-filters {
-    display: flex;
-    justify-content: space-around; /* Space buttons evenly across the container */
-    padding: 10px 0; /* Add vertical padding */
+/* Adjust for larger screens */
+@media (min-width: 769px) {
+    .issues-list {
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Further increase minimum width for laptop views */
+    }
 }
 
-.issues-filter-btn {
-    background-color: var(--color-accent);
-    color: white; /* Text color matching the main color */
-    border: none; /* Remove default button border */
-    border-radius: 20px; /* Rounded edges */
-    padding: 20px 20px; /* Button padding */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth background color transition */
-    max-width: 600px;
-    font-size: large; /* Default font size */
+.issues-card-comp {
+    box-sizing: border-box; /* Ensure padding is included in width */
+    padding: 20px; /* Add padding inside the card */
+    border: 1px solid var(--color-main); /* Add border with main color */
+    border-radius: 5px; /* Rounded corners for cards */
+    background-color: var(--color-neutral); /* Background color */
+    max-width: 500px; /* Increased max width for larger screens */
+    width: 100%; /* Allow cards to stretch to fill the container */
 }
 
-.issues-filter-btn:hover {
-    background-color: var(--color-highlight); /* Change color on hover */
-    color: white; /* Change text color on hover */
-    transform: scale(1.20);
+/* Optional: Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .issues-list {
+        grid-template-columns: 1fr; /* Stack cards on smaller screens */
+    }
+
+    .issues-card-comp {
+        max-width: 100%; /* Ensure card takes full width */
+    }
 }
 
 .issues-reported-centered-container {
     display: flex;
     justify-content: center; /* Centers the container horizontally */
     align-items: center; /* Centers the container vertically */
-    height: 88vh;
+    height: 88vh; /* Height of the container */
 }
