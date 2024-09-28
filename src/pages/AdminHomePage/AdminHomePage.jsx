@@ -6,14 +6,14 @@ import Footer from '../../components/NavigationBar/AdminHomeFooter';
 import './AdminHomePage.css';
 import AdminIcon from '../../assets/icons/admin-home-icon.svg';
 import AdminNotification from '../../components/AdminNotification/AdminNotification';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+//import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { fetchIssues, fetchVenues } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 
 function AdminHomePage(){
     const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
     const [notifications, setNotifications] = useState([]);
-    const [loading, setLoading] = useState(true);
+    //const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showNotification, setShowNotification] = useState(true); // Controls popup visibility
     
