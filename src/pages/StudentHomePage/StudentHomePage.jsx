@@ -110,7 +110,7 @@ function StudentHomePage() {
       <main className='centered-container'>
         <LoadingComponent colour="#D4A843" size="15" isLoading={loading}/> 
       </main>
-      <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick}/>
+      <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick} onProfileClick={handleProfileClick}/>
       </>
     );
   }

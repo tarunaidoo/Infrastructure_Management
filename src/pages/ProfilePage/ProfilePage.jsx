@@ -18,7 +18,7 @@ const Profile = () => {
   return (
       <>
         <NaigationHeader title="User Profile" onClick={handleback}/>
-      <div className="profile_container">
+      <main className="profile_container">
         <img 
         src={user.picture} 
         alt={user.name} 
@@ -26,12 +26,14 @@ const Profile = () => {
             e.target.src = "fallback-image-url.jpg"; // had problems using user.image but this on error fixes it
         }} 
         />
-        <p>Name: {user.name}</p>
-        <p>Email: {user.email}</p>
+        <p><b>Name:</b> {user.name}</p>
+        <p><b>Email:</b> {user.email}</p>
+        <article className="logout-container">
         <LogoutButton/>
+        </article>
         <a href="https://www.wits.ac.za/about-wits/contact-us/">Contact Wits ICT</a>
         
-      </div>
+      </main>
       </>
   );
 };

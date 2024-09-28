@@ -5,6 +5,7 @@ import './NotificationPopup.css';
 const NotificationPopup = ({ arrayOfNames, onClose, arrayOfCorrespondingvenues }) => {
   return (
     <main className="notification-popup-overlay" data-testid="popupEvents-1">
+      <label>Notification</label>
       <section className="notification-popup-content">
         <section className='notification-header'>
           <label className='notification-subheader'>

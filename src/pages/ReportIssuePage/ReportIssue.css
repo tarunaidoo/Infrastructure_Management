@@ -15,20 +15,37 @@
     height: 30px;
     width: 30px;
   }
+  .home-icon{
+    height: 30px;
+    width: 30px;
+    justify-self: flex-end;
+  }
+  .home-icon:hover{
+    cursor: pointer;
+  }
+.report-issue-heading-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+    width: 100%;
+
+}
+
 .report-issue-heading{
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 15vh;
-    gap: 10px;
-
-
+    width: 80%;
 }
 .report-issue-layout h1{
     cursor: pointer;
     font-size: 1.8em;  /* Font size */
     font-family: Arial, sans-serif;
+    margin-left: 1%;
 }
 
 .report-issue-layout h2{
@@ -101,7 +118,7 @@
     outline: none;
 }
 
-.report-issue-container button {
+.report-issue-button {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -119,14 +136,24 @@
     transition: background-color 0.3s ease;
     width: 80%;
 }
-.report-issue-container button img{
+
+.report-issue-button:active {
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    background-color: #141c5c;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }
+
+  .report-issue-button:hover{
+    transform: scale(1.05); /* Scale up slightly when tapped */
+    background-color: #141c5c;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Optional: Increase shadow */
+  }
+
+.report-issue-button img{
     height: 25px;
     width: 25px;
 }
 
-.report-issue-container button:hover {
-    background-color: #141c5c;
-}
 .report-Issue-Popups{
     display: flex;
     flex-direction: column;
