@@ -4,7 +4,7 @@ async function fetchIssues() {
     try {
         const response = await fetch(endpoint);
         const data = await response.json();
-        // console.log("Issues: ", data);
+        console.log("Issues: ", data);
         
         if (data && data.value) {
             return data.value; // Return the array of issues
@@ -25,7 +25,7 @@ async function fetchVenues() {
     try {
         const response = await fetch(endpoint);
         const data = await response.json();
-        // console.log("Venues: ", data);
+        console.log("Venues: ", data);
         
         if (data && data.value) {
             return data.value; // Return the array of venues

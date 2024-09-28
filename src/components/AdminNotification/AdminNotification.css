@@ -1,0 +1,17 @@
+.notification-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.notification-header img {
+    width: 25px; /* Adjust width as needed */
+    height: 25px; /* Adjust height as needed */
+    margin-bottom: 10px; /* Space between icon and title */
+}
+
+.notification-header h2 {
+    margin: 0; /* Remove margin to better align with the icon */
+}
