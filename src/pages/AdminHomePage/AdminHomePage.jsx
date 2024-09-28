@@ -6,12 +6,14 @@ import Footer from '../../components/NavigationBar/AdminHomeFooter';
 import './AdminHomePage.css';
 import AdminIcon from '../../assets/icons/admin-home-icon.svg';
 import AdminNotification from '../../components/AdminNotification/AdminNotification';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { fetchIssues, fetchVenues } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 
 function AdminHomePage(){
     const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
     const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showNotification, setShowNotification] = useState(true); // Controls popup visibility
     
@@ -89,6 +91,26 @@ function AdminHomePage(){
         loadIssuesAndVenues();
     }, []);
     
+    // if (loading) {
+    //     return (
+    //       <>
+    //       <header className="adminheader">
+    //             <section className="adminheaderBlock">
+    //                 <img src={AdminIcon} alt="Admin Icon" id="adminIcon"></img>
+    //                 <h1 id="admin-heading">Home</h1>
+    //             </section>
+    //         </header>
+    //       <main className='centered-container'>
+    //         <LoadingComponent colour="#D4A843" size="15" isLoading={loading}/> 
+    //       </main>
+    //       <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
+    //       </>
+    //     );
+    //   }
+    
+    //   if (error) {
+    //     return <main>{error}</main>;
+    //   }
 
     return(
         <>
@@ -98,19 +120,20 @@ function AdminHomePage(){
                     <h1 id="admin-heading">Home</h1>
                 </section>
             </header>
+            {showNotification && notifications.issuesArray && (
+            <AdminNotification
+                arrayOfIssues={notifications.issuesArray}
+                arrayOfVenues={notifications.venuesArray}
+                onClose={handleCloseNotification}
+            />
+            )}
             <main className="admin-home-container">
             <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
             <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
             </main>
             <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
             {/* Show notifications if available */}
-        {showNotification && notifications.issuesArray && (
-        <AdminNotification
-          arrayOfIssues={notifications.issuesArray}
-          arrayOfVenues={notifications.venuesArray}
-          onClose={handleCloseNotification}
-        />
-      )}
+        
 
       {/* Display error message if there's an error */}
       {error && <p className="error-message">{error}</p>}
