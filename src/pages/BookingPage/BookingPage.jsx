@@ -22,7 +22,6 @@ const BookingPage = () => {
     const location = useLocation();
     const selectedVenue = location.state || {};
     const timeOptions = generateTimeOptions();
-
     const [activeStartDate, setActiveStartDate] = useState(new Date());
     const [popupState, setPopupState] = useState("");
     const [displayPopup, setDisplayPopup] = useState(false);
