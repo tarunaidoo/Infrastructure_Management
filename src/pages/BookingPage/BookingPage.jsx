@@ -10,6 +10,7 @@ import { formatDateToISO } from '../../utils/dateUtils';
 import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingValidationUtil';
 import { generateTimeOptions } from '../../utils/timeUtils';
 
+
 import "react-calendar/dist/Calendar.css";
 import "./Calendar.css";
 import './BookingPage.css';
@@ -186,6 +187,8 @@ const BookingPage = () => {
             setDisplayPopup(false); // Hide popup if time is valid
         }
     };
+    const [recurringBookingSummary, setRecurringBookingSummary] = useState('');
+
 
     // Handler to open the recurring popup
     const handleOpenRecurringPopup = () => {
@@ -199,25 +202,35 @@ const BookingPage = () => {
 
     // Handler to confirm and proceed with the recurring booking
     const handleConfirmRecurringBooking = () => {
-        // Implement recurring booking logic here
-        // You can create multiple bookings based on the frequency and weeks
-        for (let i = 0; i < recurringDetails.weeks; i++) {
-            const bookingData = {
-                VENUE_ID: selectedVenue.VENUE_ID,
-                USER_ID: userID,
-                EVENT_NAME: bookingPageInfo.EVENT_NAME,
-                DATE: formatDateToISO(new Date(bookingPageInfo.BOOKING_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000))), // Adding weeks
-                START_TIME: bookingPageInfo.START_TIME,
-                END_TIME: bookingPageInfo.END_TIME,
-                DATE_CREATED: formatDateToISO(new Date()),
-                BOOKING_STATUS: "Confirmed"
-            };
+        // // Implement recurring booking logic here
+        // // You can create multiple bookings based on the frequency and weeks
+        // for (let i = 0; i < recurringDetails.weeks; i++) {
+        //     const bookingData = {
+        //         VENUE_ID: selectedVenue.VENUE_ID,
+        //         USER_ID: userID,
+        //         EVENT_NAME: bookingPageInfo.EVENT_NAME,
+        //         DATE: formatDateToISO(new Date(bookingPageInfo.BOOKING_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000))), // Adding weeks
+        //         START_TIME: bookingPageInfo.START_TIME,
+        //         END_TIME: bookingPageInfo.END_TIME,
+        //         DATE_CREATED: formatDateToISO(new Date()),
+        //         BOOKING_STATUS: "Confirmed"
+        //     };
 
-            mutation.mutate(bookingData);
-        }
+        //     mutation.mutate(bookingData);
+        // }
+        // setShowRecurringPopup(false);
+        // setPopupState("Recurring Bookings Successful");
+        // setDisplayPopup(true);
+        // Function to handle confirmation of recurring booking
+
+    // Create the sentence for the recurring booking summary
+        const bookingSummary = `Every week on "X" for ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
+        
+        // Update the input field with the recurring booking summary
+        setRecurringBookingSummary(bookingSummary);
+        
+        // Close the popup
         setShowRecurringPopup(false);
-        setPopupState("Recurring Bookings Successful");
-        setDisplayPopup(true);
     };
 
     const tileDisabled = ({ date, view }) => {
@@ -414,18 +427,39 @@ const BookingPage = () => {
                                 
                             </section>
                         </div>
+                        
 
                     </section>
+
+                    <section className="input-wrapper">
+                                <div className="input-container">
+                                    <input 
+                                        type="text" 
+                                        id="recurring" 
+                                        placeholder="Optional"
+                                        value={recurringBookingSummary}
+                                        onClick={handleOpenRecurringPopup} 
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        for="recurring" 
+                                        class="placeholder">
+                                            Recurring Booking
+                                    </label>
+                                </div>
+                            </section>
+                    
 
 
                     <button className="book-button" onClick={handleOpenRecurringPopup}>
                         Recurring Booking
                     </button>
 
-
                     <button className="book-button" onClick={handleSubmitButtonClick}>
                         Book event
                     </button>
+                    
                 </section>
             </section>
         </main>

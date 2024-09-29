@@ -320,6 +320,8 @@
   position: relative;
   display: flex;
   align-items:center;
+  justify-content: flex-start; /* Align items to the start (left) */
+
   
 }
 
@@ -329,6 +331,10 @@ input {
   outline: none;
   border-radius: 6px;
 }
+#recurring {
+  width: 150%; /* Adjust the width as needed */
+}
+
 
 select {
   padding: var(--padding);
@@ -372,6 +378,8 @@ select {
 .fields-right {
   margin-top: 8%;
 }
+
+
 
 
 
