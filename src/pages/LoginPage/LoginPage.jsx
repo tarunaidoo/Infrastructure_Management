@@ -20,7 +20,7 @@ function LoginPage() {
                     if(data.length===0){//user isnt in db, add them, only applies to a student, admin already in db
                         createUser(user.email,user.given_name,user.family_name);
                     }
-                    if(data[0].USER_ROLE==="Admin"){
+                    if(data.length>0 && data[0].USER_ROLE==="Admin"){
                         localStorage.setItem('userEmail', user.email);
                         localStorage.setItem('user',JSON.stringify(user));
                         navigate('/admin-home'); //navigate to the admin home 
