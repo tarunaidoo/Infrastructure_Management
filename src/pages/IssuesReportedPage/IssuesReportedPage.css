@@ -5,13 +5,6 @@
     --color-accent: #D4A843;       /* Soft Gold */
     --color-neutral: #D3D3D3;      /* Light Silver */
 }
-:root {
-    --color-main: #001F3F;         /* Deep Navy */
-    --color-secondary: #191970;    /* Midnight Blue */
-    --color-highlight: #0047AB;    /* Royal Azure */
-    --color-accent: #D4A843;       /* Soft Gold */
-    --color-neutral: #D3D3D3;      /* Light Silver */
-}
 
 .venue-filter {
     margin: 20px 0; /* Add margin around the dropdown */
@@ -40,90 +33,38 @@
     border-color: var(--color-accent); /* Change border color on focus */
 }
 
-.bookings-list {
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
-    justify-content: center; /* Center the items on smaller screens */
+.issues-list {
+    display: grid; /* Use grid layout for issues cards */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Increased minimum width for responsiveness */
     gap: 20px; /* Add space between the cards */
+    padding-bottom: 100px; /* Padding at the bottom */
 }
 
-.booked-event-card {
-    flex: 0 1 calc(33.333% - 20px); /* Each card takes 1/3 of the row minus the gap */
-    max-width: calc(33.333% - 20px); /* Ensure cards do not exceed this width */
+/* Adjust for larger screens */
+@media (min-width: 769px) {
+    .issues-list {
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Further increase minimum width for laptop views */
+    }
+}
+
+.issues-card-comp {
     box-sizing: border-box; /* Ensure padding is included in width */
+    padding: 20px; /* Add padding inside the card */
+    border: 1px solid var(--color-main); /* Add border with main color */
+    border-radius: 5px; /* Rounded corners for cards */
+    background-color: var(--color-neutral); /* Background color */
+    max-width: 500px; /* Increased max width for larger screens */
+    width: 100%; /* Allow cards to stretch to fill the container */
 }
 
 /* Optional: Add responsiveness for smaller screens */
 @media (max-width: 768px) {
-    .booked-event-card {
-        flex: 0 1 100%; /* Stack cards on smaller screens */
-        max-width: 100%;
-    }
-}
-
-.bookings-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Create a responsive grid */
-    gap: 20px; /* Add space between the cards */
-}
-
-/* Ensure cards fit properly */
-.booked-event-card {
-    box-sizing: border-box; /* Ensure padding is included in width */
-}
-
-.issues-list {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-.issue-filters {
-    display: flex;
-    justify-content: space-around; /* Space buttons evenly across the container */
-    padding: 10px 0; /* Add vertical padding */
-}
-
-.issues-filter-btn {
-    background-color: var(--color-accent);
-    color: white; /* Text color matching the main color */
-    border: none; /* Remove default button border */
-    border-radius: 20px; /* Rounded edges */
-    padding: 20px 20px; /* Button padding */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth background color transition */
-    max-width: 600px;
-    font-size: large; /* Default font size */
-}
-
-.issues-filter-btn:hover {
-    background-color: var(--color-highlight); /* Change color on hover */
-    color: white; /* Change text color on hover */
-    transform: scale(1.20);
-}
-
-/* Responsive styles */
-@media (max-width: 800px) {
-    .issue-filters {
-        flex-direction: column; /* Stack buttons vertically on smaller screens */
-        align-items: center; /* Center align buttons */
-    }
-
-    .issues-filter-btn {
-        margin: 5px 0; /* Add margin between buttons */
-        width: 80%; /* Make buttons wider on mobile */
-        padding: 15px; /* Adjust padding for smaller screens */
-        font-size: 18px; /* Set a specific size for better visibility */
-    }
-}
-
-@media (max-width: 600px) {
     .issues-list {
-        padding: 10px; /* Reduce padding for smaller screens */
+        grid-template-columns: 1fr; /* Stack cards on smaller screens */
     }
 
-    .issues-filter-btn {
-        font-size: 16px; /* Adjust font size for mobile screens */
+    .issues-card-comp {
+        max-width: 100%; /* Ensure card takes full width */
     }
 }
 
@@ -131,5 +72,5 @@
     display: flex;
     justify-content: center; /* Centers the container horizontally */
     align-items: center; /* Centers the container vertically */
-    height: 88vh;
+    height: 88vh; /* Height of the container */
 }

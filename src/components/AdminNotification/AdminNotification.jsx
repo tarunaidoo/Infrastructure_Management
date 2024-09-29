@@ -1,27 +1,27 @@
 import React from 'react';
 import notificationIcon from '../../assets/icons/bookmark-filled-gold.svg';
-import './NotificationPopup.css';
+import './AdminNotification.css';
 
-const NotificationPopup = ({ arrayOfNames, onClose, arrayOfCorrespondingvenues }) => {
+const AdminNotification = ({ arrayOfIssues, arrayOfVenues, onClose }) => {
   return (
-    <main className="notification-popup-overlay" data-testid="popupEvents-1">
+    <main className="notification-popup-overlay" data-testid="popupIssues-1">
       <label>Notification</label>
       <section className="notification-popup-content">
-        <section className='notification-header'>
-          <label className='notification-subheader'>
+        <section className="notification-header">
+          <label className="notification-subheader">
             <img src={notificationIcon} alt="Notification Icon" />
           </label>
-          <h2>Events Today</h2>
+          <h2>Today's Issues</h2>
         </section>
         <section className="notification-popup-messages">
-          {arrayOfNames.length > 0 ? (
-            arrayOfNames.map((name, index) => (
+          {arrayOfIssues.length > 0 ? (
+            arrayOfIssues.map((issue, index) => (
               <p key={index}>
-                {name} at {arrayOfCorrespondingvenues[index]}
+                {issue} at {arrayOfVenues[index]}
               </p>
             ))
           ) : (
-            <p>No events are scheduled for today.</p>
+            <p>No issues reported today.</p>
           )}
         </section>
         <button className="notification-close-btn" onClick={onClose}>Close</button>
@@ -30,4 +30,4 @@ const NotificationPopup = ({ arrayOfNames, onClose, arrayOfCorrespondingvenues }
   );
 };
 
-export default NotificationPopup;
+export default AdminNotification;
