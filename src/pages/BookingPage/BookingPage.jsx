@@ -9,6 +9,7 @@ import { createBooking, getBookings } from '../../services/BookingPage/BookingPa
 import { formatDateToISO } from '../../utils/dateUtils';
 import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingValidationUtil';
 import { generateTimeOptions } from '../../utils/timeUtils';
+import { addWeeksToDate } from '../../utils/RecurringUtils';
 
 
 import "react-calendar/dist/Calendar.css";
@@ -35,10 +36,8 @@ const BookingPage = () => {
 
     // Additional state for recurring booking popup
     const [showRecurringPopup, setShowRecurringPopup] = useState(false);
-    const [recurringDetails, setRecurringDetails] = useState({
-        frequency: "Weekly",
-        weeks: 1, // Default to 1 week
-    });
+    const [recurringDetails, setRecurringDetails] = useState({ weeks: '' });
+    const [numberOfBookings, setNumberOfBookings] = useState(0);
 
     const mutation = useMutation((newBooking) => createBooking(newBooking), {
         onSuccess: () => {
@@ -93,6 +92,21 @@ const BookingPage = () => {
         };
 
         mutation.mutate(bookingData);
+
+        if (numberOfBookings > 0) {
+            for (let i = 0; i < numberOfBookings; i++) {
+                const newBookingData = {
+                    ...bookingData,
+                    // Adjusting the date for each booking using the addWeeksToDate function
+                    DATE: formatDateToISO(addWeeksToDate(bookingData.DATE, i)), // Using i to increment weeks
+                };
+    
+                mutation.mutate(newBookingData); // Mutate for each booking
+            }
+        } else {
+            // Handle single booking logic
+            mutation.mutate(bookingData);
+        }
     };
 
     const handleBackToVenueBookingClick = () => {
@@ -202,35 +216,14 @@ const BookingPage = () => {
 
     // Handler to confirm and proceed with the recurring booking
     const handleConfirmRecurringBooking = () => {
-        // // Implement recurring booking logic here
-        // // You can create multiple bookings based on the frequency and weeks
-        // for (let i = 0; i < recurringDetails.weeks; i++) {
-        //     const bookingData = {
-        //         VENUE_ID: selectedVenue.VENUE_ID,
-        //         USER_ID: userID,
-        //         EVENT_NAME: bookingPageInfo.EVENT_NAME,
-        //         DATE: formatDateToISO(new Date(bookingPageInfo.BOOKING_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000))), // Adding weeks
-        //         START_TIME: bookingPageInfo.START_TIME,
-        //         END_TIME: bookingPageInfo.END_TIME,
-        //         DATE_CREATED: formatDateToISO(new Date()),
-        //         BOOKING_STATUS: "Confirmed"
-        //     };
-
-        //     mutation.mutate(bookingData);
-        // }
-        // setShowRecurringPopup(false);
-        // setPopupState("Recurring Bookings Successful");
-        // setDisplayPopup(true);
-        // Function to handle confirmation of recurring booking
-
     // Create the sentence for the recurring booking summary
         const bookingSummary = `Every week on "X" for ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
         
         // Update the input field with the recurring booking summary
         setRecurringBookingSummary(bookingSummary);
         
-        // Close the popup
-        setShowRecurringPopup(false);
+        setNumberOfBookings(Number(recurringDetails.weeks)); // Store the number of bookings
+        setShowRecurringPopup(false); // Close the popup
     };
 
     const tileDisabled = ({ date, view }) => {
@@ -458,7 +451,7 @@ const BookingPage = () => {
             </section>
         </main>
             {/* Recurring Booking Popup */}
-            {showRecurringPopup &&
+            {showRecurringPopup && (
             <Popup trigger={showRecurringPopup}>
                 <h2>Set Recurring Booking</h2>
                 <section className='recurring-booking-form'>
@@ -473,18 +466,32 @@ const BookingPage = () => {
                         /> 
                         Weeks
                     </label>
-
-                     {/* Sentence Display */}
-                    <p className='recurring-booking-summary'>
-                        Every week on "X" for {recurringDetails.weeks} {recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}
-                    </p>
                     <section className='popup-buttons'>
-                        <button onClick={handleConfirmRecurringBooking} className='confirm-button'>Confirm</button>
+                        <button 
+                            onClick={() => {
+                                // Save the number of bookings and close the popup
+                                handleConfirmRecurringBooking(); // Optionally you can also handle saving the weeks here if needed
+                                setShowRecurringPopup(false); // Close the popup
+                            }} 
+                            className='confirm-button'>
+                            Confirm
+                        </button>
                         <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
+                        <button 
+                            onClick={() => {
+                                // Reset recurring details
+                                setRecurringDetails({ weeks: '0' }); // Reset to empty or default value
+                                setRecurringBookingSummary(''); // Reset to empty or default value
+                                setShowRecurringPopup(false)
+                            }} 
+                            className='reset-button'>
+                            Reset
+                        </button>
                     </section>
                 </section>
             </Popup>
-        }
+        )}
+
 
 
 
