@@ -330,9 +330,11 @@ input {
   border: 1px solid rgb(223, 223, 223);
   outline: none;
   border-radius: 6px;
+  font-size: small;
+  width: 150%;
 }
 #recurring {
-  width: 150%; /* Adjust the width as needed */
+  width: 250%; /* Adjust the width as needed */
 }
 
 
@@ -353,6 +355,7 @@ select {
   bottom: 80%;
   padding: 0 1%;
   width: auto;
+  font-size: small;
   
 }
 
@@ -360,8 +363,8 @@ select {
   display: flex;               /* Use flexbox to create a two-column layout */
   justify-content: space-between; /* Space between left and right columns */
   width: 80%;                /* Full width */
-  gap:10%;
-  height: 20vh;
+  gap:25%;
+  height: 30vh;
 
 }
 
@@ -370,7 +373,7 @@ select {
   width: 100%;                  /* Set width for left and right columns */
   display: flex;               /* Make the columns flex containers */
   flex-direction: column;      /* Stack items vertically */
-  gap: 10%;                   /* Set the gap between items */
+  gap: 5%;                   /* Set the gap between items */
 }
 
 

@@ -378,6 +378,24 @@ const BookingPage = () => {
                                     </label>
                                 </div>
                             </section>
+                            <section className="input-wrapper">
+                            <div >
+                                <input 
+                                    type="text" 
+                                    id="recurring" 
+                                    placeholder="Optional"
+                                    value={recurringBookingSummary}
+                                    onClick={handleOpenRecurringPopup} 
+                                    readOnly 
+                                    required 
+                                />
+                                <label 
+                                    for="recurring" 
+                                    class="placeholder">
+                                        Recurring Booking
+                                </label>
+                            </div>
+                        </section>
                         </div>
 
                         <div className="fields-right">
@@ -426,35 +444,11 @@ const BookingPage = () => {
                                     </div>
                                 
                             </section>
+                            
                         </div>
                         
-
                     </section>
 
-                    <section className="input-wrapper">
-                                <div className="input-container">
-                                    <input 
-                                        type="text" 
-                                        id="recurring" 
-                                        placeholder="Optional"
-                                        value={recurringBookingSummary}
-                                        onClick={handleOpenRecurringPopup} 
-                                        readOnly 
-                                        required 
-                                    />
-                                    <label 
-                                        for="recurring" 
-                                        class="placeholder">
-                                            Recurring Booking
-                                    </label>
-                                </div>
-                            </section>
-                    
-
-
-                    <button className="book-button" onClick={handleOpenRecurringPopup}>
-                        Recurring Booking
-                    </button>
 
                     <button className="book-button" onClick={handleSubmitButtonClick}>
                         Book event
