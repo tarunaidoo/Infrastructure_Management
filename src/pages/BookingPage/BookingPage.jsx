@@ -91,8 +91,6 @@ const BookingPage = () => {
             BOOKING_STATUS: "Confirmed"
         };
 
-        mutation.mutate(bookingData);
-
         if (numberOfBookings > 0) {
             for (let i = 0; i < numberOfBookings; i++) {
                 const newBookingData = {
