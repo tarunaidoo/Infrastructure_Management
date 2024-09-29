@@ -10,6 +10,7 @@ import { formatDateToISO } from '../../utils/dateUtils';
 import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingValidationUtil';
 import { generateTimeOptions } from '../../utils/timeUtils';
 import { addWeeksToDate } from '../../utils/RecurringUtils';
+import ResetIcon from '../../assets/icons/resetIcon.svg';
 
 
 import "react-calendar/dist/Calendar.css";
@@ -460,10 +461,23 @@ const BookingPage = () => {
                             min="1"
                             value={recurringDetails.weeks}
                             onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
-                            placeholder="Enter number of weeks"
+                            placeholder=""
                         /> 
                         Weeks
+                        
                     </label>
+                    <button 
+                            className='reset-button' 
+                            onClick={() => {
+                                // Reset recurring details
+                                setRecurringDetails({ weeks: '0' }); // Reset to default value
+                                setRecurringBookingSummary(''); // Reset summary to empty
+                             
+                            }}
+                            style={{ background: 'transparent', border: 'none', padding: 0 }} // Style to make it look like an image
+                             >
+                            <img src={ResetIcon} alt="Reset Icon" style={{marginLeft:'8rem', width: '24px', height: '24px' }} />
+                        </button>
                     <section className='popup-buttons'>
                         <button 
                             onClick={() => {
@@ -475,16 +489,7 @@ const BookingPage = () => {
                             Confirm
                         </button>
                         <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
-                        <button 
-                            onClick={() => {
-                                // Reset recurring details
-                                setRecurringDetails({ weeks: '0' }); // Reset to empty or default value
-                                setRecurringBookingSummary(''); // Reset to empty or default value
-                                setShowRecurringPopup(false)
-                            }} 
-                            className='reset-button'>
-                            Reset
-                        </button>
+                        
                     </section>
                 </section>
             </Popup>
