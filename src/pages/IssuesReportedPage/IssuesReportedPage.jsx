@@ -161,7 +161,7 @@ function IssuesReportedPage() {
 
     return (
         <>
-            <Header title="Reports" onClick={handleHeaderBackIconClick} />
+            <Header className="ReportTitle" title="Reports" onClick={handleHeaderBackIconClick} />
             {/* Venue Dropdown */}
             <div className="venue-filter">
                 <select 
@@ -193,6 +193,7 @@ function IssuesReportedPage() {
                 {filteredIssues().length > 0 ? (
                     filteredIssues().map(issue => (
                         <IssueListCard
+                            className="issues-card-comp"
                             key={issue.ISSUE_ID}
                             title={issue.TITLE}
                             reportedBy={issue.REPORTED_BY}

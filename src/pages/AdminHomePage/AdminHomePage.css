@@ -54,7 +54,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* Align content to the top */
-    height: 100vh; /* Full viewport height */
+    height: 70vh; /* Full viewport height */
     padding: 2px; /* Add padding if necessary */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }

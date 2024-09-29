@@ -123,7 +123,9 @@ function UserBookingPage() {
     const handleAddVenueClick = () => {
         navigate('/admin-add-venue');
     };
-
+    const handleHomeClick = () => {
+        navigate("/admin-home");
+    };
     const handleEditVenueClick = () =>{
         const venueSelectionDetails = {
             SOURCE_PAGE: "/admin-home",
@@ -200,7 +202,7 @@ function UserBookingPage() {
                     <label>No bookings found.</label>
                 )}
             </main>
-            <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
+            <Footer onHomeClick={handleHomeClick} onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
             {isPopupOpen && selectedBooking && (
                 <Popup
                     title={`Booking ID: ${selectedBooking.BOOKING_ID}`}

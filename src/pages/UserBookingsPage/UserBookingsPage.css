@@ -38,6 +38,7 @@
     flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
     justify-content: center; /* Center the items on smaller screens */
     gap: 20px; /* Add space between the cards */
+    padding-bottom: 100px;
 }
 
 .booked-event-card {
