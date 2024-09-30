@@ -11,7 +11,7 @@ import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingVali
 import { generateTimeOptions } from '../../utils/timeUtils';
 import { addWeeksToDate } from '../../utils/RecurringUtils';
 import ResetIcon from '../../assets/icons/resetIcon.svg';
-// import RecurringIcon from '../../assets/icons/recurringIcon.svg';
+import RecurringIcon from '../../assets/icons/recurringIcon.svg';
 
 
 import "react-calendar/dist/Calendar.css";
@@ -382,22 +382,39 @@ const BookingPage = () => {
                                 </div>
                             </section>
                             <section className="input-wrapper">
-                            <div >
-                                <input 
-                                    type="text" 
-                                    id="recurring" 
-                                    placeholder="Optional"
-                                    value={recurringBookingSummary}
-                                    onClick={handleOpenRecurringPopup} 
-                                    readOnly 
-                                    required 
-                                />
-                                <label 
-                                    for="recurring" 
-                                    class="placeholder">
+                                <div className="input-container">
+                                    <input 
+                                        type="text" 
+                                        id="recurring" 
+                                        placeholder="Optional"
+                                        value={recurringBookingSummary}
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        htmlFor="recurring" 
+                                        className="placeholder">
                                         Recurring Booking
-                                </label>
-                            </div>
+                                    </label>
+                                    <button 
+                                        className='reset-button' 
+                                        onClick={() => {
+                                            // Reset recurring details
+                                            handleOpenRecurringPopup();
+                                        }}
+                                        style={{ 
+                                            background: 'transparent', 
+                                            border: 'none', 
+                                            paddingright: '5rem', 
+                                            position: 'absolute', 
+                                            top: '50%', 
+                                            transform: 'translateY(-50%)' 
+                                        }}
+                                    >
+                                        <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
+                                    </button>
+                                </div>
+
                         </section>
                         </div>
 
