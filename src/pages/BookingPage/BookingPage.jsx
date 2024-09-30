@@ -11,6 +11,7 @@ import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingVali
 import { generateTimeOptions } from '../../utils/timeUtils';
 import { addWeeksToDate } from '../../utils/RecurringUtils';
 import ResetIcon from '../../assets/icons/resetIcon.svg';
+// import RecurringIcon from '../../assets/icons/recurringIcon.svg';
 
 
 import "react-calendar/dist/Calendar.css";
@@ -34,11 +35,15 @@ const BookingPage = () => {
         START_TIME: "",
         END_TIME: ""
     });
+    
+  
 
     // Additional state for recurring booking popup
     const [showRecurringPopup, setShowRecurringPopup] = useState(false);
     const [recurringDetails, setRecurringDetails] = useState({ weeks: '' });
-    const [numberOfBookings, setNumberOfBookings] = useState(0);
+    const [numberOfBookings, setNumberOfBookings] = useState(2);
+   
+
 
     const mutation = useMutation((newBooking) => createBooking(newBooking), {
         onSuccess: () => {
@@ -215,12 +220,18 @@ const BookingPage = () => {
 
     // Handler to confirm and proceed with the recurring booking
     const handleConfirmRecurringBooking = () => {
-    // Create the sentence for the recurring booking summary
-        const bookingSummary = `Every week on "X" for ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
-        
+        // Extract the day of the week from the booking date
+        const bookingDate = new Date(bookingPageInfo.BOOKING_DATE);
+        const dayOfWeek = bookingDate.toLocaleString('en-US', { weekday: 'long' });
+        // Create the sentence for the recurring booking summary with the day of the week
+        let bookingSummary = `Every week on ${dayOfWeek} for ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
+        if(recurringDetails.weeks <= 1 ){
+             bookingSummary = 'No recurring bookings';
+        }
+
         // Update the input field with the recurring booking summary
         setRecurringBookingSummary(bookingSummary);
-        
+    
         setNumberOfBookings(Number(recurringDetails.weeks)); // Store the number of bookings
         setShowRecurringPopup(false); // Close the popup
     };
@@ -458,7 +469,7 @@ const BookingPage = () => {
                         Repeat over:
                         <input
                             type="number"
-                            min="1"
+                            min="2"
                             value={recurringDetails.weeks}
                             onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
                             placeholder=""
@@ -470,7 +481,7 @@ const BookingPage = () => {
                             className='reset-button' 
                             onClick={() => {
                                 // Reset recurring details
-                                setRecurringDetails({ weeks: '0' }); // Reset to default value
+                                setRecurringDetails({ weeks: '' }); // Reset to default value
                                 setRecurringBookingSummary(''); // Reset summary to empty
                              
                             }}
