@@ -97,7 +97,8 @@
 
 /* Book Event Button */
 .book-button {
-  width: 26%;
+  height: 15%;
+  width: 16rem;
   background-color: #d4af37;
   color: white;
   font-size: 18px;
@@ -365,6 +366,7 @@ select {
   width: 80%;                /* Full width */
   gap:25%;
   height: 30vh;
+  
 
 }
 
@@ -378,9 +380,7 @@ select {
 
 
 
-.fields-right {
-  margin-top: 8%;
-}
+
 
 
 
