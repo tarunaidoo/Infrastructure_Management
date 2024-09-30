@@ -224,7 +224,7 @@ const BookingPage = () => {
         const bookingDate = new Date(bookingPageInfo.BOOKING_DATE);
         const dayOfWeek = bookingDate.toLocaleString('en-US', { weekday: 'long' });
         // Create the sentence for the recurring booking summary with the day of the week
-        let bookingSummary = `Every week on ${dayOfWeek} for ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
+        let bookingSummary = `Every ${dayOfWeek} for the next ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
         if(recurringDetails.weeks <= 1 ){
              bookingSummary = 'No recurring bookings';
         }
