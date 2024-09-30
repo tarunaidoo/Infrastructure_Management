@@ -6,14 +6,14 @@ import Footer from '../../components/NavigationBar/AdminHomeFooter';
 import './AdminHomePage.css';
 import AdminIcon from '../../assets/icons/admin-home-icon.svg';
 import AdminNotification from '../../components/AdminNotification/AdminNotification';
-//import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { fetchIssues, fetchVenues } from '../../services/IssuesReportedPage/IssuesReportedPage.service';
 
 function AdminHomePage(){
     const userID = localStorage.getItem('userEmail'); // get userID
     const navigate = useNavigate();
     const [notifications, setNotifications] = useState([]);
-    //const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showNotification, setShowNotification] = useState(true); // Controls popup visibility
     
@@ -46,71 +46,72 @@ function AdminHomePage(){
         setShowNotification(false); // Close the popup
       };
 
-      useEffect(() => {
+    // Only show popup on the first visit after login
+    useEffect(() => {
+    const shouldShowPopup = localStorage.getItem('showPopupOnAdminHome');
+    if (shouldShowPopup === 'true') {
+      setShowNotification(true); // Show popup only if it's the first visit
+      localStorage.removeItem('showPopupOnAdminHome'); // Remove flag after showing the popup
+    }
+    }, []);
+    useEffect(() => {
         const loadIssuesAndVenues = async () => {
-            try {
-                const issuesData = await fetchIssues(); // Fetch issues
-                const venuesData = await fetchVenues(); // Fetch venues
+          try {
+            const issuesData = await fetchIssues(); // Fetch issues
+            const venuesData = await fetchVenues(); // Fetch venues
     
-                console.log('Issues:', issuesData);
-                console.log('Venues:', venuesData);
-    
-                if (!Array.isArray(issuesData)) {
-                    setError('issuesData is not an array or is undefined.');
-                    console.error('Error: issuesData is not an array or is undefined.');
-                    return;
-                }
-                if (!Array.isArray(venuesData)) {
-                    setError('venuesData is not an array or is undefined.');
-                    console.error('Error: venuesData is not an array or is undefined.');
-                    return;
-                }
-    
-                const today = new Date().toISOString().split('T')[0];
-    
-                // Filter issues by REPORT_DATE & ISSUE_STATUS
-                const filteredIssues = issuesData.filter(issue => 
-                    issue.REPORT_DATE && 
-                    issue.REPORT_DATE.split('T')[0] === today &&
-                    issue.ISSUE_STATUS === 'UNRESOLVED'
-                );
-    
-                const issuesArray = filteredIssues.map(issue => issue.TITLE);
-                const venuesArray = filteredIssues.map(issue => {
-                    const correspondingVenue = venuesData.find(venue => venue.VENUE_ID === issue.VENUE_ID);
-                    return correspondingVenue ? correspondingVenue.VENUE_NAME : 'Unknown Venue';
-                });
-    
-                setNotifications({ issuesArray, venuesArray });
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setError('Failed to load data.');
+            if (!Array.isArray(issuesData) || !Array.isArray(venuesData)) {
+              setError('Invalid data format.');
+              return;
             }
+    
+            const today = new Date().toISOString().split('T')[0];
+    
+            // Filter issues by REPORT_DATE & ISSUE_STATUS
+            const filteredIssues = issuesData.filter(issue =>
+              issue.REPORT_DATE &&
+              issue.REPORT_DATE.split('T')[0] === today &&
+              issue.ISSUE_STATUS === 'UNRESOLVED'
+            );
+    
+            const issuesArray = filteredIssues.map(issue => issue.TITLE);
+            const venuesArray = filteredIssues.map(issue => {
+              const correspondingVenue = venuesData.find(venue => venue.VENUE_ID === issue.VENUE_ID);
+              return correspondingVenue ? correspondingVenue.VENUE_NAME : 'Unknown Venue';
+            });
+    
+            setNotifications({ issuesArray, venuesArray });
+            setLoading(false);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            setError('Failed to load data.');
+            setLoading(false);
+          }
         };
     
         loadIssuesAndVenues();
-    }, []);
-    
-    // if (loading) {
-    //     return (
-    //       <>
-    //       <header className="adminheader">
-    //             <section className="adminheaderBlock">
-    //                 <img src={AdminIcon} alt="Admin Icon" id="adminIcon"></img>
-    //                 <h1 id="admin-heading">Home</h1>
-    //             </section>
-    //         </header>
-    //       <main className='centered-container'>
-    //         <LoadingComponent colour="#D4A843" size="15" isLoading={loading}/> 
-    //       </main>
-    //       <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
-    //       </>
-    //     );
-    //   }
-    
-    //   if (error) {
-    //     return <main>{error}</main>;
-    //   }
+      }, []);
+
+    if (loading) {
+        return (
+          <>
+          <header className="adminheader">
+                <section className="adminheaderBlock">
+                    <img src={AdminIcon} alt="Admin Icon" id="adminIcon" />
+                    <h1 id="admin-heading">Home</h1>
+                </section>
+            </header>
+          <main className='centered-container'>
+            <LoadingComponent colour="#D4A843" size="15" isLoading={loading} />
+          </main>
+          <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick} />
+          </>
+        );
+    }
+
+    if (error) {
+        return <main>{error}</main>;
+    }
 
     return(
         <>
