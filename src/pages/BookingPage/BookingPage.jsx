@@ -167,8 +167,9 @@ const BookingPage = () => {
                 END_TIME: ""
             });
 
-            setPopupState("Invalid Start Time");
+            setPopupState("Invalid Start TIme");
             setDisplayPopup(true);
+           
         } else {
             setBookingPageInfo({
                 EVENT_NAME: bookingPageInfo.EVENT_NAME,
