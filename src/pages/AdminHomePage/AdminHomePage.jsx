@@ -15,7 +15,8 @@ function AdminHomePage(){
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showNotification, setShowNotification] = useState(true); // Controls popup visibility
+    //const [showNotification, setShowNotification] = useState(true); // Controls popup visibility
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     
     const eventsCardClick = () =>{
         navigate('/admin-view-booking'); //move from this page to Events page
@@ -43,16 +44,16 @@ function AdminHomePage(){
     };
 
     const handleCloseNotification = () => {
-        setShowNotification(false); // Close the popup
+        setIsPopupOpen(false); // Close the popup
       };
 
     // Only show popup on the first visit after login
     useEffect(() => {
-    const shouldShowPopup = localStorage.getItem('showPopupOnAdminHome');
-    if (shouldShowPopup === 'true') {
-      setShowNotification(true); // Show popup only if it's the first visit
-      localStorage.removeItem('showPopupOnAdminHome'); // Remove flag after showing the popup
-    }
+      const shouldShowPopup = localStorage.getItem('showPopupOnAdminHome');
+      if (shouldShowPopup === 'true') {
+        setIsPopupOpen(true);
+        localStorage.removeItem('showPopupOnAdminHome');
+      }
     }, []);
     useEffect(() => {
         const loadIssuesAndVenues = async () => {
@@ -121,7 +122,7 @@ function AdminHomePage(){
                     <h1 id="admin-heading">Home</h1>
                 </section>
             </header>
-            {showNotification && notifications.issuesArray && (
+            {isPopupOpen && notifications.issuesArray && (
             <AdminNotification
                 arrayOfIssues={notifications.issuesArray}
                 arrayOfVenues={notifications.venuesArray}
