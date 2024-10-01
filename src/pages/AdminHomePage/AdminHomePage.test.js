@@ -37,36 +37,37 @@ describe('AdminHomePage', () => {
         useNavigate.mockReturnValue(navigate); // Mock the navigate function
     });
 
-    test('navigates to the correct pages when cards and footer buttons are clicked', () => {
+    test('navigates to the correct pages when cards and footer buttons are clicked', async () => { // Make the function async
         render(
             <MemoryRouter>
-                <AdminHomePage />
+                <AdminHomePage loading={false}/>
             </MemoryRouter>
         );
 
-        // Simulate clicking the Issues Card
-        fireEvent.click(screen.getByTestId('issues-card'));
+        // Wait for the Issues Card to appear before interacting with it
+        const issuesCard = await screen.findByTestId('issues-card');
+        fireEvent.click(issuesCard);
         expect(navigate).toHaveBeenCalledWith('/admin-issues-reported');
-        expect(navigate).toHaveBeenCalledTimes(1); // Check call count
+        expect(navigate).toHaveBeenCalledTimes(1);
 
         // Simulate clicking the Events Card
         fireEvent.click(screen.getByTestId('events-card'));
         expect(navigate).toHaveBeenCalledWith('/admin-view-booking');
-        expect(navigate).toHaveBeenCalledTimes(2); // Check call count
+        expect(navigate).toHaveBeenCalledTimes(2);
 
         // Simulate clicking Add Venue button
         fireEvent.click(screen.getByRole('button', { name: /add venue/i }));
         expect(navigate).toHaveBeenCalledWith('/admin-add-venue');
-        expect(navigate).toHaveBeenCalledTimes(3); // Check call count
+        expect(navigate).toHaveBeenCalledTimes(3);
 
         // Simulate clicking Edit Venue button
         fireEvent.click(screen.getByRole('button', { name: /edit venue/i }));
         expect(navigate).toHaveBeenCalledWith('/campus-selection', { state: { SOURCE_PAGE: "/admin-home", USER_ID: 'test@example.com', DESTINATION_PAGE: "/edit-venue" } });
-        expect(navigate).toHaveBeenCalledTimes(4); // Check call count
+        expect(navigate).toHaveBeenCalledTimes(4);
 
         // Simulate clicking Profile button
         fireEvent.click(screen.getByRole('button', { name: /profile/i }));
         expect(navigate).toHaveBeenCalledWith('/profile');
-        expect(navigate).toHaveBeenCalledTimes(5); // Check call count
+        expect(navigate).toHaveBeenCalledTimes(5);
     });
 });
