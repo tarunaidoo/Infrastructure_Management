@@ -41,7 +41,7 @@ const BookingPage = () => {
     // Additional state for recurring booking popup
     const [showRecurringPopup, setShowRecurringPopup] = useState(false);
     const [recurringDetails, setRecurringDetails] = useState({ weeks: '' });
-    const [numberOfBookings, setNumberOfBookings] = useState(2);
+    const [numberOfBookings, setNumberOfBookings] = useState(1);
    
 
 
@@ -65,16 +65,36 @@ const BookingPage = () => {
             return;
         }
 
-        const overlapExists = checkForTimeClash(
-            bookings, 
-            selectedVenue.VENUE_ID, 
-            formatDateToISO(bookingPageInfo.BOOKING_DATE), 
-            bookingPageInfo.START_TIME, 
-            bookingPageInfo.END_TIME
-        );
+        let overlapExists = false;
+        if (numberOfBookings > 1) {
+            for (let i = 0; i < numberOfBookings; i++){
+                let isOverlapping = checkForTimeClash(
+                    bookings, 
+                    selectedVenue.VENUE_ID, 
+                    formatDateToISO(addWeeksToDate(bookingPageInfo.BOOKING_DATE, i)), 
+                    bookingPageInfo.START_TIME, 
+                    bookingPageInfo.END_TIME
+                );
+
+                if (isOverlapping){
+                    overlapExists = true;
+                    break;
+                }
+            }
+        }
+
+        else {
+            overlapExists = checkForTimeClash(
+                bookings, 
+                selectedVenue.VENUE_ID, 
+                formatDateToISO(bookingPageInfo.BOOKING_DATE), 
+                bookingPageInfo.START_TIME, 
+                bookingPageInfo.END_TIME
+            );
+        }
 
         if (overlapExists) {
-            setPopupState("Time Slot Overlap");
+            setPopupState("Booking Overlap");
             setDisplayPopup(true);
         } else {
             setPopupState("Confirm Booking");
@@ -382,7 +402,7 @@ const BookingPage = () => {
                                     </label>
                                 </div>
                             </section>
-                            <section className="input-wrapper">
+                            {/* <section className="input-wrapper">
                                 <div className="input-container">
                                     <input 
                                         type="text" 
@@ -416,7 +436,7 @@ const BookingPage = () => {
                                     </button>
                                 </div>
 
-                        </section>
+                        </section> */}
                         </div>
 
                         <div className="fields-right">
@@ -466,10 +486,40 @@ const BookingPage = () => {
                                 
                             </section>
                             
-                        </div>
-                        
+                        </div>                        
                     </section>
 
+                    <section className='recurring-booking-container'>
+                    <section className="input-wrapper">
+                        <div className="input-container">
+                                <input 
+                                    type="text" 
+                                    id="recurring" 
+                                    placeholder="Optional"
+                                    value={recurringBookingSummary}
+                                    readOnly 
+                                    required 
+                                />
+                                <label 
+                                    htmlFor="recurring" 
+                                    className="placeholder">
+                                    Recurring Booking
+                                </label>
+                            </div>
+                        </section>
+
+                        <div className='recurring-booking-button-wrapper'>
+                            <button 
+                                className='recurring-booking-button' 
+                                onClick={() => {
+                                    // Reset recurring details
+                                    handleOpenRecurringPopup();
+                                }}
+                                >
+                                <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
+                            </button>
+                        </div>
+                    </section>                                
 
                     <button className="book-button" onClick={handleSubmitButtonClick}>
                         Book event
@@ -601,9 +651,9 @@ const BookingPage = () => {
             </Popup>
         }
 
-        {popupState === "Time Slot Overlap" &&
+        {popupState === "Booking Overlap" &&
             <Popup trigger={displayPopup}>
-                <h2>Time Slot Overlap</h2>
+                <h2>Booking Overlap</h2>
                 <p>The selected time slot overlaps with an existing booking.</p>
                 <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
             </Popup>
