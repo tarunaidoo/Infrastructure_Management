@@ -236,6 +236,8 @@ const BookingPage = () => {
 
     // Handler to close the recurring popup without confirming
     const handleCloseRecurringPopup = () => {
+        setRecurringDetails({ weeks: '' });
+        // setRecurringBookingSummary('');
         setShowRecurringPopup(false);
     };
 
@@ -495,7 +497,7 @@ const BookingPage = () => {
                                 <input 
                                     type="text" 
                                     id="recurring" 
-                                    placeholder="Optional"
+                                    placeholder="No recuring bookings."
                                     value={recurringBookingSummary}
                                     readOnly 
                                     required 
