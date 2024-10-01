@@ -9,6 +9,10 @@ import { createBooking, getBookings } from '../../services/BookingPage/BookingPa
 import { formatDateToISO } from '../../utils/dateUtils';
 import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingValidationUtil';
 import { generateTimeOptions } from '../../utils/timeUtils';
+import { addWeeksToDate } from '../../utils/RecurringUtils';
+import ResetIcon from '../../assets/icons/resetIcon.svg';
+import RecurringIcon from '../../assets/icons/recurringIcon.svg';
+
 
 import "react-calendar/dist/Calendar.css";
 import "./Calendar.css";
@@ -16,14 +20,12 @@ import './BookingPage.css';
 
 import headingIcon from '../../assets/icons/chevron-left.svg';
 
-
 const BookingPage = () => {
     const userID = localStorage.getItem('userEmail');
     const navigate = useNavigate();
     const location = useLocation();
     const selectedVenue = location.state || {};
     const timeOptions = generateTimeOptions();
-
     const [activeStartDate, setActiveStartDate] = useState(new Date());
     const [popupState, setPopupState] = useState("");
     const [displayPopup, setDisplayPopup] = useState(false);
@@ -33,6 +35,15 @@ const BookingPage = () => {
         START_TIME: "",
         END_TIME: ""
     });
+    
+  
+
+    // Additional state for recurring booking popup
+    const [showRecurringPopup, setShowRecurringPopup] = useState(false);
+    const [recurringDetails, setRecurringDetails] = useState({ weeks: '' });
+    const [numberOfBookings, setNumberOfBookings] = useState(1);
+   
+
 
     const mutation = useMutation((newBooking) => createBooking(newBooking), {
         onSuccess: () => {
@@ -54,19 +65,38 @@ const BookingPage = () => {
             return;
         }
 
-        const overlapExists = checkForTimeClash(
-            bookings, 
-            selectedVenue.VENUE_ID, 
-            formatDateToISO(bookingPageInfo.BOOKING_DATE), 
-            bookingPageInfo.START_TIME, 
-            bookingPageInfo.END_TIME
-        );
+        let overlapExists = false;
+        if (numberOfBookings > 1) {
+            for (let i = 0; i < numberOfBookings; i++){
+                let isOverlapping = checkForTimeClash(
+                    bookings, 
+                    selectedVenue.VENUE_ID, 
+                    formatDateToISO(addWeeksToDate(bookingPageInfo.BOOKING_DATE, i)), 
+                    bookingPageInfo.START_TIME, 
+                    bookingPageInfo.END_TIME
+                );
+
+                if (isOverlapping){
+                    overlapExists = true;
+                    break;
+                }
+            }
+        }
+
+        else {
+            overlapExists = checkForTimeClash(
+                bookings, 
+                selectedVenue.VENUE_ID, 
+                formatDateToISO(bookingPageInfo.BOOKING_DATE), 
+                bookingPageInfo.START_TIME, 
+                bookingPageInfo.END_TIME
+            );
+        }
 
         if (overlapExists) {
-            setPopupState("Time Slot Overlap");
+            setPopupState("Booking Overlap");
             setDisplayPopup(true);
-        }
-        else {
+        } else {
             setPopupState("Confirm Booking");
             setDisplayPopup(true);
         }
@@ -87,7 +117,20 @@ const BookingPage = () => {
             BOOKING_STATUS: "Confirmed"
         };
 
-        mutation.mutate(bookingData);
+        if (numberOfBookings > 0) {
+            for (let i = 0; i < numberOfBookings; i++) {
+                const newBookingData = {
+                    ...bookingData,
+                    // Adjusting the date for each booking using the addWeeksToDate function
+                    DATE: formatDateToISO(addWeeksToDate(bookingData.DATE, i)), // Using i to increment weeks
+                };
+    
+                mutation.mutate(newBookingData); // Mutate for each booking
+            }
+        } else {
+            // Handle single booking logic
+            mutation.mutate(bookingData);
+        }
     };
 
     const handleBackToVenueBookingClick = () => {
@@ -111,18 +154,17 @@ const BookingPage = () => {
             DESTINATION_PAGE: "/booking",
             BOOKING_PAGE_INFO: bookingPageInfo,
         };
-        navigate("/campus-selection", { state: venueSelectionDetails});
+        navigate("/campus-selection", { state: venueSelectionDetails });
     };
 
     const handleStartTimeChange = (event) => {
         const selectedTime = `${event.target.value}:00`; // Append seconds
-    
+
         const currentDate = new Date();
         const selectedDate = formatDateToISO(bookingPageInfo.BOOKING_DATE);
 
         if (bookingPageInfo.END_TIME) {
             if (new Date(`1970-01-01T${selectedTime}`) >= new Date(`1970-01-01T${bookingPageInfo.END_TIME}`)) {
-                
                 setBookingPageInfo({
                     EVENT_NAME: bookingPageInfo.EVENT_NAME,
                     BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
@@ -137,7 +179,7 @@ const BookingPage = () => {
         }
 
         // If booking is for today, restrict start time to be one hour before the current hour
-        if ( selectedDate === formatDateToISO(currentDate) && parseInt(selectedTime.slice(0, 2)) < currentDate.getHours()) {
+        if (selectedDate === formatDateToISO(currentDate) && parseInt(selectedTime.slice(0, 2)) < currentDate.getHours()) {
             setBookingPageInfo({
                 EVENT_NAME: bookingPageInfo.EVENT_NAME,
                 BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
@@ -147,6 +189,7 @@ const BookingPage = () => {
 
             setPopupState("Invalid Start TIme");
             setDisplayPopup(true);
+           
         } else {
             setBookingPageInfo({
                 EVENT_NAME: bookingPageInfo.EVENT_NAME,
@@ -156,7 +199,7 @@ const BookingPage = () => {
             });
         }
     };
-  
+
     const handleEndTimeChange = (event) => {
         const newEndTime = `${event.target.value}:00`; // Append seconds
 
@@ -183,19 +226,49 @@ const BookingPage = () => {
             setDisplayPopup(false); // Hide popup if time is valid
         }
     };
+    const [recurringBookingSummary, setRecurringBookingSummary] = useState('');
 
 
-    const tileDisabled = ({ date, view }) => {
-      if (view === 'month' || view === 'year' || view === 'decade') {
-          // Disable past dates
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
-
-          return date < today; // Disable dates before today
-      }
-      return false;
+    // Handler to open the recurring popup
+    const handleOpenRecurringPopup = () => {
+        setShowRecurringPopup(true);
     };
 
+    // Handler to close the recurring popup without confirming
+    const handleCloseRecurringPopup = () => {
+        setRecurringDetails({ weeks: '' });
+        // setRecurringBookingSummary('');
+        setShowRecurringPopup(false);
+    };
+
+    // Handler to confirm and proceed with the recurring booking
+    const handleConfirmRecurringBooking = () => {
+        // Extract the day of the week from the booking date
+        const bookingDate = new Date(bookingPageInfo.BOOKING_DATE);
+        const dayOfWeek = bookingDate.toLocaleString('en-US', { weekday: 'long' });
+        // Create the sentence for the recurring booking summary with the day of the week
+        let bookingSummary = `Every ${dayOfWeek} for the next ${recurringDetails.weeks} ${recurringDetails.weeks === "1" ? 'Week' : 'Weeks'}`;
+        if(recurringDetails.weeks <= 1 ){
+             bookingSummary = 'No recurring bookings';
+        }
+
+        // Update the input field with the recurring booking summary
+        setRecurringBookingSummary(bookingSummary);
+    
+        setNumberOfBookings(Number(recurringDetails.weeks)); // Store the number of bookings
+        setShowRecurringPopup(false); // Close the popup
+    };
+
+    const tileDisabled = ({ date, view }) => {
+        if (view === 'month' || view === 'year' || view === 'decade') {
+            // Disable past dates
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
+
+            return date < today; // Disable dates before today
+        }
+        return false;
+    };
 
     const tileContent = ({ date, view }) => {
         if (view === 'month') {
@@ -215,7 +288,7 @@ const BookingPage = () => {
 
                 <section className='booking-container'>
                     <main className='booking-loading-component-container'>
-                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading}/>
+                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading} />
                     </main>
                 </section>
             </main>
@@ -272,67 +345,239 @@ const BookingPage = () => {
                 </article>
 
                 <section className="booking-form">
-                    <input
-                        type="text"
-                        placeholder="Enter event name"
-                        value={bookingPageInfo.EVENT_NAME}
-                        onChange={(e) => (
-                            setBookingPageInfo({
-                            EVENT_NAME: e.target.value,
-                            BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
-                            START_TIME: bookingPageInfo.START_TIME,
-                            END_TIME: bookingPageInfo.END_TIME
-                            })
-                        )}
-                        className="input-field"
-                    />
-                    <article onClick={handleOnVenueSelectionClick} className="input-field">
-                        {selectedVenue.BUILDING_NAME ? selectedVenue.BUILDING_NAME : "Select a venue"}
-                    </article>
-                    <article className="input-field">
-                        {selectedVenue.VENUE_NAME}
-                    </article>
+                    <section className="fields">
+                        <div className="fields-left">
+                            <section className="input-wrapper">
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={bookingPageInfo.EVENT_NAME}
+                                        id='input-event-name'
+                                        required  
+                                        onChange={(e) => (
+                                            setBookingPageInfo({
+                                                EVENT_NAME: e.target.value,
+                                                BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
+                                                START_TIME: bookingPageInfo.START_TIME,
+                                                END_TIME: bookingPageInfo.END_TIME
+                                            })
+                                        )}
+                                    />
+                                    <label 
+                                        for='input-event-name' 
+                                        class='placeholder'>
+                                        Event Name
+                                    </label>
+                                </div>
+                            </section>
 
-                    <section className="time-slot">
-                        <section className="input-field">
-                            <div>
-                                <label>Start Time</label>
-                                <select
-                                    value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
-                                    onChange={handleStartTimeChange}
-                                    className="time-dropdown"
-                                >
-                                    <option value="" disabled>- - : - -</option>
-                                    {timeOptions.map((time, index) => (
-                                        <option key={index} value={time}>{time}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </section>
+                            <section className="input-wrapper" onClick={handleOnVenueSelectionClick}>
+                                <div >
+                                    <input 
+                                        type="text" 
+                                        id="input-building-name" 
+                                        value={selectedVenue.BUILDING_NAME || ""} 
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        for="input-building-name" 
+                                        class="placeholder">
+                                        Select a venue
+                                    </label>
+                                </div>
+                            </section>
 
-                        <section className="input-field">
-                            <div>
-                                <label>End Time</label>
-                                <select
-                                    value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
-                                    onChange={handleEndTimeChange}
-                                    className="time-dropdown"
-                                >
-                                    <option value="" disabled>- - : - -</option>
-                                    {timeOptions.map((time, index) => (
-                                        <option key={index} value={time}>{time}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </section>
+                            <section className="input-wrapper">
+                                <div className="input-container">
+                                    <input 
+                                        type="text" 
+                                        id="input-venue-name" 
+                                        value={selectedVenue.VENUE_NAME || ""} 
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        for="input-venue-name" 
+                                        class="placeholder">
+                                            Room
+                                    </label>
+                                </div>
+                            </section>
+                            {/* <section className="input-wrapper">
+                                <div className="input-container">
+                                    <input 
+                                        type="text" 
+                                        id="recurring" 
+                                        placeholder="Optional"
+                                        value={recurringBookingSummary}
+                                        readOnly 
+                                        required 
+                                    />
+                                    <label 
+                                        htmlFor="recurring" 
+                                        className="placeholder">
+                                        Recurring Booking
+                                    </label>
+                                    <button 
+                                        className='reset-button' 
+                                        onClick={() => {
+                                            // Reset recurring details
+                                            handleOpenRecurringPopup();
+                                        }}
+                                        style={{ 
+                                            background: 'transparent', 
+                                            border: 'none', 
+                                            paddingright: '5rem', 
+                                            position: 'absolute', 
+                                            top: '50%', 
+                                            transform: 'translateY(-50%)' 
+                                        }}
+                                    >
+                                        <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
+                                    </button>
+                                </div>
+
+                        </section> */}
+                        </div>
+
+                        <div className="fields-right">
+                            
+                                <section className="input-wrapper">
+                                    <div >
+                                        <label 
+                                            for="input" 
+                                            class="placeholder">
+                                                From
+                                        </label>
+                                        <select
+                                            id="select"
+                                            value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
+                                            onChange={handleStartTimeChange}
+                                            
+                                            required
+                                        >
+                                            <option value="" disabled>- - : - -</option>
+                                            {timeOptions.map((time, index) => (
+                                                <option key={index} value={time}>{time}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </section>
+
+                                <section className="input-wrapper">
+                                    
+                                    <div >
+                                        <label 
+                                            for="input" 
+                                            class="placeholder">
+                                                To
+                                        </label>
+                                        <select
+                                            id="input"
+                                            value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
+                                            onChange={handleEndTimeChange}
+                                            required
+                                        >
+                                            <option value="" disabled>- - : - -</option>
+                                            {timeOptions.map((time, index) => (
+                                                <option key={index} value={time}>{time}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                
+                            </section>
+                            
+                        </div>                        
                     </section>
+
+                    <section className='recurring-booking-container'>
+                    <section className="input-wrapper">
+                        <div className="input-container">
+                                <input 
+                                    type="text" 
+                                    id="recurring" 
+                                    placeholder="No recuring bookings."
+                                    value={recurringBookingSummary}
+                                    readOnly 
+                                    required 
+                                />
+                                <label 
+                                    htmlFor="recurring" 
+                                    className="placeholder">
+                                    Recurring Booking
+                                </label>
+                            </div>
+                        </section>
+
+                        <div className='recurring-booking-button-wrapper'>
+                            <button 
+                                className='recurring-booking-button' 
+                                onClick={() => {
+                                    // Reset recurring details
+                                    handleOpenRecurringPopup();
+                                }}
+                                >
+                                <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
+                            </button>
+                        </div>
+                    </section>                                
 
                     <button className="book-button" onClick={handleSubmitButtonClick}>
                         Book event
                     </button>
+                    
                 </section>
             </section>
         </main>
+            {/* Recurring Booking Popup */}
+            {showRecurringPopup && (
+            <Popup trigger={showRecurringPopup}>
+                <h2>Set Recurring Booking</h2>
+                <section className='recurring-booking-form'>
+                    <label>
+                        Repeat over:
+                        <input
+                            type="number"
+                            min="2"
+                            value={recurringDetails.weeks}
+                            onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
+                            placeholder=""
+                        /> 
+                        Weeks
+                        
+                    </label>
+                    <button 
+                            className='reset-button' 
+                            onClick={() => {
+                                // Reset recurring details
+                                setRecurringDetails({ weeks: '' }); // Reset to default value
+                                setRecurringBookingSummary(''); // Reset summary to empty
+                             
+                            }}
+                            style={{ background: 'transparent', border: 'none', padding: 0 }} // Style to make it look like an image
+                             >
+                            <img src={ResetIcon} alt="Reset Icon" style={{marginLeft:'8rem', width: '24px', height: '24px' }} />
+                        </button>
+                    <section className='popup-buttons'>
+                        <button 
+                            onClick={() => {
+                                // Save the number of bookings and close the popup
+                                handleConfirmRecurringBooking(); // Optionally you can also handle saving the weeks here if needed
+                                setShowRecurringPopup(false); // Close the popup
+                            }} 
+                            className='confirm-button'>
+                            Confirm
+                        </button>
+                        <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
+                        
+                    </section>
+                </section>
+            </Popup>
+        )}
+
+
+
 
         {popupState === "Invalid Details" &&
             <Popup trigger={displayPopup}>
@@ -408,9 +653,9 @@ const BookingPage = () => {
             </Popup>
         }
 
-        {popupState === "Time Slot Overlap" &&
+        {popupState === "Booking Overlap" &&
             <Popup trigger={displayPopup}>
-                <h2>Time Slot Overlap</h2>
+                <h2>Booking Overlap</h2>
                 <p>The selected time slot overlaps with an existing booking.</p>
                 <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
             </Popup>
