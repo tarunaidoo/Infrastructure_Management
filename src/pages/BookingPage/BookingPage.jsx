@@ -443,48 +443,47 @@ const BookingPage = () => {
 
                         <div className="fields-right">
                             
-                                <section className="input-wrapper">
-                                    <div >
-                                        <label 
-                                            for="input" 
-                                            class="placeholder">
-                                                From
-                                        </label>
-                                        <select
-                                            id="select"
-                                            value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
-                                            onChange={handleStartTimeChange}
-                                            
-                                            required
-                                        >
-                                            <option value="" disabled>- - : - -</option>
-                                            {timeOptions.map((time, index) => (
-                                                <option key={index} value={time}>{time}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </section>
+                            <section className="input-wrapper">
+                                <div >
+                                    <label 
+                                        for="input" 
+                                        class="placeholder">
+                                            From
+                                    </label>
+                                    <select
+                                        id="select"
+                                        value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
+                                        onChange={handleStartTimeChange}
+                                        
+                                        required
+                                    >
+                                        <option value="" disabled>- - : - -</option>
+                                        {timeOptions.map((time, index) => (
+                                            <option key={index} value={time}>{time}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </section>
 
-                                <section className="input-wrapper">
-                                    
-                                    <div >
-                                        <label 
-                                            for="input" 
-                                            class="placeholder">
-                                                To
-                                        </label>
-                                        <select
-                                            id="input"
-                                            value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
-                                            onChange={handleEndTimeChange}
-                                            required
-                                        >
-                                            <option value="" disabled>- - : - -</option>
-                                            {timeOptions.map((time, index) => (
-                                                <option key={index} value={time}>{time}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            <section className="input-wrapper">
+                                <div >
+                                    <label 
+                                        for="input" 
+                                        class="placeholder">
+                                            To
+                                    </label>
+                                    <select
+                                        id="input"
+                                        value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
+                                        onChange={handleEndTimeChange}
+                                        required
+                                    >
+                                        <option value="" disabled>- - : - -</option>
+                                        {timeOptions.map((time, index) => (
+                                            <option key={index} value={time}>{time}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 
                             </section>
                             
