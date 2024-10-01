@@ -260,7 +260,8 @@
 .recurring-booking-form {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   background-color: transparent; /* Light grey background for better contrast */
   width: 300px; /* Control the form width */
@@ -397,13 +398,37 @@ select {
   
 }
 
+.recurring-booking-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  
+  align-self: center;
+  width: 100%;
+}
 
+.recurring-booking-button-container .popup-heading {
+  font-size: large;
+  font-weight: bold;
+}
 
+.reset-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
+.reset-button {
+  background-color: #d4af37;
+  padding: 0;
+}
 
-
-
-
+.reset-icon {
+  width: 24px;
+  height: 24px;
+}
 
 
 

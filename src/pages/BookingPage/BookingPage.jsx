@@ -533,7 +533,7 @@ const BookingPage = () => {
             {/* Recurring Booking Popup */}
             {showRecurringPopup && (
             <Popup trigger={showRecurringPopup}>
-                <h2>Set Recurring Booking</h2>
+                <h3> Set Recurring Booking</h3>
                 <section className='recurring-booking-form'>
                     <label>
                         Repeat over:
@@ -547,31 +547,31 @@ const BookingPage = () => {
                         Weeks
                         
                     </label>
-                    <button 
-                            className='reset-button' 
+                    <section className='reset-button-container'>
+                        <img
                             onClick={() => {
                                 // Reset recurring details
                                 setRecurringDetails({ weeks: '' }); // Reset to default value
                                 setRecurringBookingSummary(''); // Reset summary to empty
-                             
+                                
                             }}
-                            style={{ background: 'transparent', border: 'none', padding: 0 }} // Style to make it look like an image
-                             >
-                            <img src={ResetIcon} alt="Reset Icon" style={{marginLeft:'8rem', width: '24px', height: '24px' }} />
-                        </button>
-                    <section className='popup-buttons'>
+                            className="reset-icon" 
+                            src={ResetIcon} 
+                            alt="Reset Icon"
+                        />
+                    </section>
+                    <article className='recurring-booking-button-container'>
                         <button 
                             onClick={() => {
                                 // Save the number of bookings and close the popup
                                 handleConfirmRecurringBooking(); // Optionally you can also handle saving the weeks here if needed
                                 setShowRecurringPopup(false); // Close the popup
                             }} 
-                            className='confirm-button'>
+                            className='booking-popup-button'>
                             Confirm
-                        </button>
-                        <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
-                        
-                    </section>
+                        </button>   
+                        <button onClick={handleCloseRecurringPopup} className='booking-popup-button'>Cancel</button>
+                    </article>
                 </section>
             </Popup>
         )}
