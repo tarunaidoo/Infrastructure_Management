@@ -130,8 +130,8 @@ function AdminHomePage(){
             />
             )}
             <main className="admin-home-container">
-            <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards"/>
-            <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards"/>
+            <AdminIssuesCard onClick={issuesCardClick} className="admin-home-cards" data-testid="issues-card"/>
+            <AdminEventsCard onClick={eventsCardClick} className="admin-home-cards" data_testid="events-card"/>
             </main>
             <Footer onAddVenueClick={handleAddVenueClick} onEditVenueClick={handleEditVenueClick} onProfileClick={handleProfileClick}/>
             {/* Show notifications if available */}
