@@ -71,8 +71,8 @@
   display: flex;
   flex-direction: column;
   width: 100vw;
-  height: 45%;
-  gap: 10%;
+  height: 48%;
+  gap: 5%;
   align-items: center;
   justify-content: center;
   padding-top: 5%;
@@ -97,7 +97,7 @@
 
 /* Book Event Button */
 .book-button {
-  height: 15%;
+  height: 10%;
   width: 16rem;
   background-color: #d4af37;
   color: white;
@@ -323,7 +323,8 @@
   display: flex;
   align-items:center;
   justify-content: flex-start; /* Align items to the start (left) */
-  height: 50%;
+  height: 30%;
+  max-height: 60px;
 }
 
 input {
@@ -355,8 +356,8 @@ select {
   background-color: white;
   color:  rgb(173, 173, 173);
   left: var(--padding);
-  bottom: 80%;
-  padding: 0 1%;
+  bottom: 70%;
+  padding: 0% 3% 2% 3%;
   width: auto;
   font-size: small;
   
@@ -364,10 +365,10 @@ select {
 
 .fields {
   display: flex;               /* Use flexbox to create a two-column layout */
-  justify-content: space-between; /* Space between left and right columns */
+  justify-content: flex-start; /* Space between left and right columns */
   width: 80%;                /* Full width */
-  gap:10%;
-  height: 20vh;
+  gap:12%;
+  height: 25vh;
   margin-left: 20%;
 }
 
@@ -464,7 +465,8 @@ select {
     cursor: pointer;
   }
   .book-button {
-    height: 50px;
+    height: 25%;
+    max-height: 45px;
     width: 60%;
     background-color: #d4af37;
     color: white;
@@ -481,7 +483,7 @@ select {
     display: flex;
     align-items:center;
     justify-content: flex-start; /* Align items to the start (left) */
-    height: 40%;
+    height: 25%;
     
   }
   
@@ -498,7 +500,7 @@ select {
     padding: var(--padding);
     border: 1px solid rgb(223,223,223);
     outline: none;
-    border-radius: 6px;
+    border-radius: 4px;
     background-color: white;
     width: 150%;
   }
@@ -508,11 +510,9 @@ select {
     background-color: white;
     color:  rgb(173, 173, 173);
     left: var(--padding);
-    bottom: 80%;
-    padding: 0 1%;
+    bottom: 75%;
     width: auto;
     font-size: small;
-    
   }
   
   .fields {
@@ -520,7 +520,7 @@ select {
     justify-content: space-between; /* Space between left and right columns */
     width: 80%;                /* Full width */
     gap:25%;
-    /* height: 30vh; */
+    height: 80%;
     margin-left: 0;
   }
   
@@ -529,20 +529,23 @@ select {
     width: 100%;                  /* Set width for left and right columns */
     display: flex;               /* Make the columns flex containers */
     flex-direction: column;      /* Stack items vertically */
+    justify-content: flex-start;
     gap: 10%;                   /* Set the gap between items */
   }
   
   #recurring {
     width: 135%; /* Adjust the width as needed */
+    height: 100%;
   }
 
   .recurring-booking-container {
     width: 85%;
+    height: 40%;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    gap: 17%;
+    gap: 20%;
   }
   
   .recurring-booking-button-wrapper{

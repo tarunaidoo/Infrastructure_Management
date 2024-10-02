@@ -404,41 +404,6 @@ const BookingPage = () => {
                                     </label>
                                 </div>
                             </section>
-                            {/* <section className="input-wrapper">
-                                <div className="input-container">
-                                    <input 
-                                        type="text" 
-                                        id="recurring" 
-                                        placeholder="Optional"
-                                        value={recurringBookingSummary}
-                                        readOnly 
-                                        required 
-                                    />
-                                    <label 
-                                        htmlFor="recurring" 
-                                        className="placeholder">
-                                        Recurring Booking
-                                    </label>
-                                    <button 
-                                        className='reset-button' 
-                                        onClick={() => {
-                                            // Reset recurring details
-                                            handleOpenRecurringPopup();
-                                        }}
-                                        style={{ 
-                                            background: 'transparent', 
-                                            border: 'none', 
-                                            paddingright: '5rem', 
-                                            position: 'absolute', 
-                                            top: '50%', 
-                                            transform: 'translateY(-50%)' 
-                                        }}
-                                    >
-                                        <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
-                                    </button>
-                                </div>
-
-                        </section> */}
                         </div>
 
                         <div className="fields-right">
