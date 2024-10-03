@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 import "./RoomCard.css"
 
@@ -13,5 +14,18 @@ const RoomCard = ({roomName, onClick, children}) => {
         </section>
     );
 }
+
+// PropTypes for validation
+RoomCard.propTypes = {
+    roomName: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
+    children: PropTypes.node,
+};
+
+// Default props
+RoomCard.defaultProps = {
+    onClick: () => {}, // Fallback to a no-op function if not provided
+    children: null, // Default children to null
+};
 
 export default RoomCard;
