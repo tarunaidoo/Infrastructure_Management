@@ -404,87 +404,51 @@ const BookingPage = () => {
                                     </label>
                                 </div>
                             </section>
-                            {/* <section className="input-wrapper">
-                                <div className="input-container">
-                                    <input 
-                                        type="text" 
-                                        id="recurring" 
-                                        placeholder="Optional"
-                                        value={recurringBookingSummary}
-                                        readOnly 
-                                        required 
-                                    />
-                                    <label 
-                                        htmlFor="recurring" 
-                                        className="placeholder">
-                                        Recurring Booking
-                                    </label>
-                                    <button 
-                                        className='reset-button' 
-                                        onClick={() => {
-                                            // Reset recurring details
-                                            handleOpenRecurringPopup();
-                                        }}
-                                        style={{ 
-                                            background: 'transparent', 
-                                            border: 'none', 
-                                            paddingright: '5rem', 
-                                            position: 'absolute', 
-                                            top: '50%', 
-                                            transform: 'translateY(-50%)' 
-                                        }}
-                                    >
-                                        <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
-                                    </button>
-                                </div>
-
-                        </section> */}
                         </div>
 
                         <div className="fields-right">
                             
-                                <section className="input-wrapper">
-                                    <div >
-                                        <label 
-                                            for="input" 
-                                            class="placeholder">
-                                                From
-                                        </label>
-                                        <select
-                                            id="select"
-                                            value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
-                                            onChange={handleStartTimeChange}
-                                            
-                                            required
-                                        >
-                                            <option value="" disabled>- - : - -</option>
-                                            {timeOptions.map((time, index) => (
-                                                <option key={index} value={time}>{time}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </section>
+                            <section className="input-wrapper">
+                                <div >
+                                    <label 
+                                        for="input" 
+                                        class="placeholder">
+                                            From
+                                    </label>
+                                    <select
+                                        id="select"
+                                        value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
+                                        onChange={handleStartTimeChange}
+                                        
+                                        required
+                                    >
+                                        <option value="" disabled>- - : - -</option>
+                                        {timeOptions.map((time, index) => (
+                                            <option key={index} value={time}>{time}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </section>
 
-                                <section className="input-wrapper">
-                                    
-                                    <div >
-                                        <label 
-                                            for="input" 
-                                            class="placeholder">
-                                                To
-                                        </label>
-                                        <select
-                                            id="input"
-                                            value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
-                                            onChange={handleEndTimeChange}
-                                            required
-                                        >
-                                            <option value="" disabled>- - : - -</option>
-                                            {timeOptions.map((time, index) => (
-                                                <option key={index} value={time}>{time}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            <section className="input-wrapper">
+                                <div >
+                                    <label 
+                                        for="input" 
+                                        class="placeholder">
+                                            To
+                                    </label>
+                                    <select
+                                        id="input"
+                                        value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
+                                        onChange={handleEndTimeChange}
+                                        required
+                                    >
+                                        <option value="" disabled>- - : - -</option>
+                                        {timeOptions.map((time, index) => (
+                                            <option key={index} value={time}>{time}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 
                             </section>
                             
@@ -533,7 +497,7 @@ const BookingPage = () => {
             {/* Recurring Booking Popup */}
             {showRecurringPopup && (
             <Popup trigger={showRecurringPopup}>
-                <h2>Set Recurring Booking</h2>
+                <h3> Set Recurring Booking</h3>
                 <section className='recurring-booking-form'>
                     <label>
                         Repeat over:
@@ -547,31 +511,31 @@ const BookingPage = () => {
                         Weeks
                         
                     </label>
-                    <button 
-                            className='reset-button' 
+                    <section className='reset-button-container'>
+                        <img
                             onClick={() => {
                                 // Reset recurring details
                                 setRecurringDetails({ weeks: '' }); // Reset to default value
                                 setRecurringBookingSummary(''); // Reset summary to empty
-                             
+                                
                             }}
-                            style={{ background: 'transparent', border: 'none', padding: 0 }} // Style to make it look like an image
-                             >
-                            <img src={ResetIcon} alt="Reset Icon" style={{marginLeft:'8rem', width: '24px', height: '24px' }} />
-                        </button>
-                    <section className='popup-buttons'>
+                            className="reset-icon" 
+                            src={ResetIcon} 
+                            alt="Reset Icon"
+                        />
+                    </section>
+                    <article className='recurring-booking-button-container'>
                         <button 
                             onClick={() => {
                                 // Save the number of bookings and close the popup
                                 handleConfirmRecurringBooking(); // Optionally you can also handle saving the weeks here if needed
                                 setShowRecurringPopup(false); // Close the popup
                             }} 
-                            className='confirm-button'>
+                            className='booking-popup-button'>
                             Confirm
-                        </button>
-                        <button onClick={handleCloseRecurringPopup} className='cancel-button'>Cancel</button>
-                        
-                    </section>
+                        </button>   
+                        <button onClick={handleCloseRecurringPopup} className='booking-popup-button'>Cancel</button>
+                    </article>
                 </section>
             </Popup>
         )}
