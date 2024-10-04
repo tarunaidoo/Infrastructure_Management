@@ -22,6 +22,10 @@ TO get running locally where it DOES automatically update webpage as changes are
 5. In a seperate terminal inside of the Infrastructure_Management folder run "swa start http://localhost:3000 --data-api-location ./swa-db-connections"
 Now changes made will be automatically reflected
 
+# Figma
+The functional prototype Figma can be found here: https://www.figma.com/design/jPVO0pXUdKCfBDlHqYA7ML/SegFault-UI%2FUX-Diagram?node-id=0-1&t=zITNrk9itw3ZHDwF-0
+
+
 
 
 
