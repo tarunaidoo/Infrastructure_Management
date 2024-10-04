@@ -102,6 +102,7 @@
     border: 1px solid #ccc;
     font-size: 16px;
     font-family: Arial, sans-serif;
+    width: 80vw;
 }
 .report-issue-container input:focus{
     outline: none;
