@@ -212,15 +212,16 @@
 .custom-input-wrapper input {
   width: 100%;
   height: 45%;
+
+  border: 1px solid rgb(223,223,223);
+  outline: none;
   border-radius: 6px;
-  border-width: 1px;
-  border-color: #cccccc;
   font-size: small;
 }
 
 .custom-input-wrapper input:focus {
   padding: var(--padding);
-  border: 1px solid #ccc;
+  border: 1px solid rgb(223,223,223);
   outline: none;
 }
 
@@ -233,6 +234,8 @@
   width: 40%;
   height: 45%;
 
+  border: 1px solid rgb(223,223,223);
+  outline: none;
   border-radius: 6px;
   background-color: white;
   padding: 10px 25px;
