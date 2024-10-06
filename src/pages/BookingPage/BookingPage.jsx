@@ -20,6 +20,7 @@ import './BookingPage.css';
 
 import headingIcon from '../../assets/icons/chevron-left.svg';
 
+
 const BookingPage = () => {
     const userID = localStorage.getItem('userEmail');
     const navigate = useNavigate();
@@ -347,144 +348,108 @@ const BookingPage = () => {
                 <section className="booking-form">
                     <section className="fields">
                         <div className="fields-left">
-                            <section className="input-wrapper">
-                                <div>
-                                    <input
-                                        type="text"
-                                        value={bookingPageInfo.EVENT_NAME}
-                                        id='input-event-name'
-                                        required  
-                                        onChange={(e) => (
-                                            setBookingPageInfo({
-                                                EVENT_NAME: e.target.value,
-                                                BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
-                                                START_TIME: bookingPageInfo.START_TIME,
-                                                END_TIME: bookingPageInfo.END_TIME
-                                            })
-                                        )}
-                                    />
-                                    <label 
-                                        for='input-event-name' 
-                                        class='placeholder'>
-                                        Event Name
-                                    </label>
-                                </div>
+                            <section className="custom-input-wrapper">
+                                <label for='input-event-name' > Event Name </label>
+                                <input
+                                    type="text"
+                                    value={bookingPageInfo.EVENT_NAME}
+                                    id='input-event-name'
+                                    required  
+                                    onChange={(e) => (
+                                        setBookingPageInfo({
+                                            EVENT_NAME: e.target.value,
+                                            BOOKING_DATE: bookingPageInfo.BOOKING_DATE,
+                                            START_TIME: bookingPageInfo.START_TIME,
+                                            END_TIME: bookingPageInfo.END_TIME
+                                        })
+                                    )}
+                                />
                             </section>
 
-                            <section className="input-wrapper" onClick={handleOnVenueSelectionClick}>
-                                <div >
-                                    <input 
-                                        type="text" 
-                                        id="input-building-name" 
-                                        value={selectedVenue.BUILDING_NAME || ""} 
-                                        readOnly 
-                                        required 
-                                    />
-                                    <label 
-                                        for="input-building-name" 
-                                        class="placeholder">
-                                        Select a venue
-                                    </label>
-                                </div>
+                            <section className="custom-input-wrapper" onClick={handleOnVenueSelectionClick}>
+                                <label for="input-building-name" >
+                                    Select a Venue
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="input-building-name" 
+                                    value={selectedVenue.BUILDING_NAME || ""} 
+                                    readOnly 
+                                    required 
+                                />
                             </section>
 
-                            <section className="input-wrapper">
-                                <div className="input-container">
-                                    <input 
-                                        type="text" 
-                                        id="input-venue-name" 
-                                        value={selectedVenue.VENUE_NAME || ""} 
-                                        readOnly 
-                                        required 
-                                    />
-                                    <label 
-                                        for="input-venue-name" 
-                                        class="placeholder">
-                                            Room
-                                    </label>
-                                </div>
+                            <section className="custom-input-wrapper">
+                                <label for="input-venue-name">
+                                    Room
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="input-venue-name" 
+                                    value={selectedVenue.VENUE_NAME || ""} 
+                                    readOnly 
+                                    required 
+                                />
                             </section>
                         </div>
 
                         <div className="fields-right">
-                            
-                            <section className="input-wrapper">
-                                <div >
-                                    <label 
-                                        for="input" 
-                                        class="placeholder">
-                                            From
-                                    </label>
-                                    <select
-                                        id="select"
-                                        value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
-                                        onChange={handleStartTimeChange}
-                                        
-                                        required
-                                    >
-                                        <option value="" disabled>- - : - -</option>
-                                        {timeOptions.map((time, index) => (
-                                            <option key={index} value={time}>{time}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                            <section className="custom-input-wrapper">
+                                <label for="input" >
+                                        From
+                                </label>
+                                <select
+                                    id="select"
+                                    value={bookingPageInfo.START_TIME.slice(0, 5)} // Displaying only HH:mm
+                                    onChange={handleStartTimeChange}
+                                    
+                                    required
+                                >
+                                    <option value="" disabled>- - : - -</option>
+                                    {timeOptions.map((time, index) => (
+                                        <option key={index} value={time}>{time}</option>
+                                    ))}
+                                </select>
                             </section>
 
-                            <section className="input-wrapper">
-                                <div >
-                                    <label 
-                                        for="input" 
-                                        class="placeholder">
-                                            To
-                                    </label>
-                                    <select
-                                        id="input"
-                                        value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
-                                        onChange={handleEndTimeChange}
-                                        required
-                                    >
-                                        <option value="" disabled>- - : - -</option>
-                                        {timeOptions.map((time, index) => (
-                                            <option key={index} value={time}>{time}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                
+                            <section className="custom-input-wrapper">
+                                <label for="input">
+                                    To
+                                </label>
+                                <select
+                                    id="input"
+                                    value={bookingPageInfo.END_TIME.slice(0, 5)} // Displaying only HH:mm
+                                    onChange={handleEndTimeChange}
+                                    required
+                                >
+                                    <option value="" disabled>- - : - -</option>
+                                    {timeOptions.map((time, index) => (
+                                        <option key={index} value={time}>{time}</option>
+                                    ))}
+                                </select>
                             </section>
                             
                         </div>                        
                     </section>
 
-                    <section className='recurring-booking-container'>
-                    <section className="input-wrapper">
-                        <div className="input-container">
-                                <input 
-                                    type="text" 
-                                    id="recurring" 
-                                    placeholder="No recuring bookings."
-                                    value={recurringBookingSummary}
-                                    readOnly 
-                                    required 
-                                />
-                                <label 
-                                    htmlFor="recurring" 
-                                    className="placeholder">
-                                    Recurring Booking
-                                </label>
-                            </div>
+                    <section className='recurring-booking-wrapper' onClick={handleOpenRecurringPopup}>
+                        <section className="custom-input-wrapper" >
+                            <label for="recurring">
+                                Recurring Booking
+                            </label>
+                            <input 
+                                type="text" 
+                                placeholder="No Recurring Bookings."
+                                value={recurringBookingSummary}
+                                readOnly 
+                                required 
+                            />
                         </section>
-
-                        <div className='recurring-booking-button-wrapper'>
-                            <button 
-                                className='recurring-booking-button' 
-                                onClick={() => {
-                                    // Reset recurring details
-                                    handleOpenRecurringPopup();
-                                }}
-                                >
-                                <img src={RecurringIcon} alt="Recurring Icon" style={{ marginRight:'5%',width: '24px', height: '24px' }} />
-                            </button>
-                        </div>
+                        <img 
+                            src={RecurringIcon} 
+                            alt="Recurring Booking Icon" 
+                            className='recurring-booking-icon' 
+                        />
                     </section>                                
 
                     <button className="book-button" onClick={handleSubmitButtonClick}>
