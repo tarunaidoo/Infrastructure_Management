@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   background-color: white;
   color: black;
   width: 100vw;
@@ -70,43 +71,26 @@
 .booking-form {
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  height: 48%;
-  gap: 5%;
+  width: 80%;
+  height: 50%;
   align-items: center;
-  justify-content: center;
-  padding-top: 5%;
-}
-
-.booking-form .input-field {
-  display: flex;
-  width: 40vw;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-}
-
-.input-field input:focus {
-  border: 1px solid #ccc;
-  outline: none;
+  justify-content: flex-start;
 }
 
 /* Book Event Button */
 .book-button {
-  height: 10%;
+  height: 40px;
   width: 16rem;
+  margin-top: 2%;
+
   background-color: #d4af37;
   color: white;
   font-size: 18px;
   font-weight: bold;
+  
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  margin-bottom: 5%;
 }
 
 .book-button:active {
@@ -154,109 +138,110 @@
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2); /* Add custom focus ring */
 }
 
-/* Predefined Field */
-.predefined-field {
-  height: 50px;
-  width: 26vw;
+.popup-buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
+  justify-content: flex-end;
+  width: 100%;
 }
 
-/* Dropdown itself */
-.predefined-field select { /* Control the width of the dropdown */
-  width: 26vw;
-  height: 50px; /* Size of the dropdown before clicked */
-  font-size: 16px; /* Adjust text size */
-  padding: 10px; /* Add padding for spacing */
-  text-align: center; /* Center text inside the dropdown */
-  border-radius: 5px; /* Rounded corners */
-  border: 2px solid #ccc; /* Border style */
-  background-color: #e0e0e0; /* Background color */
-  cursor: pointer;
-}
-
-/* Control the dropdown list size */
-.predefined-field select:focus {
-  max-height: 100px; /* Maximum height of the dropdown list */
-  overflow-y: auto; /* Enable scrolling if list exceeds height */
+.popup-buttons button {
+  padding: 10px 15px;
+  margin-left: 10px; /* Space between buttons */
   border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 14px;
+}
+
+.popup-buttons .cancel-button {
+  background-color: #dc3545; /* Red for the cancel button */
+}
+
+.popup-buttons button:hover {
+  opacity: 0.9; /* Slight opacity change on hover */
+}
+
+.fields {
+  display: flex;               /* Use flexbox to create a two-column layout */
+  flex-direction: row;
+
+  height: 60%;
+  width: 80%;
+}
+
+.fields .fields-left {
+  height: 100%;
+  width: 60%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.fields .fields-right {
+  height: 100%;
+  width: 40%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* background-color: tomato; */
+}
+
+.custom-input-wrapper {
+  width: 260px;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.custom-input-wrapper label {
+  position: relative;
+  top: 10%;
+  left: min(15px, 10%);
+
+  width: auto;
+  font-size: small;
+  background-color: white;
+}
+
+.custom-input-wrapper input {
+  width: 100%;
+  height: 45%;
+
+  border: 1px solid rgb(223,223,223);
+  outline: none;
+  border-radius: 6px;
+  font-size: small;
+}
+
+.custom-input-wrapper input:focus {
+  padding: var(--padding);
+  border: 1px solid rgb(223,223,223);
   outline: none;
 }
 
-/* For older browsers or additional control */
-.predefined-field select option {
-  height: 40px; /* Control the height of each option */
-  font-size: 12px; /* Adjust the font size */
-  padding: 5px 10px; /* Add padding to each option */
+.custom-input-wrapper input[type=text] {
+  /* width: 100%; */
+  padding: 0px 10px;
 }
 
-/* Hide the scroll bar for more aesthetic look */
-.predefined-field select::-webkit-scrollbar {
-  width: 8px; /* Custom width of the scrollbar */
+.custom-input-wrapper select {
+  width: 40%;
+  height: 45%;
+
+  border: 1px solid rgb(223,223,223);
+  outline: none;
+  border-radius: 6px;
+  background-color: white;
+  padding: 10px 25px;
 }
 
-.predefined-field select::-webkit-scrollbar-thumb {
-  background-color: #ccc; /* Color of the scrollbar */
-  border-radius: 10px; /* Rounded scrollbar for a better look */
-}
-
-.time-slot {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 3%;
-  width:30%;
-
-}
-
-.time-slot div {
-  flex: 1;
-  margin-right: 5rem;
- 
-}
-
-.time-slot div:last-child {
-  margin-right: 0;
-}
-
-.time-slot label {
-  display: block;
-  text-align: center;
-}
-
-.time-slot input {
-  width: 100%;
-  padding: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
-  border: none;
-  background-color: #e0e0e0;
-}
-
-.time-dropdown {
-  width: 80%; /* Full width */
-  text-align: center;
-  border:none; /* Light gray border */
-  font-size: 16px; /* Font size */
-  background-color: #e0e0e0;
-  cursor: pointer; /* Pointer cursor on hover */
-}
-
-.time-dropdown:focus {
-  outline: none; /* Remove default focus outline */
-  background-color: #e0e0e0;
-}
-
-.time-dropdown option {
-  padding: 10px; /* Space inside each option */
-  
-}
-
-/* Recurring Booking Form Styles */
+/* Recurring Booking Popup CSS*/
 .recurring-booking-form {
   display: flex;
   flex-direction: column;
@@ -285,119 +270,29 @@
   border-radius: 4px;
 }
 
-.recurring-booking-summary {
-  font-size: 14px;
-  color: #666;
-  margin: 15px 0; /* Space above and below the summary text */
-}
-
-.popup-buttons {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.popup-buttons button {
-  padding: 10px 15px;
-  margin-left: 10px; /* Space between buttons */
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 14px;
-}
-
-.popup-buttons .cancel-button {
-  background-color: #dc3545; /* Red for the cancel button */
-}
-
-.popup-buttons button:hover {
-  opacity: 0.9; /* Slight opacity change on hover */
-}
-
-.input-wrapper {
-  --padding: 10px;
-  --focus-color: grey;
-  position: relative;
-  display: flex;
-  align-items:center;
-  justify-content: flex-start; /* Align items to the start (left) */
-  height: 30%;
-  max-height: 60px;
-}
-
-input {
-  padding: var(--padding);
-  border: 1px solid rgb(223, 223, 223);
-  outline: none;
-  border-radius: 6px;
-  font-size: small;
-  width: 150%;
-  
-  
-}
-#recurring {
-  width: 300%; /* Adjust the width as needed */
-}
-
-
-select {
-  padding: var(--padding);
-  border: 1px solid rgb(223,223,223);
-  outline: none;
-  border-radius: 6px;
-  background-color: white;
-  width: 150%;
-}
-
-.placeholder {
-  position: absolute;
-  background-color: white;
-  color:  rgb(173, 173, 173);
-  left: var(--padding);
-  bottom: 70%;
-  padding: 0% 3% 2% 3%;
-  width: auto;
-  font-size: small;
-  
-}
-
-.fields {
-  display: flex;               /* Use flexbox to create a two-column layout */
-  justify-content: flex-start; /* Space between left and right columns */
-  width: 80%;                /* Full width */
-  gap:12%;
-  height: 25vh;
-  margin-left: 20%;
-}
-
-
-.fields-left, .fields-right {
-  width: 100%;                  /* Set width for left and right columns */
-  display: flex;               /* Make the columns flex containers */
-  flex-direction: column;      /* Stack items vertically */
-  gap: 8%;                   /* Set the gap between items */
-}
-
-
-.recurring-booking-container {
-  width: 60%;
+.recurring-booking-wrapper {
+  width: 80%;
+  height: 18%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
-  gap: 27%;
+  justify-content: flex-start;
 }
 
-.recurring-booking-button-wrapper{
-  width:10%;
+.recurring-booking-wrapper .custom-input-wrapper {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.recurring-booking-button {
-  background: transparent;
-  border: none;
-  
+.recurring-booking-wrapper .recurring-booking-icon {
+  position: relative;
+  top: 6px;
+  left: max(1%, 5px);
+  width: max(30px, 3%);
 }
 
 .recurring-booking-button-container {
@@ -410,8 +305,7 @@ select {
   width: 100%;
 }
 
-.recurring-booking-button-container .popup-heading {
-  font-size: large;
+.recurring-booking-button-container button {
   font-weight: bold;
 }
 
@@ -422,18 +316,16 @@ select {
   width: 100%;
 }
 
-.reset-button {
-  background-color: #d4af37;
-  padding: 0;
-}
-
 .reset-icon {
   width: 24px;
   height: 24px;
 }
 
-
-
+.booking-loading-component-container {
+  display: flex;
+  justify-content: center; /* Centers the container horizontally */
+  align-items: center; /* Centers the container vertically */
+}
 
 
 
@@ -442,28 +334,6 @@ select {
 
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
-  .predefined-field {
-    position: relative;
-    height: 50px;
-    width: 60vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    font-size: 16px;
-  }
-  .predefined-field select { /* Control the width of the dropdown */
-    width: 100vw;
-    height: 50px; /* Size of the dropdown before clicked */
-    font-size: 16px; /* Adjust text size */
-    padding: 10px; /* Add padding for spacing */
-    text-align: center; /* Center text inside the dropdown */
-    border-radius: 5px; /* Rounded corners */
-    border: 2px solid #ccc; /* Border style */
-    background-color: #e0e0e0; /* Background color */
-    cursor: pointer;
-  }
   .book-button {
     height: 25%;
     max-height: 45px;
@@ -477,89 +347,107 @@ select {
     cursor: pointer;
     margin-top: 20px;
   }
-  .input-wrapper {
-    --focus-color: grey;
-    position: relative;
-    display: flex;
-    align-items:center;
-    justify-content: flex-start; /* Align items to the start (left) */
-    height: 25%;
-    
+
+  .fields {
+    display: flex;               /* Use flexbox to create a two-column layout */
+    flex-direction: row;
+  
+    height: 50%;
+    width: 100%;
   }
   
-  input {
-    padding: var(--padding);
-    border: 1px solid rgb(223, 223, 223);
+  .fields-left {
+    height: 100%;
+    width: 80%;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 3%;
+  }
+  
+  .fields-right {
+    height: 100%;
+    width: 20%;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 3%;
+  }
+  
+  .custom-input-wrapper {
+    width: 90%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .custom-input-wrapper label {
+    position: relative;
+    top: 13%;
+    left: min(10px, 10%);
+  
+    width: auto;
+    font-size: small;
+    background-color: white;
+  }
+  
+  .custom-input-wrapper input {
+    width: 100%;
+    height: 75%;
+    max-height: 40px;
+
+    border: 1px solid rgb(223,223,223);
     outline: none;
     border-radius: 6px;
     font-size: small;
-    width: 150%;
   }
   
-  select {
+  .custom-input-wrapper input:focus {
     padding: var(--padding);
+    border: 1px solid #ccc;
+    outline: none;
+  }
+  
+  .custom-input-wrapper input[type=text] {
+    padding: 0px 10px;
+  }
+  
+  .custom-input-wrapper select {
+    width: 100%;
+    height: 80%;
+    max-height: 40px;
+    
     border: 1px solid rgb(223,223,223);
     outline: none;
-    border-radius: 4px;
-    background-color: white;
-    width: 150%;
+    border-radius: 6px;
+    padding: 10px 15px;
   }
   
-  .placeholder {
-    position: absolute;
-    background-color: white;
-    color:  rgb(173, 173, 173);
-    left: var(--padding);
-    bottom: 75%;
-    width: auto;
-    font-size: small;
-  }
-  
-  .fields {
-    display: flex;               /* Use flexbox to create a two-column layout */
-    justify-content: space-between; /* Space between left and right columns */
-    width: 80%;                /* Full width */
-    gap:25%;
-    height: 80%;
-    margin-left: 0;
-  }
-  
-  
-  .fields-left, .fields-right {
-    width: 100%;                  /* Set width for left and right columns */
-    display: flex;               /* Make the columns flex containers */
-    flex-direction: column;      /* Stack items vertically */
-    justify-content: flex-start;
-    gap: 10%;                   /* Set the gap between items */
-  }
-  
-  #recurring {
-    width: 135%; /* Adjust the width as needed */
-    height: 100%;
-  }
-
-  .recurring-booking-container {
-    width: 85%;
-    height: 40%;
+  .recurring-booking-wrapper {
+    width: 100%;
+    height: 18%;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
     align-items: center;
-    gap: 20%;
+    justify-content: space-between;
   }
   
-  .recurring-booking-button-wrapper{
-    width:15%;
+  .recurring-booking-wrapper .custom-input-wrapper {
+    width: 89%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
   }
   
-  .recurring-booking-button {
-    background: transparent;
-    border: none;
+  .recurring-booking-wrapper .recurring-booking-icon {
+    position: relative;
+    top: 6px;
+    width: 9%;
   }
-}
-
-.booking-loading-component-container {
-  display: flex;
-  justify-content: center; /* Centers the container horizontally */
-  align-items: center; /* Centers the container vertically */
 }
