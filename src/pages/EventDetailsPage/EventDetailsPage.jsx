@@ -1,23 +1,28 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/EventDetailsHeader/EventDetailsHeader';
 import Card from '../../components/EventDetailsCard/EventDetailsCard';
-import xIcon from '../../assets/icons/xmark.svg'
+import xIcon from '../../assets/icons/xmark.svg';
 import './EventDetailsPage.css';
-import { deleteBooking } from '../../services/HomePages/HomePage.service';
-import { useNavigate } from 'react-router-dom';
+import { useDeleteBooking } from '../../services/HomePages/HomePage.service';
 
 function EventDetailsPage() {
   const location = useLocation();
-  
-  // Ensure location.state is defined and fallback to empty object if not
-  const { booking = {}, venue = {}, building = {} } = location.state || {};
-  console.log(booking);
-
   const navigate = useNavigate();
+
+  // Destructure safely
+  const { booking = {}, venue = {}, building = {} } = location.state || { booking: {}, venue: {}, building: {} };
+  const deleteBookingMutation = useDeleteBooking();
+
   const handleDeleteClick = () => {
-    deleteBooking(booking.BOOKING_ID);
-    navigate('/student-home');
+    deleteBookingMutation.mutate(booking.BOOKING_ID, {
+      onSuccess: () => {
+        navigate('/student-home');
+      },
+      onError: (error) => {
+        console.error('Error deleting booking:', error); // Log the error for debugging
+      },
+    });
   };
 
   return (
@@ -32,9 +37,16 @@ function EventDetailsPage() {
             venue={building?.BUILDING_NAME || 'Unknown Building'} 
             room={venue?.VENUE_NAME || 'Unknown Room'} 
           />
-          <button className='cancel-event-button' onClick={handleDeleteClick}>
-          <img src={xIcon} alt='xIcon' />
-            Cancel Booking</button>
+          <button 
+            className='cancel-event-button' 
+            onClick={handleDeleteClick} 
+            disabled={deleteBookingMutation.isLoading}
+            aria-label='Cancel Booking'
+          >
+            <img src={xIcon} alt='Cancel booking' />
+            {deleteBookingMutation.isLoading ? 'Cancelling...' : 'Cancel Booking'}
+          </button>
+          {deleteBookingMutation.isError && <p className="error-message">Error cancelling booking</p>}
         </section>
       </main>
     </>
