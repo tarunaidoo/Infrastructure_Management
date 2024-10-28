@@ -1,7 +1,7 @@
 import { formatDateToISO } from "../dateUtils";
 
 
-function convertTo24HourFormat(time12h) {
+const convertTo24HourFormat = (time12h) => {
     // Split the time into [time, modifier]
     const [time, modifier] = time12h.split(" ");
     let [hours, minutes] = time.split(":").map(Number);
@@ -22,7 +22,7 @@ function convertTo24HourFormat(time12h) {
 }
 
 
-function getEndTime(startTime, durationMinutes) {
+const getEndTime = (startTime, durationMinutes) => {
     // Parse the start time in "HH:mm" format
     let [hours, minutes] = startTime.split(":").map(Number);
 
@@ -41,7 +41,7 @@ function getEndTime(startTime, durationMinutes) {
 }
 
 
-export const formatTutoringBookings = (tutoringBookings) => {
+const formatTutoringBookings = (tutoringBookings) => {
     const inPersonBookings = tutoringBookings.filter((booking) => booking.meetingType === "In-person");
     
     const formattedBookings =  inPersonBookings.map((booking) => {
@@ -65,7 +65,7 @@ const convertToDateObject = (dateString) => {
 }
 
 
-export const formatEventBookings = (eventsBookings) => {
+const formatEventBookings = (eventsBookings) => {
     const formattedBookings =  eventsBookings.map((booking) => {
         const formattedBooking = {
             EVENT_NAME: `Events Booking - ${booking.title}`,
@@ -125,4 +125,8 @@ const checkForTimeClash = (bookings, eventsBookings, tutoringBookings, venueID, 
 }
 
 
-export { filterBookingsByVenueIDAndDate, isOverlapping, checkForTimeClash };
+export { 
+    filterBookingsByVenueNameAndDate, filterBookingsByVenueIDAndDate, isOverlapping, 
+    checkForTimeClash, convertTo24HourFormat, convertToDateObject, formatEventBookings, 
+    formatTutoringBookings, getEndTime 
+};
