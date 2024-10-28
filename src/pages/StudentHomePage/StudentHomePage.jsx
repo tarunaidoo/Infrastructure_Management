@@ -5,25 +5,80 @@ import Footer from '../../components/NavigationBar/StudentHomeFooter';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import Popup from '../../components/NotificationPopup/NotificationPopup';
 import './StudentHomePage.css';
-import { fetchBooking, fetchVenue, fetchBuilding, fetchEventsBookings, fetchTutoringBookings } from "../../services/HomePages/HomePage.service";
+import { fetchBooking, fetchVenue, fetchBuilding } from "../../services/HomePages/HomePage.service";
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+
 
 function StudentHomePage() {
   const userID = localStorage.getItem('userEmail'); // get userID
 
+  // Date Time information
+  const date = new Date();
+  const currentTime = date.toISOString().split('T')[1].slice(0, 8); // Get current time in 'HH:MM:SS' format
+  const today = date.toISOString().split('T')[0];
+
   // State for bookings, venues, buildings, and loading/error handling
-  const [bookings, setBookings] = useState([]);
-  const [eventBookings, setEventBookings] = useState([]);
-  const [tutoringBookings, setTutoringBookings] = useState([]);
-  const [venues, setVenues] = useState([]);
-  const [buildings, setBuildings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [eventNames, setEventNames] = useState([]);
   const navigate = useNavigate();
   const [eventVenues, setEventVenues] = useState([]);
 
+  const { data: bookings, error: userBookingsError, isLoading: userBookingsLoading} = useQuery(
+    "UserBookings", async () => {
+      const fetchedBookings = await fetchBooking(userID);
+      const filteredBookings = fetchedBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
+      return filteredBookings;
+    },
+    {
+      refetchOnWindowFocus: true, // Refetch when the window is focused
+      refetchOnMount: true, // Refetch when the component mounts
+    }
+  );
+
+  const { data: venues, error: venuesError, isLoading: venuesLoading, refetch: refetchVenues } = useQuery(
+    "bookingVenues", async () => {
+      const todaysBookings = bookings.filter(booking => booking.DATE === today);
+      const namesArray = todaysBookings.map(booking => booking.EVENT_NAME);
+      setEventNames(namesArray);
+
+      const fetchedVenues = await fetchVenue();
+
+      // Set corresponding venues for today's bookings
+      const venuesArray = todaysBookings.map(booking => {
+        const venue = fetchedVenues.find(v => v.VENUE_ID === booking.VENUE_ID);
+        return venue ? venue.VENUE_NAME : 'Unknown Venue';
+      });
+      setEventVenues(venuesArray);
+
+      return fetchedVenues;
+    },
+    {
+      enabled: !!bookings, // Ensure venues refetches when bookings change
+    }
+  );
+
+  const { data: buildings, error: buildingError, isLoading: buildingsLoading, refetch: refetchBuildings } = useQuery(
+    "bookingBuildings", async () => {
+      const fetchedBuildings = await fetchBuilding();
+      return fetchedBuildings;
+    },
+    {
+      enabled: !!venues, // Ensure buildings refetches when venues change
+    }
+  );
+
+  useEffect(() => {
+    if (bookings) {
+      refetchVenues();
+    }
+  }, [bookings, refetchVenues]);
+
+  useEffect(() => {
+    if (venues) {
+      refetchBuildings();
+    }
+  }, [venues, refetchBuildings]);
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
@@ -36,55 +91,6 @@ function StudentHomePage() {
       localStorage.removeItem('showPopupOnStudentHome');
     }
   }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const date = new Date();
-        const currentTime = date.toISOString().split('T')[1].slice(0, 8); // Get current time in 'HH:MM:SS' format
-        const today = date.toISOString().split('T')[0];
-
-        const fetchedBookings = await fetchBooking(userID);
-        const filteredBookings = fetchedBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
-        setBookings(filteredBookings);
-  
-        const fetchedEventBookings = await fetchEventsBookings(userID);
-        const filteredEventBookings = fetchedEventBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
-        setEventBookings(filteredEventBookings);
-  
-        const fetchedTutoringBookings = await fetchTutoringBookings(userID);
-        const filteredTutoringBookings = fetchedTutoringBookings.filter(booking => (booking.DATE > today) || (booking.DATE === today && booking.END_TIME >= currentTime));
-        setTutoringBookings(filteredTutoringBookings);
-  
-        const todaysBookings = filteredBookings.filter(booking => booking.DATE === today);
-        const namesArray = todaysBookings.map(booking => booking.EVENT_NAME);
-        setEventNames(namesArray);
-  
-        const venuePromises = fetchedBookings.map(booking => fetchVenue(booking.VENUE_ID));
-        const fetchedVenues = await Promise.all(venuePromises);
-        setVenues(fetchedVenues);
-  
-        // Set corresponding venues for today's bookings
-        const venuesArray = todaysBookings.map(booking => {
-          const venue = fetchedVenues.find(v => v.VENUE_ID === booking.VENUE_ID);
-          return venue ? venue.VENUE_NAME : 'Unknown Venue';
-        });
-        setEventVenues(venuesArray);
-  
-        const buildingPromises = fetchedVenues.map(venue => fetchBuilding(venue?.BUILDING_ID));
-        const fetchedBuildings = await Promise.all(buildingPromises);
-        setBuildings(fetchedBuildings);
-  
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setError(`Failed to load data: ${error.message}`);
-        setLoading(false);
-      }
-    };
-  
-    fetchData();
-  }, [userID]);
 
   const handleOnReportIssueClick = () => {
     const venueSelectionDetails = {
@@ -103,28 +109,34 @@ function StudentHomePage() {
     navigate("/profile");
   }
 
-  if (loading) {
+  if (userBookingsLoading || venuesLoading || buildingsLoading) {
     return (
       <>
       <Header />
       <main className='centered-container'>
-        <LoadingComponent colour="#D4A843" size="15" isLoading={loading}/> 
+        <LoadingComponent colour="#D4A843" size="15" isLoading={userBookingsLoading || venuesLoading || buildingsLoading}/> 
       </main>
       <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick} onProfileClick={handleProfileClick}/>
       </>
     );
   }
 
-  if (error) {
-    return <main>{error}</main>;
+  if (userBookingsError || buildingError || venuesError) {
+    return (
+      <>
+      <Header />
+      <main className='centered-container'>
+        <p>Error loading user bookings!!!</p>
+      </main>
+      <Footer onBookVenueClick={handleOnBookVenueClick} onReportIssueClick={handleOnReportIssueClick} onProfileClick={handleProfileClick}/>
+      </>
+    );
   }
 
   const handleCardClick = (booking, venue, building) => {
     console.log('Navigating to event details with:', { booking, venue, building });
     navigate(`/event-details/${booking.EVENT_NAME}`, { state: { booking, venue, building } });
   };
-
-  console.log(bookings);
 
   return (
     <>
@@ -134,19 +146,20 @@ function StudentHomePage() {
       <main className='home-body'>
         <Header />
         <section className='home-content'>
-          {bookings.length > 0  || eventBookings.length > 0 ? (
-            [...bookings, ...eventBookings, ...tutoringBookings].map((booking, index) => {
+          {bookings.length > 0 && venues.length > 0 && buildings.length > 0 ? (
+            bookings.map((booking, index) => {
               const venue = venues.find(v => v.VENUE_ID === booking.VENUE_ID);
               const building = buildings.find(b => b.BUILDING_ID === venue?.BUILDING_ID);
-              
+              // console.log(venue, building);
+
               return (
                 <Card
                   key={index}
-                  event={booking.EVENT_NAME || booking.TITLE}
+                  event={booking.EVENT_NAME}
                   date={booking.DATE}
                   time={`${booking.START_TIME} - ${booking.END_TIME}`}
-                  venue={booking.BUILDING_NAME || building?.BUILDING_NAME || 'Unknown Building'} // [!!] Hack was done, should be done better
-                  room={booking.VENUE_NAME || venue?.VENUE_NAME || 'Unknown Room'} // [!!] Hack was done, should be done better
+                  venue={building.BUILDING_NAME} 
+                  room={venue.VENUE_NAME}
                   onClick={() => handleCardClick(booking, venue, building)} // Pass onClick handler
                 />
               );
