@@ -1,3 +1,5 @@
+import { useMutation, useQueryClient } from 'react-query';
+
 // Retry logic helper function
 async function retryFetch(fetchFn, retries = 15, delay = 1000) {
   for (let i = 0; i < retries; i++) {
@@ -12,7 +14,7 @@ async function retryFetch(fetchFn, retries = 15, delay = 1000) {
 }
 
 // Fetch building based on venue
-async function fetchBuilding(building_id) {
+async function fetchBuilding() {
   const endpoint = `/data-api/rest/BUILDING/`;
 
   const fetchFn = async () => {
@@ -22,11 +24,9 @@ async function fetchBuilding(building_id) {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
     }
     const result = await response.json();
-    console.log("Fetched building: ", result);
 
     if (result.value && Array.isArray(result.value)) {
-      const building = result.value.find(b => b.BUILDING_ID === building_id);
-      return building || null;
+      return result.value || [];
     }
     return null;
   };
@@ -35,7 +35,7 @@ async function fetchBuilding(building_id) {
 }
 
 // Fetch venue based on bookings
-async function fetchVenue(venue_id) {
+async function fetchVenue() {
   const endpoint = `/data-api/rest/VENUE/`;
 
   const fetchFn = async () => {
@@ -45,11 +45,9 @@ async function fetchVenue(venue_id) {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
     }
     const result = await response.json();
-    console.log("Fetched venue: ", result);
 
     if (result.value && Array.isArray(result.value)) {
-      const venue = result.value.find(v => v.VENUE_ID === venue_id);
-      return venue || null;
+      return result.value || [];
     }
     return null;
   };
@@ -68,7 +66,6 @@ async function fetchBooking(user_id) {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
     }
     const result = await response.json();
-    console.log("Fetched booking data: ", result);
 
     if (result.value && Array.isArray(result.value)) {
       const bookings = result.value.filter(b => b.USER_ID === user_id);
@@ -81,56 +78,34 @@ async function fetchBooking(user_id) {
 }
 
 // Deletes Booking based of booking ID
-async function deleteBooking(booking_id) 
-{
-  const endpoint = `/data-api/rest/BOOKING`
+const deleteBooking = async (booking_id) => {
+  const endpoint = `/data-api/rest/BOOKING`;
   const response = await fetch(`${endpoint}/BOOKING_ID/${booking_id}`, {
     method: "DELETE"
   });
-  if(response.ok){
+  
+  if (response.ok) {
     console.log(`Deleted Booking with ID ${booking_id}`);
-  }
-  if (!response.ok) {
-    const errorText = await response.text();
+  } else {
     console.log(`Failed to delete Booking with ID ${booking_id}`);
-    console.error(errorText);
   }
-}
-
-const fetchEventsBookings = async (userID) => {
-  try{
-      const endpoint = "/data-api/rest/EVENTS/"
-      const response = await fetch(endpoint);
-      const data = await response.json();
-
-      // Filter the data based on the provided USER_ID
-      const filteredData = data.value.filter(row => row.USER_ID === userID);
-
-      return filteredData; // Return the filtered data
-  }
-  catch (error) {
-      console.error('Error fetching data:', error);
-      return []; // Return an empty array or handle the error as needed
-  }
-}
+};
 
 
-const fetchTutoringBookings = async (userID) => {
-  try{
-      const endpoint = "/data-api/rest/TUTORING/"
-      const response = await fetch(endpoint);
-      const data = await response.json();
+const useDeleteBooking = ()  => {
+  const queryClient = useQueryClient();
 
-      // Filter the data based on the provided USER_ID
-      const filteredData = data.value.filter(row => row.USER_ID === userID);
-
-      return filteredData; // Return the filtered data
-  }
-  catch (error) {
-      console.error('Error fetching data:', error);
-      return []; // Return an empty array or handle the error as needed
-  }
+  return useMutation({
+    mutationFn: deleteBooking,
+    onSuccess: () => {
+      // Invalidate any queries related to bookings to keep data fresh
+      queryClient.invalidateQueries('bookings');
+    },
+    onError: (error) => {
+      console.error('Error deleting booking:', error);
+    },
+  });
 }
 
 
-export { fetchBooking, fetchVenue, fetchBuilding, deleteBooking, fetchEventsBookings, fetchTutoringBookings };
+export { fetchBooking, fetchVenue, fetchBuilding, deleteBooking, useDeleteBooking};

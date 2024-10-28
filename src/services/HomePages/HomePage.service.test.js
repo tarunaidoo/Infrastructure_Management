@@ -8,88 +8,88 @@ describe("Building, Venue, and Booking Services", () => {
         jest.resetAllMocks(); // Reset mocks before each test
     });
 
-    // Test for fetchBuilding
-    it("should return the correct building for a given building ID", async () => {
-        const mockBuildingData = {
-            value: [
-                { BUILDING_ID: 1, BUILDING_NAME: "Building A" },
-                { BUILDING_ID: 2, BUILDING_NAME: "Building B" }
-            ]
-        };
+    // Tests for fetchBuilding
+    describe("fetchBuilding", () => {
+        it("should return building data when fetch is successful", async () => {
+            const mockBuildingData = { value: [{ BUILDING_ID: 1, BUILDING_NAME: "Building A" }] };
 
-        // Mock the fetch response for building
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: jest.fn().mockResolvedValueOnce(mockBuildingData)
+            fetch.mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce(mockBuildingData),
+            });
+
+            const result = await fetchBuilding();
+            expect(result).toEqual([{ BUILDING_ID: 1, BUILDING_NAME: "Building A" }]);
+            expect(fetch).toHaveBeenCalledWith("/data-api/rest/BUILDING/");
         });
 
-        const buildingID = 1;
-        const result = await fetchBuilding(buildingID);
+        it("should return null when building data is not an array", async () => {
+            const mockBuildingData = { value: { BUILDING_ID: 1, BUILDING_NAME: "Building A" } };
 
-        expect(result).toEqual({ BUILDING_ID: 1, BUILDING_NAME: "Building A" });
-        expect(fetch).toHaveBeenCalledWith("/data-api/rest/BUILDING/");
+            fetch.mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce(mockBuildingData),
+            });
+
+            const result = await fetchBuilding();
+            expect(result).toBeNull();
+            expect(fetch).toHaveBeenCalledWith("/data-api/rest/BUILDING/");
+        });
+
+        it("should return an empty array when building data is an empty array", async () => {
+            const mockBuildingData = { value: [] };
+
+            fetch.mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce(mockBuildingData),
+            });
+
+            const result = await fetchBuilding();
+            expect(result).toEqual([]);
+            expect(fetch).toHaveBeenCalledWith("/data-api/rest/BUILDING/");
+        });
     });
 
-    it("should return null if building ID not found", async () => {
-        const mockBuildingData = {
-            value: [
-                { BUILDING_ID: 1, BUILDING_NAME: "Building A" },
-                { BUILDING_ID: 2, BUILDING_NAME: "Building B" }
-            ]
-        };
+    // Tests for fetchVenue
+    describe("fetchVenue", () => {
+        it("should return venue data when fetch is successful", async () => {
+            const mockVenueData = { value: [{ VENUE_ID: 1, VENUE_NAME: "Venue A" }] };
 
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: jest.fn().mockResolvedValueOnce(mockBuildingData)
+            fetch.mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce(mockVenueData),
+            });
+
+            const result = await fetchVenue();
+            expect(result).toEqual([{ VENUE_ID: 1, VENUE_NAME: "Venue A" }]);
+            expect(fetch).toHaveBeenCalledWith("/data-api/rest/VENUE/");
         });
 
-        const buildingID = 3; // Non-existent ID
-        const result = await fetchBuilding(buildingID);
+        it("should return null when venue data is not an array", async () => {
+            const mockVenueData = { value: { VENUE_ID: 1, VENUE_NAME: "Venue A" } };
 
-        expect(result).toBeNull();
-        expect(fetch).toHaveBeenCalledWith("/data-api/rest/BUILDING/");
-    });
+            fetch.mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce(mockVenueData),
+            });
 
-    // Test for fetchVenue
-    it("should return the correct venue for a given venue ID", async () => {
-        const mockVenueData = {
-            value: [
-                { VENUE_ID: 1, VENUE_NAME: "Venue A" },
-                { VENUE_ID: 2, VENUE_NAME: "Venue B" }
-            ]
-        };
-
-        // Mock the fetch response for venue
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: jest.fn().mockResolvedValueOnce(mockVenueData)
+            const result = await fetchVenue();
+            expect(result).toBeNull();
+            expect(fetch).toHaveBeenCalledWith("/data-api/rest/VENUE/");
         });
 
-        const venueID = 1;
-        const result = await fetchVenue(venueID);
+        it("should return an empty array when venue data is an empty array", async () => {
+            const mockVenueData = { value: [] };
 
-        expect(result).toEqual({ VENUE_ID: 1, VENUE_NAME: "Venue A" });
-        expect(fetch).toHaveBeenCalledWith("/data-api/rest/VENUE/");
-    });
+            fetch.mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce(mockVenueData),
+            });
 
-    it("should return null if venue ID not found", async () => {
-        const mockVenueData = {
-            value: [
-                { VENUE_ID: 1, VENUE_NAME: "Venue A" },
-                { VENUE_ID: 2, VENUE_NAME: "Venue B" }
-            ]
-        };
-
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: jest.fn().mockResolvedValueOnce(mockVenueData)
+            const result = await fetchVenue();
+            expect(result).toEqual([]);
+            expect(fetch).toHaveBeenCalledWith("/data-api/rest/VENUE/");
         });
-
-        const venueID = 3; // Non-existent ID
-        const result = await fetchVenue(venueID);
-
-        expect(result).toBeNull();
-        expect(fetch).toHaveBeenCalledWith("/data-api/rest/VENUE/");
     });
 
     // Test for fetchBooking
