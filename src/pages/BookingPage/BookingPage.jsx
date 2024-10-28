@@ -5,9 +5,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Calendar from "react-calendar";
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import Popup from '../../components/Popup/Popup';
-import { createBooking, getBookings } from '../../services/BookingPage/BookingPage.service';
+import { createBooking, getBookings, getTutoringBookings, getEventsBookings } from '../../services/BookingPage/BookingPage.service';
 import { formatDateToISO } from '../../utils/dateUtils';
-import { checkForTimeClash } from '../../utils/bookingValidationUtil/bookingValidationUtil';
+import { checkForTimeClash, formatEventBookings, formatTutoringBookings } from '../../utils/bookingValidationUtil/bookingValidationUtil';
 import { generateTimeOptions } from '../../utils/timeUtils';
 import { addWeeksToDate } from '../../utils/RecurringUtils';
 import ResetIcon from '../../assets/icons/resetIcon.svg';
@@ -36,7 +36,7 @@ const BookingPage = () => {
         START_TIME: "",
         END_TIME: ""
     });
-    
+    const [overlappingBooking, setOverlappingBooking] = useState({});
   
 
     // Additional state for recurring booking popup
@@ -59,6 +59,10 @@ const BookingPage = () => {
 
     const { data: bookings, error: bookingsError, isLoading: bookingsLoading } = useQuery("bookingsData", getBookings);
 
+    const { data: eventsBookings, error: eventsBookingsError, isLoading: eventsBookingsLoading } = useQuery("EventsbookingsData", getEventsBookings);
+
+    const { data: tutoringBookings, error: tutoringBookingsError, isLoading: tutoringBookingsLoading } = useQuery("TutoringbookingsData", getTutoringBookings);
+
     const handleSubmitButtonClick = async () => {
         if (!selectedVenue || !bookingPageInfo.START_TIME || !bookingPageInfo.END_TIME || !bookingPageInfo.EVENT_NAME) {
             setPopupState("Invalid Details");
@@ -66,12 +70,18 @@ const BookingPage = () => {
             return;
         }
 
+        const formattedEventsBookings = formatEventBookings(eventsBookings);
+        const formattedTutoringBookings = formatTutoringBookings(tutoringBookings);
+
         let overlapExists = false;
         if (numberOfBookings > 1) {
             for (let i = 0; i < numberOfBookings; i++){
-                let isOverlapping = checkForTimeClash(
-                    bookings, 
-                    selectedVenue.VENUE_ID, 
+                const {isOverlapping, booking} = checkForTimeClash(
+                    bookings,
+                    formattedEventsBookings,
+                    formattedTutoringBookings,
+                    selectedVenue.VENUE_ID,
+                    selectedVenue.VENUE_NAME, 
                     formatDateToISO(addWeeksToDate(bookingPageInfo.BOOKING_DATE, i)), 
                     bookingPageInfo.START_TIME, 
                     bookingPageInfo.END_TIME
@@ -79,22 +89,30 @@ const BookingPage = () => {
 
                 if (isOverlapping){
                     overlapExists = true;
+                    setOverlappingBooking(booking);
                     break;
                 }
             }
         }
 
         else {
-            overlapExists = checkForTimeClash(
-                bookings, 
-                selectedVenue.VENUE_ID, 
+            const {isOverlapping, booking} = checkForTimeClash(
+                bookings,
+                formattedEventsBookings,
+                formattedTutoringBookings,
+                selectedVenue.VENUE_ID,
+                selectedVenue.VENUE_NAME, 
                 formatDateToISO(bookingPageInfo.BOOKING_DATE), 
                 bookingPageInfo.START_TIME, 
                 bookingPageInfo.END_TIME
             );
+
+            overlapExists = isOverlapping;
+            setOverlappingBooking(booking);
         }
 
         if (overlapExists) {
+            console.log(overlappingBooking);
             setPopupState("Booking Overlap");
             setDisplayPopup(true);
         } else {
@@ -279,7 +297,7 @@ const BookingPage = () => {
         return null;
     };
 
-    if (bookingsLoading) {
+    if (bookingsLoading || eventsBookingsLoading || tutoringBookingsLoading) {
         return (
             <main className='booking-layout'>
                 <article onClick={handleHeaderBackIconClick} className='booking-heading'>
@@ -289,14 +307,14 @@ const BookingPage = () => {
 
                 <section className='booking-container'>
                     <main className='booking-loading-component-container'>
-                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading} />
+                        <LoadingComponent colour="#D4A843" size="15px" isLoading={bookingsLoading || eventsBookingsLoading || tutoringBookingsLoading} />
                     </main>
                 </section>
             </main>
         );
     }
 
-    if (bookingsError) {
+    if (bookingsError || eventsBookingsError || tutoringBookingsError) {
         return (
             <main className='booking-layout'>
                 <article onClick={handleHeaderBackIconClick} className='booking-heading'>
@@ -583,9 +601,11 @@ const BookingPage = () => {
         }
 
         {popupState === "Booking Overlap" &&
-            <Popup trigger={displayPopup}>
+            <Popup trigger={displayPopup}>  
                 <h2>Booking Overlap</h2>
-                <p>The selected time slot overlaps with an existing booking.</p>
+                <p>Your booking conflicts with the following booking: </p>
+                <p> {overlappingBooking.EVENT_NAME}</p>
+                <p> {overlappingBooking.START_TIME} - {overlappingBooking.END_TIME} </p>
                 <button onClick={handleBackToVenueBookingClick} className='booking-popup-button'>Close</button>
             </Popup>
         }
