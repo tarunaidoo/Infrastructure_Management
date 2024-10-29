@@ -487,6 +487,7 @@ const BookingPage = () => {
                         <input
                             type="number"
                             min="2"
+                            max="4"
                             value={recurringDetails.weeks}
                             onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
                             placeholder=""
