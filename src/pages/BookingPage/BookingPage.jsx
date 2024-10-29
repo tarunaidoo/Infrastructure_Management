@@ -484,15 +484,15 @@ const BookingPage = () => {
                 <section className='recurring-booking-form'>
                     <label>
                         Repeat over:
-                        <input
-                            type="number"
-                            min="2"
-                            max="4"
+                        <select
                             value={recurringDetails.weeks}
-                            onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
-                            placeholder=""
-                        /> 
-                        Weeks
+                            onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: Number(e.target.value) })}
+                        >
+                            <option value="" disabled>Select weeks</option>
+                            <option value={2}>2 Weeks</option>
+                            <option value={3}>3 Weeks</option>
+                            <option value={4}>4 Weeks</option>
+                        </select>
                         
                     </label>
                     <section className='reset-button-container'>
