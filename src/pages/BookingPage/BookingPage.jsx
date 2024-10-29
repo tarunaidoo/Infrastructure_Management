@@ -487,6 +487,7 @@ const BookingPage = () => {
                         <input
                             type="number"
                             min="2"
+                            max="4"
                             value={recurringDetails.weeks}
                             onChange={(e) => setRecurringDetails({ ...recurringDetails, weeks: e.target.value })}
                             placeholder=""
@@ -567,7 +568,7 @@ const BookingPage = () => {
         }
 
         {popupState === "Confirm Booking" &&
-            <Popup trigger={displayPopup}>
+            <Popup trigger={displayPopup}>  
                 <h2>Confirmation</h2>
                 <p>Do you want to place a booking for this event?</p>
                 <article className='confirm-booking-button-container'>
