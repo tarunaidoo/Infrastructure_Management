@@ -41,16 +41,31 @@ const getEventsBookings = async () => {
 
 
 const getTutoringBookings = async () => {
-    try {
-        const endpoint = "https://witscampustutoring.azurewebsites.net/api/bookings"
-        const response = await fetch(endpoint);
-        const data = await response.json();
-        return data;
+    const endpoint = "https://witscampustutoring.azurewebsites.net/api/bookings";
+  
+  // Define a timeout promise that rejects after a set period (e.g., 10000 ms or 10 seconds)
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timed out")), 10000)
+    );
+
+  try {
+    // Use Promise.race to race the fetch against the timeout
+    const response = await Promise.race([
+      fetch(endpoint),
+      timeoutPromise
+    ]);
+
+    // Check if the fetch was successful and process the response
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
     }
-    catch (error) {
-        console.error('Error fetching data:', error);
-        return []; // Return an empty array or handle the error as needed
-    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return []; // Return an empty array or handle the error as needed
+  }
 }
 
 
